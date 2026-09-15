@@ -1,0 +1,4560 @@
+openapi: 3.0.0
+info:
+  title: 'QCB Open Finance: Authorization Endpoints API'
+  description: >-
+    # QCB Open Finance Authorization Endpoints
+
+
+    This API description provides the API descriptions for two OAuth 2.0 operations included in the FAPI 2.0 Security
+    Profile:
+
+
+    * [Pushed Authorization Requests](https://datatracker.ietf.org/doc/html/rfc9126), which implement [Rich
+    Authorization Requests (RAR)](https://datatracker.ietf.org/doc/html/rfc9396) (RAR) payloads to provide Consent for a
+    given use case.
+
+
+    * Token operations that provide details of the RAR associated with a given Access Token request.
+
+
+    Please note that the Authorization Request described by the Pushed Authorization Request is a JWT-Secured
+    Authorization Request, as described by [RFC 9101](https://datatracker.ietf.org/doc/html/rfc9101).
+
+
+    The API description describes the `request` property that implements this as a **plain JSON object, which only
+    describes the payload of a signed JSON Web Token (JWS)**.
+
+
+    The `request` object **MUST** be transmitted as a JWS, where the JWS is the value of the `request` parameter, which
+    is encoded and submitted using the `application/x-www-form-urlencoded` content type.
+
+
+    Users of this API description must ensure they implement the Authorization Request as a JWS, encoding the payload as
+    described by [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515) and reflecting the requirements of the API
+    Security Profile for the QCB open finance standards.
+  version: v1.0-draft1
+  x-sf-docs-util-menu-item-name: Authorization Endpoints
+  x-sf-typescript-util-family: Qcb
+  x-sf-typescript-util-api-type: standards
+  x-sf-typescript-util-class-prefix: QcbAuthEdpt
+tags:
+  - name: Pushed Authorization Requests
+    description: Operations to support Pushed Authorization Requests (PAR)
+  - name: Token Operations
+    description: Operations for creating OAuth 2.0 Access Tokens
+paths:
+  /par:
+    post:
+      operationId: CreatePushedAuthorizationRequestV1_0
+      summary: Pushed Authorization Request endpoint
+      description: >-
+        Submit a Rich Authorization Request (RAR) to the Pushed Authorization Request (PAR) Endpoint, as defined in [RFC
+        9126](https://datatracker.ietf.org/doc/html/rfc9126).
+
+
+        The `application/json` Content Type is included in the Request Body for tooling compatibility, but requests
+        **MUST** be sent using the Content Type `application/x-www-form-urlencoded`.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushedAuthorizationResponse1Properties'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth.OAuthBadRequestErrorResponse1Properties'
+        '405':
+          description: Method Not Allowed
+        '413':
+          description: Content Too Large
+        '429':
+          description: Too Many Requests
+          headers:
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+      tags:
+        - Pushed Authorization Requests
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushedAuthorizationRequestBody1Properties'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PushedAuthorizationRequestBody1Properties'
+  /token:
+    post:
+      operationId: CreateAccessTokenRequestV1_0
+      summary: Obtain an Access Token
+      description: >-
+        Request an Access Token based on a given grant type, indicated by `grant_type` and request payload properties.
+
+
+        Response provides information on the original Rich Authorization Request (RAR) as described in [RFC
+        9396](https://datatracker.ietf.org/doc/html/rfc9396).
+
+
+        The `application/json` Content Type is included in the Request Body for tooling compatibility, but requests
+        **MUST** be sent using the Content Type `application/x-www-form-urlencoded`.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse1Types'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth.OAuthBadRequestErrorResponse1Properties'
+      tags:
+        - Token Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/AuthorizationCodeGrantTokenRequest1Properties'
+                - $ref: '#/components/schemas/RefreshTokenGrantTokenRequest1Properties'
+                - $ref: '#/components/schemas/ClientCredentialsGrantTokenRequest1Properties'
+          application/x-www-form-urlencoded:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/AuthorizationCodeGrantTokenRequest1Properties'
+                - $ref: '#/components/schemas/RefreshTokenGrantTokenRequest1Properties'
+                - $ref: '#/components/schemas/ClientCredentialsGrantTokenRequest1Properties'
+components:
+  schemas:
+    AccountInformation.AccountSubType1Codes:
+      type: string
+      enum:
+        - Current
+        - Savings
+        - CreditCard
+        - Mortgage
+        - Finance
+      description: |-
+        Specifies the sub type of account (product family group).
+
+        Supported values: CurrentAccount, Savings, CreditCard, Mortgage, Finance.
+    AccountInformation.AccountType1Codes:
+      type: string
+      enum:
+        - Retail
+        - SME
+        - Corporate
+      description: Specifies the type of account (Retail, SME or Corporate).
+    AccountInformation.ConsentPermission1Codes:
+      type: string
+      enum:
+        - ReadAccountsBasic
+        - ReadAccountsDetail
+        - ReadBalances
+        - ReadTransactionsBasic
+        - ReadTransactionsDetail
+      description: The permission codes available to the TPP for Bank Data Sharing and agreed with the User.
+      x-ozone-discovery-requires-analysis: Verify that the list of permissions is correct for QCB.
+    AccountInformation.CreateAccountInformationAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:bank-data-sharing:account-information:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/AccountInformation.CreateAccountInformationConsent1Properties'
+        subscription:
+          allOf:
+            - $ref: '#/components/schemas/Events.Subscription1Properties'
+          description: Subscription to Event Notifications, to be sent to the TPP Webhook registered at the API Hub.
+      description: Properties for creating a Consent object for sharing account information with a TPP.
+      additionalProperties: false
+      title: Account Information Consent
+    AccountInformation.CreateAccountInformationConsent1Properties:
+      type: object
+      required:
+        - ConsentId
+        - Permissions
+        - ExpirationDateTime
+        - OpenFinanceBilling
+      properties:
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInformation.ConsentPermission1Codes'
+          minItems: 1
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        FromDate:
+          $ref: '#/components/schemas/AccountInformation.FromDate1Type'
+        ToDate:
+          $ref: '#/components/schemas/AccountInformation.ToDate1Type'
+        AccountType:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInformation.AccountType1Codes'
+          minItems: 1
+        AccountSubType:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInformation.AccountSubType1Codes'
+          minItems: 1
+        OnBehalfOf:
+          $ref: '#/components/schemas/Consent.TppActingOnBehalfOf1Types'
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/AccountInformation.TppBillingInformation1Properties'
+      additionalProperties: false
+    AccountInformation.FromDate1Type:
+      type: string
+      format: date
+      description: >-
+        Specified start date for the transaction or statement query period.
+
+
+        If this is not populated, the start date will be open ended, and data will be returned from the earliest
+        available transaction or statement.
+
+
+        All dates in the JSON payloads are represented in RFC 3339 date format.  For example: 2025-01-01
+    AccountInformation.ReadAccountInformationAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:bank-data-sharing:account-information:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/AccountInformation.ReadConsent1Properties'
+        subscription:
+          allOf:
+            - $ref: '#/components/schemas/Events.Subscription1Properties'
+          description: >-
+            Subscription to Event Notifications, to be sent to the TPP Webhook registered at the API Hub.
+
+
+            Omitted where the TPP does not implement Event Notifications of Webhooks, and will use polling to retrieve
+            updates to the status of a given Consent.
+      description: Properties of a Consent object created to share Account Information with a TPP.
+      additionalProperties: false
+    AccountInformation.ReadConsent1Properties:
+      type: object
+      required:
+        - ConsentId
+        - Permissions
+        - ExpirationDateTime
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - OpenFinanceBilling
+      properties:
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInformation.ConsentPermission1Codes'
+          minItems: 1
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        FromDate:
+          $ref: '#/components/schemas/AccountInformation.FromDate1Type'
+        ToDate:
+          $ref: '#/components/schemas/AccountInformation.ToDate1Type'
+        AccountType:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInformation.AccountType1Codes'
+          minItems: 1
+        AccountSubType:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInformation.AccountSubType1Codes'
+          minItems: 1
+        OnBehalfOf:
+          $ref: '#/components/schemas/Consent.TppActingOnBehalfOf1Types'
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          type: object
+          properties:
+            IsLargeCorporate:
+              type: boolean
+              description: Account holder is classified as a large corporate customer by the LFI.
+            UserType:
+              $ref: '#/components/schemas/Billing.TppBillingUserTypes1Codes'
+            Purpose:
+              type: string
+              enum:
+                - AccountAggregation
+                - RiskAssessment
+                - TaxFiling
+                - Onboarding
+                - Verification
+                - QuoteComparison
+                - BudgetingAnalysis
+                - FinancialAdvice
+                - AuditReconciliation
+              description: Purpose of data sharing request, based on supported use cases.
+              x-ozone-discovery-requires-analysis: Verify that the use cases listed are appropriate for QCB.
+          required:
+            - UserType
+            - Purpose
+          description: >-
+            Consolidated billing information properties added by the TPP and LFI.
+
+
+            `isLargeCorporate` is optional as the value is updated out-of-band, and may be updated after the completion
+            of Consent Authorization.
+          additionalProperties: false
+      additionalProperties: false
+    AccountInformation.ToDate1Type:
+      type: string
+      format: date
+      description: >-
+        Specified end date for the transaction or statement query period.
+
+
+        If this is not populated, the end date will be open ended, and data will be returned to the latest available
+        transaction or the last statement generated.
+
+
+        All dates in the JSON payloads are represented in RFC 3339 date format.  For example: 2025-12-31    
+    AccountInformation.TppBillingInformation1Properties:
+      type: object
+      required:
+        - UserType
+        - Purpose
+      properties:
+        UserType:
+          $ref: '#/components/schemas/Billing.TppBillingUserTypes1Codes'
+        Purpose:
+          type: string
+          enum:
+            - AccountAggregation
+            - RiskAssessment
+            - TaxFiling
+            - Onboarding
+            - Verification
+            - QuoteComparison
+            - BudgetingAnalysis
+            - FinancialAdvice
+            - AuditReconciliation
+          description: Purpose of data sharing request, based on supported use cases.
+          x-ozone-discovery-requires-analysis: Verify that the use cases listed are appropriate for QCB.
+      description: Billing information specified during Consent Setup or following authorization.
+      additionalProperties: false
+    Address.Address1Types:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/Address.QatarAddress1Properties'
+        - $ref: '#/components/schemas/Address.InternationalQualifiedAddress1Properties'
+        - $ref: '#/components/schemas/Address.InternationalUnqualifiedAddress1Properties'
+      discriminator:
+        propertyName: AddressFormatType
+        mapping:
+          Qatar: '#/components/schemas/Address.QatarAddress1Properties'
+          InternationalQualifiedAddress: '#/components/schemas/Address.InternationalQualifiedAddress1Properties'
+          InternationalUnqualifiedAddress: '#/components/schemas/Address.InternationalUnqualifiedAddress1Properties'
+      description: >-
+        An address related to a given person or organization, based on ISO 20022.
+
+
+        Qatar address structures are mapped as follows:
+
+
+        * Zone: `CountrySubDivision`.
+
+
+        * Street: `StreetName`.
+
+
+        * Building Number: `BuildingNumber`.
+
+
+        Other properties are retained in this object to support non-Qatar addresses.
+
+
+        Implementers can choose, where appropriate, to provide `AddressLine` and `Country` where disambiguation of
+        address properties is impossible.
+    Address.AddressLine1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: A freeform address entry that is not specified using specific address properties.
+    Address.AddressType1Codes:
+      type: string
+      enum:
+        - Billing
+        - Business
+        - Correspondence
+        - DeliveryTo
+        - MailTo
+        - POBox
+        - Postal
+        - Permanent
+        - Residential
+        - Statement
+        - Other
+      description: Qualifies the type of address.
+    Address.InternationalQualifiedAddress1Properties:
+      type: object
+      required:
+        - AddressFormatType
+        - AddressType
+        - BuildingNumber
+        - StreetName
+        - CountrySubDivision
+        - Country
+      properties:
+        AddressFormatType:
+          type: string
+          enum:
+            - InternationalQualifiedAddress
+          description: Address format, defaults to `InternationalQualifiedAddress`
+        AddressType:
+          $ref: '#/components/schemas/Address.AddressType1Codes'
+        BuildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifies the position of a given building on a street.
+        BuildingName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of the house or building.
+        Floor:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Floor or storey within a building.
+        StreetName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a street or thoroughfare.
+        DistrictName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Identifies a subdivision within a country sub-division.
+        PostBox:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Numbered box ina post office assigned to a given Party where post is kept until collected.
+        PostCode:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifier that qualifies a postal address to assist with the sorting and delivery of mail.
+        TownName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a built-up area.
+        CountrySubDivision:
+          type: string
+          minLength: 1
+          maxLength: 35
+          description: Country sub-division based on standards for stated country.
+        Country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: International address in the qualified address format, implemented using separate address properties.
+      additionalProperties: false
+    Address.InternationalUnqualifiedAddress1Properties:
+      type: object
+      required:
+        - AddressFormatType
+        - AddressType
+        - Country
+      properties:
+        AddressFormatType:
+          type: string
+          enum:
+            - InternationalUnqualifiedAddress
+          description: Address format, defaults to `InternationalUnqualifiedAddress`
+        AddressType:
+          $ref: '#/components/schemas/Address.AddressType1Codes'
+        AddressLine:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address.AddressLine1Type'
+          minItems: 1
+          maxItems: 7
+          description: One-or-more address lines provided using freeform text.
+        Country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: International address in the unqualified address format, implemented using `AddressLine` and `Country`.
+      additionalProperties: false
+    Address.QatarAddress1Properties:
+      type: object
+      required:
+        - AddressFormatType
+        - AddressType
+        - BuildingNumber
+        - StreetName
+        - CountrySubDivision
+        - Country
+      properties:
+        AddressFormatType:
+          type: string
+          enum:
+            - Qatar
+          description: Address format, defaults to `Qatar`
+        AddressType:
+          $ref: '#/components/schemas/Address.AddressType1Codes'
+        BuildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifies the position of a given building on a street.
+        StreetName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a street or thoroughfare.
+        CountrySubDivision:
+          type: string
+          pattern: ^Zone [0-9]{1,2}$
+          description: Country sub-division, provided as as a Zone for Qatar addresses.
+        Country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: Address in the Qatar address format.
+      x-ozone-discovery-requires-analysis: Confirm that address format introduced for Qatar is appropriate for all use cases.
+      additionalProperties: false
+    AuthorizationCodeGrantTokenAuthorizationDetailsResponse1Properties:
+      type: object
+      required:
+        - access_token
+        - token_type
+        - expires_in
+        - authorization_details
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            [OAuth 2.0 Access Token](https://datatracker.ietf.org/doc/html/rfc6749#section-1.4) issued through
+            Authorization Code grant.
+        token_type:
+          type: string
+          enum:
+            - Bearer
+          description: Access Token type.
+        expires_in:
+          type: integer
+          description: Validity period of Access Token in seconds.
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: >-
+            [Access Token Scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) as sent in Authorization
+            Request and granted by the End User.
+        state:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            OAuth 2.0 `state` value, provided as a means to support integrity checking by the Client under FAPI 2.0.
+            Omitted from Refresh Token Grant.
+        refresh_token:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: |-
+            [OAuth 2.0 Refresh Token](https://datatracker.ietf.org/doc/html/rfc6749#section-1.5).
+
+            Omitted from responses where not supported by a given consent type.
+        id_token:
+          type: string
+          minLength: 1
+          maxLength: 16384
+          description: OpenID Connect ID Token, returned where applicable to requested scope and supported flows.
+        authorization_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorizationCodeGrantTokenRequestAuthorizationDetailTypesV1_0'
+          minItems: 1
+          description: Authorization details are sent in the Pushed Authorization Request
+      additionalProperties: false
+    AuthorizationCodeGrantTokenRequest1Properties:
+      type: object
+      required:
+        - client_id
+        - client_assertion_type
+        - client_assertion
+        - code_verifier
+        - grant_type
+        - code
+        - redirect_uri
+      properties:
+        client_id:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: The OAuth 2.0 Client ID of the Client, as set in the Trust Framework.
+        client_assertion_type:
+          type: string
+          enum:
+            - urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+          description: >-
+            Client Assertion Type indicating JWT Authentication, as described by [RFC
+            7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).
+
+
+            The value `urn:ietf:params:oauth:client-assertion-type:jwt-bearer` is prescribed, and is implemented with
+            URL encoding.
+        client_assertion:
+          type: string
+          pattern: ^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$
+          description: >-
+            Client Assertion value, which **must** be a single JWT.
+
+
+            Implemented using the `private_key_jwt` method, as defined by [OpenID
+            Connect](https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication).
+        code_verifier:
+          type: string
+          minLength: 43
+          maxLength: 128
+          description: >-
+            Code verifier value, created for Proof of Key Code Exchange correlating with value sent with Authorization
+            Request.
+        grant_type:
+          $ref: '#/components/schemas/OAuth.AuthorizationCodeGrantType1Codes'
+        code:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The authorization code received by the TPP from the Authorization Server.
+        redirect_uri:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          format: uri
+          description: |-
+            The OAuth 2.0 redirect URI of the Client, as set in the Trust Framework.
+
+            The value of this property **MUST** match a redirect URI value registered at the Trust Framework.
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: >-
+            [Access Token Scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) as sent in Authorization
+            Request and granted by the End User.
+      additionalProperties: false
+    AuthorizationCodeGrantTokenRequestAuthorizationDetailTypesV1_0:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/AccountInformation.ReadAccountInformationAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadFixedDefinedScheduleAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadFixedOnDemandAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadFixedPeriodicScheduleAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadOpenPaymentsAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadSingleFutureDatedPaymentAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadSingleInstantPaymentAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadVariableDefinedScheduleAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadVariableOnDemandAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.ReadVariablePeriodicScheduleAuthorizationDetails1Properties'
+      discriminator:
+        propertyName: type
+        mapping:
+          urn:openfinanceqatar:bank-data-sharing:account-information:v1.0: '#/components/schemas/AccountInformation.ReadAccountInformationAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:fixed-defined-schedule:v1.0: '#/components/schemas/PaymentInitiation.ReadFixedDefinedScheduleAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:fixed-on-demand:v1.0: '#/components/schemas/PaymentInitiation.ReadFixedOnDemandAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:fixed-periodic-schedule:v1.0: '#/components/schemas/PaymentInitiation.ReadFixedPeriodicScheduleAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:open-payments:v1.0: '#/components/schemas/PaymentInitiation.ReadOpenPaymentsAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:single-future-dated-payment:v1.0: '#/components/schemas/PaymentInitiation.ReadSingleFutureDatedPaymentAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:single-instant-payment:v1.0: '#/components/schemas/PaymentInitiation.ReadSingleInstantPaymentAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:variable-defined-schedule:v1.0: '#/components/schemas/PaymentInitiation.ReadVariableDefinedScheduleAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:variable-on-demand:v1.0: '#/components/schemas/PaymentInitiation.ReadVariableOnDemandAuthorizationDetails1Properties'
+          urn:openfinanceqatar:payment-initiation:variable-periodic-schedule:v1.0: '#/components/schemas/PaymentInitiation.ReadVariablePeriodicScheduleAuthorizationDetails1Properties'
+    AuthorizationRequest1Properties:
+      type: object
+      required:
+        - authorization_details
+        - iss
+        - exp
+        - nbf
+        - client_id
+        - response_type
+        - redirect_uri
+        - scope
+        - code_challenge
+        - code_challenge_method
+      properties:
+        authorization_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushedAuthorizationRequestAuthorizationDetailTypesV1_0'
+          minItems: 1
+          maxItems: 1
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The Issuer claim for the JWT, as described in [RFC 7519](https://tools.ietf.org/html/rfc7519#section-4.1.1)
+        aud:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            The Audience claim for the JWT, as described in [RFC
+            7519](https://tools.ietf.org/html/rfc7519#section-4.1.3)
+
+
+            This value is constrained to a single `string` value, as prescribed by [FAPI 2.0 Security
+            Profile](https://openid.net/specs/fapi-2_0-security-profile-ID2.html#section-5.3.2.1-2.5.1).
+        exp:
+          type: integer
+          format: unixtime
+          description: >-
+            The Expiration Time claim for the JWT, as described in [RFC
+            7519](https://tools.ietf.org/html/rfc7519#section-4.1.4)
+        nbf:
+          type: integer
+          format: unixtime
+          description: >-
+            The Not Before claim for the JWT, as described in [RFC
+            7519](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5) and expanded in the FAPI 2.0 Security Profile.
+        client_id:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: The OAuth 2.0 Client ID of the Client, as set in the Trust Framework.
+        response_type:
+          $ref: '#/components/schemas/OAuth.ResponseCode1Codes'
+        redirect_uri:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          format: uri
+          description: |-
+            The OAuth 2.0 redirect URI of the Client, as set in the Trust Framework.
+
+            The value of this property **MUST** match a redirect URI value registered at the Trust Framework.
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: >-
+            The OAuth 2.0 scope requested by the Client. 
+
+
+            This value **MUST** match one-or-more scope values provided in the API descriptions for the Open Finance
+            Standards.
+        state:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            The OAuth 2.0 state value requested by the Client, as described in [RFC
+            6749](https://tools.ietf.org/html/rfc6749#section-4.1.1).
+        nonce:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            Nonce value as described in [OpenID Connect Core](https://openid.net/specs/openid-connect-core-1_0.html) and
+            expanded in the FAPI 2.0 Security Profile.
+        max_age:
+          type: integer
+          description: >-
+            Maximum Authentication Age as described in [OpenID Connect
+            Core](https://openid.net/specs/openid-connect-core-1_0.html).
+        login_hint:
+          oneOf:
+            - $ref: '#/components/schemas/FAPI.LoginHintJwe1Type'
+            - $ref: '#/components/schemas/FAPI.LoginHintJwePayload1Properties'
+          description: >-
+            Optional parameter used to send the User's national identifier as an encrypted JSON Web Token (JWE).
+
+
+            This mechanism allows LFIs to correlate the User identity, and therefore the features of their account,
+            before the User is redirected to the LFI's authentication page.
+
+
+            The value **MUST** be a JWE, encrypted with the target LFI's public key, whose payload is a JSON object
+            created from the `LoginHintJwePayload1Properties` Schema Object and signed with the TPP signing key to
+            create a JSON Web Signature.
+
+
+            As prescribed by OpenID Connect Core, `login_hint` is used for discovery. It **MUST NOT** be used to bypass
+            authentication of the User, and a request **MUST NOT** be rejected because `login_hint` is not provided.
+
+
+            The property is represented in both encoded and decoded form using a `oneOf`, so implementers can readily
+            understand both the structure and the serialized form. Only the encoded form is sent on the wire.
+        code_challenge:
+          type: string
+          minLength: 43
+          maxLength: 128
+          description: >-
+            Code challenge as described in [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636.html#section-4.3).
+
+
+            Implements the Proof Key for Code Exchange (PKCE) extension to OAuth 2.0. PKCE is mandated by the FAPI 2.0
+            Security Profile.
+        code_challenge_method:
+          allOf:
+            - $ref: '#/components/schemas/PKCE.CodeChallengeMethod1Codes'
+          description: |-
+            Code challenge method as described in [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636.html#section-4.3).
+
+            Implements the Proof Key for Code Exchange (PKCE) extension to OAuth 2.0. 
+
+            PKCE is mandated by the FAPI 2.0 Security Profile, which prescribes the use of the `S256` method.
+      description: >-
+        Authorization Request for a given Rich Authorization Request (RAR) objects that encodes the Consent agreed
+        between the TPP and the User.
+
+
+        Only a single RAR may be submitted at this version of the open finance standards.      
+
+
+        The Schema Object defines the required JSON Web Token (JWT) payload. This **does not** represent a correctly
+        serialized JWT, but provides a Schema Object that correctly defines the supported RARs.
+      additionalProperties: false
+    Billing.CustomerType1Properties:
+      type: object
+      required:
+        - IsLargeCorporate
+      properties:
+        IsLargeCorporate:
+          type: boolean
+          description: Account holder is classified as a large corporate customer by the LFI.
+      description: Billing parameters specified by the LFI.
+      x-ozone-discovery-requires-analysis: Confirm the billing parameters for Qatar and what a large corporate is classified as.
+      additionalProperties: false
+    Billing.TppBillingUserTypes1Codes:
+      type: string
+      enum:
+        - Retail
+        - SME
+        - Corporate
+      description: >-
+        Defines the entity type the TPP is acting on behalf of, as an indicator for the pricing tier of the service
+        being provided.
+      x-ozone-discovery-requires-analysis: Confirm that the billing user types are correct for Qatar.
+    Charges.Charge1Properties:
+      type: object
+      required:
+        - ChargeBearer
+        - Type
+        - Amount
+      properties:
+        ChargeBearer:
+          $ref: '#/components/schemas/Charges.ChargeBearerType1Codes'
+        Type:
+          $ref: '#/components/schemas/Charges.PaymentChargeType1Codes'
+        Amount:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+          additionalProperties: false
+      description: Charges related to a given payment or transaction.
+      additionalProperties: false
+    Charges.ChargeBearerType1Codes:
+      type: string
+      enum:
+        - BorneByCreditor
+        - BorneByDebtor
+        - Shared
+      description: Bearer of the charges associated with a given payment or transaction.
+    Charges.PaymentChargeType1Codes:
+      type: string
+      enum:
+        - VAT
+        - Fees
+      description: Charge type codes, indicating what the charge relates to.
+    ClientCredentialsGrantTokenRequest1Properties:
+      type: object
+      required:
+        - client_id
+        - client_assertion_type
+        - client_assertion
+        - grant_type
+      properties:
+        client_id:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: The OAuth 2.0 Client ID of the Client, as set in the Trust Framework.
+        client_assertion_type:
+          type: string
+          enum:
+            - urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+          description: >-
+            Client Assertion Type indicating JWT Authentication, as described by [RFC
+            7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).
+
+
+            The value `urn:ietf:params:oauth:client-assertion-type:jwt-bearer` is prescribed, and is implemented with
+            URL encoding.
+        client_assertion:
+          type: string
+          pattern: ^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$
+          description: >-
+            Client Assertion value, which **must** be a single JWT.
+
+
+            Implemented using the `private_key_jwt` method, as defined by [OpenID
+            Connect](https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication).
+        grant_type:
+          type: string
+          enum:
+            - client_credentials
+          description: The grant type, which must be set to `client_credentials`.
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: Access Token scope. Omitted if not required.
+      additionalProperties: false
+    ClientCredentialsGrantTokenResponse1Properties:
+      type: object
+      required:
+        - access_token
+        - token_type
+        - expires_in
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            [OAuth 2.0 Access Token](https://datatracker.ietf.org/doc/html/rfc6749#section-1.4) issued through Client
+            Credentials grant.
+        token_type:
+          type: string
+          enum:
+            - Bearer
+          description: Access Token type.
+        expires_in:
+          type: integer
+          description: Validity period of Access Token in seconds.
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: Access Token scope. Omitted if not required.
+      description: >-
+        Token response for the Client Credentials grant.
+
+
+        No Rich Authorization Request (RAR) objects are returned, as the grant is not associated with a Consent agreed
+        by a User.
+      additionalProperties: false
+    Consent.ConsentCreationDateTime1Type:
+      type: string
+      pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+      format: date-time
+      description: >-
+        Consent creation date and time, as recorded by Consent Manager.
+
+
+        Date and time is represented in RFC 3339 date-time format, qualified as Arabia Standard Time, with seconds being
+        the maximum supported precision.
+    Consent.ConsentExpirationDateTime1Type:
+      type: string
+      pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+      format: date-time
+      description: >-
+        Date and time at which the consent will expire, as agreed at Consent Setup between the User and the TPP.
+
+
+        Date and time is represented in RFC 3339 date-time format, qualified as Arabia Standard Time, with seconds being
+        the maximum supported precision.
+    Consent.ConsentId1Type:
+      type: string
+      minLength: 1
+      maxLength: 128
+      format: uuid
+      description: >-
+        Unique identification assigned by the TPP to identify the Consent.
+          
+        Indicates either a unique Consent or is used to identify a series of Consents linked by the TPP to indicate
+        continuity of service across two-or-more Consent durations.
+
+
+        Where used to indicate a series of Consents the value is described as the "Base Consent ID" (`baseConsentId`).
+    Consent.ConsentMeta1Properties:
+      type: object
+      properties:
+        MultipleAuthorizers:
+          allOf:
+            - $ref: '#/components/schemas/Consent.MultiAuthorization1Properties'
+          description: Information on multi-authorization
+      description: Metadata associated with a Consent Resource.
+      additionalProperties: false
+    Consent.ConsentRevokedBy1Codes:
+      type: string
+      enum:
+        - LFI
+        - TPP
+        - LFI.InitiatedByUser
+        - TPP.InitiatedByUser
+      description: |-
+        Indicates who the Consent was revoked by.
+
+        | Identifier            | Description                              |
+        |-----------------------|------------------------------------------|
+        | `LFI`                 | Revoked by LFI without User interaction. |
+        | `TPP`                 | Revoked by TPP without User interaction. |
+        | `LFI.InitiatedByUser` | Initiated by the User at the LFI.        |
+        | `TPP.InitiatedByUser` | Initiated by the User the TPP.           |
+    Consent.ConsentStatus1Codes:
+      type: string
+      enum:
+        - AwaitingAuthorization
+        - Authorized
+        - Rejected
+        - Revoked
+        - Expired
+        - Consumed
+        - Suspended
+      description: |-
+        Specifies the status of a Consent as recorded at Consent Manager.
+         
+        | Consent Status           | State Type | Description                                                       |
+        |--------------------------|------------|-------------------------------------------------------------------|
+        | `AwaitingAuthorization`  | Pending    | The Consent is awaiting authorization by the User.                |
+        | `Authorized`             | In Use     | The Consent has been successfully authorized.                     |
+        | `Rejected`               | Terminal   | The unauthorized Consent has been rejected at the LFI.            |
+        | `Revoked`                | Terminal   | The Consent has been revoked at the TPP or LFI.                   |
+        | `Expired`                | Terminal   | The Consent has expired.                                          |
+        | `Consumed`               | Terminal   | The consented action(s) have been completed successfully.         |
+        | `Suspended`              | In Use     | The Consent has been suspended.                                   |
+    Consent.ConsentStatusUpdateDateTime1Type:
+      type: string
+      pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+      format: date-time
+      description: >-
+        Consent status update data and time, as recorded by Consent Manager.
+
+
+        Date and time is represented in RFC 3339 date-time format, qualified as Arabia Standard Time, with seconds being
+        the maximum supported precision.
+    Consent.IdentifiedTppActingOnBehalfOf1Properties:
+      type: object
+      required:
+        - LegalName
+        - IdentifierType
+        - Identifier
+      properties:
+        TradingName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: >-
+            Trading Name of the organization, as understood by the User agreeing the Consent. Omitted where the Trading
+            Name and Legal Name are the same.
+        LegalName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Legal Name, as registered with the local agency who licenses or regulates the activity of the organization.
+        IdentifierType:
+          type: string
+          enum:
+            - CommercialRegistrationCertificate
+            - Other
+          description: >-
+            Qualifier for the organization identifier. Permissible values:
+
+
+            * CommercialRegistrationCertificate: Issued by Ministry of Commerce and Industry, with the value being the
+            Certificate number.
+
+
+            * Other: Alternative identifier, as allowed under open finance regulations.
+        Identifier:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Value of the identifier, qualified by `IdentifierType`.
+      description: >-
+        Provides details of the organization a TPP is acting on behalf of in providing open finance services, identified
+        by name and by a qualified identifier.
+
+
+        `IdentifierType` and `Identifier` are paired: an identifier is always accompanied by the scheme that qualifies
+        it.
+      additionalProperties: false
+    Consent.MultiAuthorization1Properties:
+      type: object
+      required:
+        - TotalRequired
+        - Authorizations
+      properties:
+        TotalRequired:
+          type: integer
+          description: The total number of Authorizers required to process the request, as provided by the LFI.
+        Authorizations:
+          type: array
+          items:
+            type: object
+            properties:
+              AuthorizerId:
+                type: string
+                minLength: 1
+                maxLength: 128
+                description: Authorizer identifier, as assigned by the LFI.
+              AuthorizerType:
+                type: string
+                minLength: 1
+                maxLength: 50
+                description: The Type of Authorizer. For example, Financial, Management, etc.
+              AuthorizationDate:
+                type: string
+                pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+                format: date-time
+                description: The date and time when the Authorization occurred.
+              AuthorizationStatus:
+                type: string
+                enum:
+                  - Pending
+                  - Approved
+                  - Rejected
+                description: Status that reflects the authorizers decision in granted Consent.
+            required:
+              - AuthorizerId
+              - AuthorizationDate
+              - AuthorizationStatus
+            additionalProperties: false
+          minItems: 1
+      description: Metadata that describes the multi-authorization characteristics of the Consent, as prescribed by the LFI.
+      additionalProperties: false
+    Consent.TppActingOnBehalfOf1Types:
+      oneOf:
+        - $ref: '#/components/schemas/Consent.IdentifiedTppActingOnBehalfOf1Properties'
+        - $ref: '#/components/schemas/Consent.UnidentifiedTppActingOnBehalfOf1Properties'
+      description: >-
+        Provides details of the organization a TPP is acting on behalf of in providing open finance services.
+
+
+        Used in Consent to provide information on organizations that are not licensed directly to provide open finance
+        services.
+
+
+        Omitted where the TPP is not representing another organization in providing open finance services and agreeing
+        Consent with the User.
+      x-ozone-discovery-requires-analysis: Confirm that the on-behalf of approach is correct for Qatar and whether this or Sponsored TPP is correct.
+    Consent.UnidentifiedTppActingOnBehalfOf1Properties:
+      type: object
+      required:
+        - LegalName
+      properties:
+        TradingName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: >-
+            Trading Name of the organization, as understood by the User agreeing the Consent. Omitted where the Trading
+            Name and Legal Name are the same.
+        LegalName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Legal Name, as registered with the local agency who licenses or regulates the activity of the organization.
+      description: >-
+        Provides details of the organization a TPP is acting on behalf of in providing open finance services, identified
+        by name only.
+
+
+        Used where no qualified identifier is held for the organization.
+      additionalProperties: false
+    CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties:
+      type: object
+      required:
+        - UnitCurrency
+        - RateType
+      properties:
+        UnitCurrency:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Currency in which the rate of exchange is expressed in a currency exchange. Often referred to as the "sell"
+            side in a currency conversion.
+
+
+            In the example 1GBP = xxxCUR, the unit currency is GBP.
+        RateType:
+          $ref: '#/components/schemas/CurrencyExchange.RateType1Codes'
+        ContractIdentification:
+          $ref: '#/components/schemas/CurrencyExchange.ContractIdentification1Type'
+        ExchangeRate:
+          type: number
+          description: |-
+            The factor used for conversion of an amount from one currency to another.
+
+            Reflects the price at which one currency was bought with another currency.
+        ExpirationDateTime:
+          type: string
+          format: date-time
+          description: |-
+            Specified date and time the exchange rate agreement will expire.
+
+            All dates in the JSON payloads are represented in ISO 8601 date-time format.
+
+            All date-time fields in responses must include the timezone, for example: 2023-04-05T10:43:07+00:00
+      description: |-
+        Details of the currency exchange recorded against a Consent.
+
+        `ExchangeRate` is optional, as the rate may not have been established at the point the Consent is
+        read — unlike a payment, which reports the rate that was applied.
+      additionalProperties: false
+    CurrencyExchange.ContractIdentification1Type:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: >-
+        Unique and unambiguous reference to the foreign exchange contract agreed between the initiating party/Creditor
+        and the Debtor Agent.
+    CurrencyExchange.CurrencyExchangeRateInformation1Properties:
+      type: object
+      required:
+        - UnitCurrency
+        - RateType
+      properties:
+        UnitCurrency:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Currency in which the rate of exchange is expressed in a currency exchange. Often referred to as the "sell"
+            side in a currency conversion.
+
+
+            In the example 1GBP = xxxCUR, the unit currency is GBP.
+        RateType:
+          $ref: '#/components/schemas/CurrencyExchange.RateType1Codes'
+        ContractIdentification:
+          $ref: '#/components/schemas/CurrencyExchange.ContractIdentification1Type'
+        ExchangeRate:
+          type: number
+          description: |-
+            The factor used for conversion of an amount from one currency to another.
+
+            Reflects the price at which one currency was bought with another currency.
+      description: |-
+        Provides details on the currency exchange rate and contract requested for a payment.
+
+        `ExchangeRate` is omitted where the rate is not known at the point the request is made, and is
+        resolved by the LFI.
+      additionalProperties: false
+    CurrencyExchange.InstructionPriority1Codes:
+      type: string
+      enum:
+        - Normal
+        - Urgent
+      description: >-
+        Indicator of the urgency or order of importance that the instructing party would like the instructed party to
+        apply to the processing of the instruction.
+
+
+        Payment Initiation Request may not require this code where it is not supported or the payment can proceed
+        without specific prioritization.
+    CurrencyExchange.RateType1Codes:
+      type: string
+      enum:
+        - Actual
+        - Agreed
+        - Indicative
+      description: Specifies the type used to complete the currency exchange.
+    CurrencyExchange.RequestedCurrencyExchange1Properties:
+      type: object
+      required:
+        - ExtendedPurpose
+        - CurrencyOfTransfer
+      properties:
+        InstructionPriority:
+          $ref: '#/components/schemas/CurrencyExchange.InstructionPriority1Codes'
+        ExtendedPurpose:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Specifies the purpose of an international payment, using freeform text.
+          x-ozone-discovery-requires-analysis: Does QCB mandate extended purpose codes for international payments.
+        ChargeBearer:
+          $ref: '#/components/schemas/Charges.ChargeBearerType1Codes'
+        CurrencyOfTransfer:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Specifies the currency of the to be transferred amount, which is different from the currency of the Debtor
+            Account.
+
+
+            Often referred to as the "buy" side in a currency conversion.
+        DestinationCountryCode:
+          type: string
+          pattern: '[A-Z]{2,2}'
+          description: >-
+            Country in which Credit Account is domiciled. Code to identify a country, a dependency, or another area of
+            particular geopolitical interest, on the basis of country names obtained from the United Nations (ISO 3166,
+            Alpha-2 code).
+
+
+            Provides visibility to the LFI of the destination country for payment routing and risk screening purposes.
+        ExchangeRateInformation:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyExchange.CurrencyExchangeRateInformation1Properties'
+          description: >-
+            Details of the request currency exchange.
+
+
+            Omitted where the TPP has no visibility of available rates at Consent Setup, with resolution of the
+            requested currency exchange details happening at the LFI.
+      description: >-
+        The details of the non-local currency or currency exchange request that has been agreed between the User and the
+        TPP.
+
+
+        The requested Charge Bearer and Exchange Rate Information included in this object may be superseded by updated
+        information supplied by the LFI, which will be recorded on the Consent record at Consent Manager.
+      additionalProperties: false
+    Events.Subscription1Properties:
+      type: object
+      required:
+        - Webhook
+      properties:
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: >-
+        Properties of the a Event Notification Subscription created by the TPP for a given Consent.
+
+
+        Additional guidance on supported Events is provided separately in the Developer Portal, and in the Webhook
+        Template API description.
+      additionalProperties: false
+    FAPI.LoginHintJwe1Type:
+      type: string
+      minLength: 1
+      maxLength: 131072
+      description: >-
+        The `login_hint` value as a JSON Web Encryption (JWE) object.
+
+
+        The value is a Compact Serialization of a JWE, encrypted with the target LFI's public key, whose decrypted
+        payload **MUST** be parsed using the `LoginHintJwePayload1Properties` Schema Object.
+    FAPI.LoginHintJwePayload1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          allOf:
+            - $ref: '#/components/schemas/Identity.NationalIdentifier1Codes'
+          description: The scheme name that specifies the identification type value.
+        Identification:
+          type: string
+          minLength: 1
+          maxLength: 12
+          description: Identification value, qualified by `SchemeName`.
+      description: Provides the structure of the payload for the JWE used in the `login_hint` parameter.
+      additionalProperties: false
+    FAPI.RequestUri1Type:
+      type: string
+      minLength: 1
+      maxLength: 512
+    Identity.BusinessIdentity1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - CommercialRegistrationNumber
+          description: |-
+            The scheme name that specifies the identification type value.
+
+            `CommercialRegistrationNumber` is the only supported value for businesses.
+        Identification:
+          type: string
+          minLength: 1
+          maxLength: 12
+          description: Identification value, qualified by `schemeName`
+        ExpiryDate:
+          type: string
+          pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]
+          format: date
+          description: |-
+            Date on which the identification expires.
+
+            Omitted if not held.
+        Name:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in English language.
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in Arabic
+          description: Name of the organization. Omitted if not held.
+          additionalProperties: false
+      additionalProperties: false
+    Identity.Identity1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          $ref: '#/components/schemas/Identity.NationalIdentifier1Codes'
+        Identification:
+          type: string
+          minLength: 1
+          maxLength: 12
+          description: Identification value, qualified by `schemeName`
+        Name:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in English language.
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in Arabic
+          description: Name of the person or organization. Omitted if not held.
+          additionalProperties: false
+      additionalProperties: false
+    Identity.NationalIdentifier1Codes:
+      type: string
+      enum:
+        - QID
+        - CommercialRegistrationNumber
+      description: |-
+        Identifier type, based on following values:
+
+        * QID: A Qatar ID, issued to individuals.
+
+        * CommercialRegistrationNumber: Commercial Registration Certificate, issued to organizations.
+      x-ozone-discovery-requires-analysis: Verify that these schemes are the only required, or others need to be brought into scope.
+    OAuth.AuthorizationCodeGrantType1Codes:
+      type: string
+      enum:
+        - authorization_code
+      description: The grant type, which must be set to `authorization_code`.
+    OAuth.ErrorDescription1Type:
+      type: string
+      minLength: 1
+      maxLength: 512
+      description: Description of the error providing additional information
+    OAuth.ErrorUri1Type:
+      type: string
+      format: uri
+      minLength: 1
+      maxLength: 2048
+      description: A URI identifying a human-readable web page with information about the error
+    OAuth.OAuthBadRequestErrorResponse1Properties:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/OAuth.OAuthErrorResponse1Properties'
+      description: Bad Request
+    OAuth.OAuthError1Codes:
+      type: string
+      enum:
+        - invalid_request
+        - invalid_client
+        - invalid_grant
+        - unauthorized_client
+        - unsupported_grant_type
+        - invalid_scope
+      description: Status code corresponding to error condition to be returned to the client
+    OAuth.OAuthErrorResponse1Properties:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/OAuth.OAuthError1Codes'
+        error_description:
+          $ref: '#/components/schemas/OAuth.ErrorDescription1Type'
+        error_uri:
+          $ref: '#/components/schemas/OAuth.ErrorUri1Type'
+      description: Error returned from endpoints compliant with security profile
+      additionalProperties: false
+    OAuth.ResponseCode1Codes:
+      type: string
+      enum:
+        - code
+      description: >-
+        The OAuth 2.0 response type requested by the Client, which defaults to 'code' as only Authorization Code Flow is
+        supported by FAPI 2.0 Security Profile.
+    PKCE.CodeChallengeMethod1Codes:
+      type: string
+      enum:
+        - S256
+      description: >-
+        Code verifier transformation method, set to S256 as required by the [FAPI 2.0 Security
+        Profile](https://openid.net/specs/fapi-2_0-security-profile-ID2.html#section-5.3.1.2-2.5.1)
+    PaymentInitiation.AccountName1Properties:
+      type: object
+      properties:
+        en:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: English language value of the account name.
+        ar:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Arabic language value of the account name.
+      description: Name of the account holder on the account as recorded by the FI.
+      additionalProperties: false
+    PaymentInitiation.AccountType1Codes:
+      type: string
+      enum:
+        - CurrentAccount
+        - Savings
+        - CreditCard
+        - Mortgage
+        - Finance
+      description: The type of account held by the Creditor.
+    PaymentInitiation.AddressMatchLevel1Codes:
+      type: string
+      enum:
+        - FullMatch
+        - PartialMatch
+        - NoMatch
+        - NotApplicable
+      description: The level to which the delivery address matches the billing address.
+    PaymentInitiation.AuthenticationChannel1Codes:
+      type: string
+      enum:
+        - App
+        - Web
+      description: Indicates whether the User authenticated at the TPP using a mobile app or website.
+    PaymentInitiation.AuthenticationFlow1Codes:
+      type: string
+      enum:
+        - MFA
+        - Other
+      description: The authentication flow used by the User when authenticated at the TPP.
+    PaymentInitiation.AuthenticationValue1Type:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: Value of authentication code.
+    PaymentInitiation.BicFi1Type:
+      type: string
+      pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+      description: A BIC as defined by ISO 9302.
+    PaymentInitiation.BindingStatus1Codes:
+      type: string
+      enum:
+        - Active
+        - Expired
+        - Revoked
+        - Suspended
+      description: The status of the binding between the device and the session established by the TPP with the User.
+    PaymentInitiation.BiometricType1Codes:
+      type: string
+      enum:
+        - Fingerprint
+        - FacialRecognition
+        - Iris
+        - VoicePrint
+        - Other
+      description: The type of biometric supported by the User's device.
+    PaymentInitiation.ChallengeOutcome1Codes:
+      type: string
+      enum:
+        - Pass
+        - Fail
+        - NotPerformed
+      description: The outcome of the authentication challenge performed by the User at the TPP.
+    PaymentInitiation.Channel1Codes:
+      type: string
+      enum:
+        - Web
+        - Mobile
+      description: Where the payment has been initiated from.
+    PaymentInitiation.ChannelType1Codes:
+      type: string
+      enum:
+        - ECommerce
+        - InStore
+        - InApp
+        - Telephone
+        - Mail
+        - RecurringPayment
+        - Other
+      description: The channel through which the transaction is being conducted.
+    PaymentInitiation.ConnectionType1Codes:
+      type: string
+      enum:
+        - WiFi
+        - Cellular
+        - Other
+      description: The type of network connection used by the User's device.
+    PaymentInitiation.CreatePaymentInitiationAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:bank-service-initiation:payment-initiation:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.CreatePaymentInitiationConsent1Properties'
+          description: Properties of the consent agreed by the User with the TPP.
+        subscription:
+          allOf:
+            - $ref: '#/components/schemas/Events.Subscription1Properties'
+          description: Subscription to Event Notifications, to be sent to the TPP Webhook registered at the API Hub.
+      description: A Rich Authorization Request object for a Payment Initiation Consent.
+      additionalProperties: false
+      title: Payment Initiation Consent
+    PaymentInitiation.CreatePaymentInitiationConsent1Properties:
+      type: object
+      required:
+        - PersonalIdentifiableInformation
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+      properties:
+        PersonalIdentifiableInformation:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentInitiation.DomesticPaymentPersonalIdentifiableInformation1Properties'
+            - $ref: '#/components/schemas/PaymentInitiation.JWEPaymentPII1Type'
+          description: >-
+            Personal Identifiable Information (PII), represented in both encoded and decoded form using a `oneOf`.
+
+
+            Implementers **MUST** adhere to the `DomesticPaymentPersonalIdentifiableInformation1Properties` Schema
+            Object when creating the object to be signed and encrypted through a JWS and JWE.
+
+
+            Debtor and Creditor information **MUST** be set according to the rules for the payment type being
+            instructed.
+
+
+            A `DebtorAccount` **_may_** be provided if known to the TPP and agreed in the initial Consent setup at the
+            TPP.
+
+
+            The encrypted form of the object is provided by the `JWEPaymentPII1Type` Schema Object, which **MUST** be
+            used when invoking the PAR operation.
+        ControlParameters:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationControlParameters1Properties'
+          description: Control Parameters set the overall rules for the Payment Schedule.
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+      description: Properties of the consent agreed by the User with the TPP for a Payment Initiation Consent.
+      additionalProperties: false
+    PaymentInitiation.Creditor1Properties:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Creditor name.
+        PostalAddress:
+          allOf:
+            - $ref: '#/components/schemas/Address.Address1Types'
+          description: Creditor postal address.
+      description: Party to which an amount of money is due.
+      additionalProperties: false
+    PaymentInitiation.CreditorAccountType1Codes:
+      type: string
+      enum:
+        - Individual
+        - Merchant
+        - Business
+        - Charity
+        - GovernmentBody
+        - Other
+      description: |-
+        The Creditor (Payee) Type, based on an allowed list.
+
+        This value is populated by TPPs to inform the User of the type of Creditor being authorized
+
+        Used to provide information to the User during the Consent journey.
+    PaymentInitiation.CreditorAgent1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - BICFI
+            - Other
+          description: |-
+            The name of the scheme that qualifies the `identification` value for the Agent.
+
+            The following values are supported:
+
+            * `BICFI`: A Business Identification Code, as defined under ISO9362.
+
+            * `Other`: An alternative identifier, as prescribed under local market regulations.
+        Identification:
+          anyOf:
+            - $ref: '#/components/schemas/PaymentInitiation.BicFi1Type'
+            - $ref: '#/components/schemas/PaymentInitiation.OtherFiIdentification1Type'
+          description: Identification for the financial institution who is the Agent, qualified by `SchemeName`.
+        Name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Creditor Agent name.
+        PostalAddress:
+          allOf:
+            - $ref: '#/components/schemas/Address.Address1Types'
+          description: Creditor Agent postal address.
+      description: >-
+        Properties of the Creditor Agent, which provides information on the Financial Institution that holds the
+        Creditor Account.
+      additionalProperties: false
+    PaymentInitiation.CreditorIndicators1Properties:
+      type: object
+      properties:
+        AccountType:
+          $ref: '#/components/schemas/PaymentInitiation.AccountType1Codes'
+        IsCreditorPrePopulated:
+          type: boolean
+          description: Creditor details are provided by the TPP and the User has not entered them at Consent Setup.
+        TradingName:
+          $ref: '#/components/schemas/PaymentInitiation.TradingName1Properties'
+        IsVerifiedByTPP:
+          type: boolean
+          description: The TPP has onboarded the Creditor and verified their identity.
+        AdditionalAccountHolderIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity.Identity1Properties'
+        MerchantDetails:
+          type: object
+          properties:
+            MerchantIdentification:
+              $ref: '#/components/schemas/Identity.BusinessIdentity1Properties'
+            MerchantSICCode:
+              type: string
+              minLength: 3
+              maxLength: 4
+            MerchantCategoryCode:
+              type: string
+              minLength: 3
+              maxLength: 4
+          required:
+            - MerchantIdentification
+          description: >-
+            Details of the Merchant involved in the transaction.
+
+
+            Merchant details are specified only for those merchant categories that are generally expected to originate
+            retail financial transactions.
+          x-ozone-discovery-requires-analysis: Confirm that the Merchant model makes sense, is freely available, and can be supplied by TPPs.
+          additionalProperties: false
+        SupplementaryData:
+          type: object
+          description: Additional information that cannot be captured in the structured fields and/or any other specific block
+          additionalProperties: false
+      description: Creditor Indicators
+      additionalProperties: false
+    PaymentInitiation.CreditorReference1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[A-Za-z0-9 \/?:().,'+-]+$
+      description: >-
+        Creditor Reference that provides information to the Creditor on the source of the payment.
+
+
+        If included in the Consent displayed during Consent Authorization and recorded with payment on the Creditor
+        account ledger of transactions by the LFI, where supported by the LFI.
+
+
+        If included in the Payment Initiation operation included in the request payload.
+
+
+        If included in Account Information, provides a record of the Creditor Reference recorded with the transaction.
+    PaymentInitiation.DebtorAccount1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - IBAN
+          description: Scheme name for the Debtor Account. The Debtor Account must be an IBAN.
+        Identification:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.QcbIban1Type'
+          description: The Identification of the Debtor Account.
+        Name:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+          minProperties: 1
+          description: The Debtor Account, which can be provided in both English and Arabic. Omitted if not held by the TPP.
+          additionalProperties: false
+      description: >-
+        Details of the Debtor Account when provided at the TPP. Omitted if not available at the TPP or the User chooses
+        to select the Debtor Account at the LFI.
+      additionalProperties: false
+    PaymentInitiation.DebtorIndicators1Properties:
+      type: object
+      properties:
+        Authentication:
+          type: object
+          properties:
+            AuthenticationChannel:
+              $ref: '#/components/schemas/PaymentInitiation.AuthenticationChannel1Codes'
+            PossessionFactor:
+              type: object
+              properties:
+                IsUsed:
+                  type: boolean
+                Type:
+                  $ref: '#/components/schemas/PaymentInitiation.PossessionFactorType1Codes'
+              additionalProperties: false
+            KnowledgeFactor:
+              type: object
+              properties:
+                IsUsed:
+                  type: boolean
+                Type:
+                  $ref: '#/components/schemas/PaymentInitiation.KnowledgeFactorType1Codes'
+              additionalProperties: false
+            InherenceFactor:
+              type: object
+              properties:
+                IsUsed:
+                  type: boolean
+                Type:
+                  $ref: '#/components/schemas/PaymentInitiation.InherenceFactorType1Codes'
+              additionalProperties: false
+            ChallengeOutcome:
+              $ref: '#/components/schemas/PaymentInitiation.ChallengeOutcome1Codes'
+            AuthenticationFlow:
+              $ref: '#/components/schemas/PaymentInitiation.AuthenticationFlow1Codes'
+            AuthenticationValue:
+              $ref: '#/components/schemas/PaymentInitiation.AuthenticationValue1Type'
+            ChallengeDateTime:
+              type: string
+              format: date-time
+          description: The authentication method used by the User to access their account with the TPP.
+          additionalProperties: false
+        UserName:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in English language.
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in Arabic
+          description: The Name of the User initiating the Payment
+          additionalProperties: false
+        GeoLocation:
+          type: object
+          properties:
+            Latitude:
+              $ref: '#/components/schemas/Values.Latitude1Type'
+            Longitude:
+              $ref: '#/components/schemas/Values.Longitude1Type'
+          required:
+            - Latitude
+            - Longitude
+          description: GPS to identify and track the whereabouts of the connected electronic device.
+          additionalProperties: false
+        DeviceInformation:
+          type: object
+          properties:
+            DeviceId:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceId1Type'
+            AlternativeDeviceId:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceId1Type'
+            DeviceOperatingSystem:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceOperatingSystem1Type'
+            DeviceOperatingSystemVersion:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceOperatingSystemVersion1Type'
+            DeviceBindingId:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceBindingId1Type'
+            LastBindingDateTime:
+              type: string
+              format: date-time
+            BindingDuration:
+              type: string
+              format: duration
+            BindingStatus:
+              $ref: '#/components/schemas/PaymentInitiation.BindingStatus1Codes'
+            DeviceType:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceType1Codes'
+            DeviceManufacturer:
+              type: object
+              properties:
+                Model:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+                Manufacturer:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+              description: Device manufacturer information.
+              additionalProperties: false
+            DeviceLanguage:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceLanguage1Type'
+            DeviceLocalDateTime:
+              type: string
+              format: date-time
+              description: Date and time as set on the device.
+            ConnectionType:
+              $ref: '#/components/schemas/PaymentInitiation.ConnectionType1Codes'
+            ScreenInformation:
+              type: object
+              properties:
+                PixelDensity:
+                  type: integer
+                  format: int64
+                Orientation:
+                  $ref: '#/components/schemas/PaymentInitiation.Orientation1Codes'
+              description: Device screen information
+              additionalProperties: false
+            BatteryStatus:
+              type: object
+              properties:
+                Level:
+                  type: integer
+                  format: int64
+                  minimum: 0
+                  maximum: 100
+                IsCharging:
+                  type: boolean
+              description: Device battery information.
+              additionalProperties: false
+            TouchSupport:
+              type: object
+              properties:
+                Supported:
+                  type: boolean
+                MaxTouchPoints:
+                  type: integer
+                  minimum: 0
+              description: Device touch support information.
+              additionalProperties: false
+            MotionSensors:
+              type: object
+              properties:
+                Status:
+                  $ref: '#/components/schemas/PaymentInitiation.MotionSensorStatus1Codes'
+                Accelerometer:
+                  type: boolean
+                Gyroscope:
+                  type: boolean
+              description: Device motion sensor information.
+              additionalProperties: false
+            DeviceEnvironmentContext:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentInitiation.DeviceEnvironmentContext1Codes'
+              minItems: 1
+              description: Device environment context information.
+          description: Detailed device information
+          additionalProperties: false
+        BiometricCapabilities:
+          type: object
+          properties:
+            SupportsBiometric:
+              type: boolean
+            BiometricTypes:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentInitiation.BiometricType1Codes'
+          description: Device biometric capabilities
+          additionalProperties: false
+        AppInformation:
+          type: object
+          properties:
+            AppVersion:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: TPP app version number or label.
+            PackageName:
+              type: string
+              minLength: 1
+              maxLength: 256
+              description: TPP app package name.
+            BuildNumber:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: TPP app build number.
+          minProperties: 1
+          description: Mobile application specific information
+          additionalProperties: false
+        BrowserInformation:
+          type: object
+          properties:
+            UserAgent:
+              type: string
+              minLength: 1
+              maxLength: 1024
+              description: User agent information.
+            IsCookiesEnabled:
+              type: boolean
+              description: Whether cookies are enabled indicator.
+            AvailableFonts:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 140
+                description: Font family name.
+              minItems: 1
+            Plugins:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 140
+                description: Plug-in name.
+              minItems: 1
+            PixelRatio:
+              type: integer
+              format: int64
+              description: Browser pixel ratio.
+          minProperties: 1
+          description: Browser-specific information
+          additionalProperties: false
+        UserBehavior:
+          type: object
+          properties:
+            ScrollBehavior:
+              type: object
+              properties:
+                Direction:
+                  $ref: '#/components/schemas/PaymentInitiation.Direction1Codes'
+                Speed:
+                  type: integer
+                  format: int64
+                Frequency:
+                  type: integer
+                  format: int64
+              additionalProperties: false
+          description: User behavior indicators
+          additionalProperties: false
+        AccountRiskIndicators:
+          type: object
+          properties:
+            UserOnboardingDateTime:
+              type: string
+              format: date-time
+              description: Date and time at which the User was onboarded with the TPP.
+            LastAccountChangeDate:
+              type: string
+              format: date
+              description: Date at which the User last changed their account settings at the TPP.
+            LastPasswordChangeDate:
+              type: string
+              format: date
+              description: Date at which the User last changed their password at the TPP.
+            SuspiciousActivity:
+              $ref: '#/components/schemas/PaymentInitiation.SuspiciousActivity1Codes'
+            TransactionHistory:
+              type: object
+              properties:
+                LastDay:
+                  type: integer
+                  minimum: 0
+                LastYear:
+                  type: integer
+                  minimum: 0
+              description: Summary of User transaction history at the TPP.
+              additionalProperties: false
+          description: Risk indicators related to the account
+          additionalProperties: false
+        SupplementaryData:
+          type: object
+          description: >-
+            Additional information that cannot be captured in the structured fields and/or any other specific block.
+            This may include information that is not available in the structured fields, such as a user's behavioural
+            data like their typing speed and typing patterns.
+          additionalProperties: false
+      description: Indicators associated with the User (Debtor) that agreed the Consent with the TPP.
+      additionalProperties: false
+    PaymentInitiation.DebtorReference1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[A-Za-z0-9 \/?:().,'+-]+$
+      description: >-
+        Debtor Reference that provides information to the User on the source of the payment.
+
+
+        If included in the Consent displayed during Consent Authorization and recorded with payment on the account
+        ledger of transactions by the LFI.
+
+
+        If included in the Payment Initiation operation included in the request payload or returned by the financial
+        institution for information for the User.
+    PaymentInitiation.DeliveryTimeframe1Codes:
+      type: string
+      enum:
+        - ElectronicDelivery
+        - SameDayShipping
+        - OvernightShipping
+        - MoreThan1DayShipping
+      description: The delivery timeframe for the merchandise as provided by the merchant.
+    PaymentInitiation.DeviceBindingId1Type:
+      type: string
+      minLength: 1
+      maxLength: 8192
+      description: Device binding identifier that binds a device to the session established by the TPP with the User.
+    PaymentInitiation.DeviceEnvironmentContext1Codes:
+      type: string
+      enum:
+        - VPNDetected
+        - EmulatorDetected
+      description: Contextual indicators detected in the environment of the User's device.
+    PaymentInitiation.DeviceId1Type:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: Device identifier (primary or alternative) as elicited by the TPP from the appropriate device interface.
+    PaymentInitiation.DeviceLanguage1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      description: Device language setting.
+    PaymentInitiation.DeviceOperatingSystem1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: Device operating system as elicited by the TPP from the appropriate device interface.
+    PaymentInitiation.DeviceOperatingSystemVersion1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: Device operating system version as elicited by the TPP from the appropriate device interface.
+    PaymentInitiation.DeviceType1Codes:
+      type: string
+      enum:
+        - Mobile
+        - Desktop
+        - Tablet
+        - Wearable
+        - Other
+      description: The type of device used by the User to access their account with the TPP.
+    PaymentInitiation.Direction1Codes:
+      type: string
+      enum:
+        - Up
+        - Down
+        - Both
+      description: The direction of the User's scroll behaviour.
+    PaymentInitiation.DomesticCreditor1Properties:
+      type: object
+      required:
+        - CreditorAccount
+      properties:
+        CreditorAgent:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorAgent1Properties'
+        Creditor:
+          $ref: '#/components/schemas/PaymentInitiation.Creditor1Properties'
+        CreditorAccount:
+          $ref: '#/components/schemas/PaymentInitiation.DomesticCreditorAccount1Properties'
+      description: Identification elements for a Creditor for a domestic payment instruction.
+      additionalProperties: false
+    PaymentInitiation.DomesticCreditorAccount1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+        - Name
+      properties:
+        Type:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorAccountType1Codes'
+        SchemeName:
+          type: string
+          enum:
+            - IBAN
+          description: Domestic payment scheme, restricted to `IBAN`.
+        Identification:
+          $ref: '#/components/schemas/PaymentInitiation.QcbIban1Type'
+        Name:
+          $ref: '#/components/schemas/PaymentInitiation.AccountName1Properties'
+        TradingName:
+          $ref: '#/components/schemas/PaymentInitiation.TradingName1Properties'
+      description: Unambiguous identification of the account of the Creditor to which a payment will be made.
+      additionalProperties: false
+    PaymentInitiation.DomesticPaymentPersonalIdentifiableInformation1Properties:
+      type: object
+      required:
+        - Initiation
+        - Risk
+      properties:
+        Initiation:
+          type: object
+          properties:
+            DebtorAccount:
+              $ref: '#/components/schemas/PaymentInitiation.DebtorAccount1Properties'
+            Creditor:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentInitiation.DomesticCreditor1Properties'
+              minItems: 1
+              maxItems: 10
+              description: List of Creditors for a domestic payment consent.
+              x-ozone-discovery-requires-analysis: Should multi-Creditor consents be supported for international payments.
+          required:
+            - Creditor
+          description: The Initiation data is sent by the TPP to the LFI. This data is immutable and cannot be changed.
+          additionalProperties: false
+        Risk:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.Risk1Properties'
+          description: |-
+            Risk data provides the context of the Consent Setup at the TPP.
+
+            Guidance on the required data for given payment types is provided separately.
+      description: >-
+        Personal Identifiable Information (PII) for a Domestic Payment.
+
+
+        Between one and ten Creditors are supported, to allow fixed and variable payments to multiple Creditors under a
+        single Consent.
+      additionalProperties: false
+      title: Domestic Payment PII Schema Object
+    PaymentInitiation.InherenceFactorType1Codes:
+      type: string
+      enum:
+        - Biometric
+        - Fingerprint
+        - FaceRecognition
+        - IrisSca
+        - VoiceRecognition
+        - FIDOBiometric
+        - DeviceBiometrics
+        - Other
+    PaymentInitiation.JWEPaymentPII1Type:
+      type: string
+      minLength: 1
+      maxLength: 131072
+      description: >-
+        A JSON Web Encryption (JWE) object, which encapsulates a JWS. 
+
+
+        The value is a Compact Serialization of a JWE, which encapsulates encrypted content using JSON data structures.
+
+
+        Decrypted payload content **MUST** be parsed using the Scheme Objects defined by the
+        `personalIdentifiableInformation` property for the given payment type.
+      title: Encrypted PII Object
+    PaymentInitiation.KnowledgeFactorType1Codes:
+      type: string
+      enum:
+        - PIN
+        - Password
+        - SecurityQuestion
+        - SMSOTP
+        - EmailOTP
+        - OTPPush
+        - Other
+    PaymentInitiation.LongLivedPaymentConsent1Properties:
+      type: object
+      required:
+        - PeriodicSchedule
+      properties:
+        MaximumCumulativeValueOfPayments:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties'
+          description: >-
+            The maximum cumulative value of all successful payment rails executions under the Consent.
+
+
+            Each successful payment rails execution amount (related to the Consent) is added to the total cumulative
+            value of the Consent, which cannot exceed the maximum value agreed with the User at the point of consent.
+        MaximumCumulativeNumberOfPayments:
+          type: integer
+          description: >-
+            The maximum cumulative number of all successful payment rails executions under the Consent.
+
+
+            Each successful payment rails execution (related to the Consent) is added to the total cumulative number of
+            payments for the Consent, which cannot exceed the maximum value agreed with the User at the point of
+            consent.
+        PeriodicSchedule:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationPeriodicSchedule1Types'
+      description: A Consent definition for defining Multi Payments.
+      additionalProperties: false
+    PaymentInitiation.MaximumIndividualAmount1Properties:
+      type: object
+      required:
+        - Amount
+        - Currency
+      properties:
+        Amount:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+        Currency:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+      description: This is the Maximum amount a variable payment can take per period.
+      additionalProperties: false
+    PaymentInitiation.MotionSensorStatus1Codes:
+      type: string
+      enum:
+        - InMotion
+        - Stationary
+      description: Indicates whether the User's device is in motion or stationary.
+    PaymentInitiation.MultiPaymentConsentSchedule1Properties:
+      type: object
+      required:
+        - MultiPayment
+      properties:
+        MultiPayment:
+          $ref: '#/components/schemas/PaymentInitiation.LongLivedPaymentConsent1Properties'
+      description: A Consent Schedule for a Multi-Payment, initiated under a payment schedule agreed between the User and the TPP.
+      additionalProperties: false
+    PaymentInitiation.Orientation1Codes:
+      type: string
+      enum:
+        - Portrait
+        - Landscape
+      description: The screen orientation of the User's device.
+    PaymentInitiation.OtherFiIdentification1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      description: Alternative FI identification, where BICFI is not supplied or supported.
+    PaymentInitiation.PaymentConsumption1Properties:
+      type: object
+      required:
+        - CumulativeNumberOfPayments
+        - CumulativeValueOfPayments
+      properties:
+        CumulativeNumberOfPayments:
+          type: integer
+          description: |-
+            The cumulative number of payment instructions initiated under the consent schedule.
+
+            Excludes instructions in a Rejected state.
+        CumulativeValueOfPayments:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: >-
+            The cumulative value of payment instructions initiated under the consent schedule, excluding instructions in
+            a Rejected state.
+
+
+            A number of monetary units specified in an active currency where the unit of currency is explicit and
+            compliant with ISO 4217.
+          additionalProperties: false
+        CumulativeNumberOfPaymentsInCurrentPeriod:
+          type: integer
+          description: |-
+            The cumulative number of payment instructions in the current period initiated under the consent schedule.
+
+            Excludes instructions in a Rejected state.
+        CumulativeValueOfPaymentsInCurrentPeriod:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: >-
+            The cumulative value of payment instructions in the current period initiated under the consent schedule.
+
+
+            Excludes instructions in a Rejected state.
+
+
+            A number of monetary units specified in an active currency where the unit of currency is explicit and
+            compliant with ISO 4217.
+          additionalProperties: false
+      additionalProperties: false
+    PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes:
+      type: string
+      enum:
+        - ReadAccountsBasic
+        - ReadAccountsDetail
+        - ReadBalances
+        - ReadRefundAccount
+    PaymentInitiation.PaymentInitiationConsentSchedule1Types:
+      oneOf:
+        - $ref: '#/components/schemas/PaymentInitiation.SinglePaymentConsentSchedule1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.MultiPaymentConsentSchedule1Properties'
+      description: |-
+        The Consent Schedule agreed between the User and the TPP.
+
+        Exactly one payment type **MUST** be provided.
+    PaymentInitiation.PaymentInitiationControlParameters1Properties:
+      type: object
+      required:
+        - ConsentSchedule
+      properties:
+        ConsentSchedule:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationConsentSchedule1Types'
+          description: |-
+            The various payment types that can be initiated. Exactly one payment type **MUST** be provided:
+
+            * A Single Payment, initiated immediately after the User authorizes the Consent at the LFI.
+
+            * A Multi-Payment, initiated under a payment schedule agreed between the User and the TPP.
+      description: Control Parameters set the overall rules for the Payment Schedule.
+      additionalProperties: false
+    PaymentInitiation.PaymentInitiationPeriodicSchedule1Types:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/PaymentInitiation.VariableOnDemand1Properties'
+      discriminator:
+        propertyName: Type
+        mapping:
+          VariableOnDemand: '#/components/schemas/PaymentInitiation.VariableOnDemand1Properties'
+      description: The definition for a payment schedule, discriminated by the `Type` property.
+    PaymentInitiation.PeriodStartDate1Type:
+      type: string
+      format: date
+      description: Specifies the start date of when a payment schedule begins.
+    PaymentInitiation.PeriodType1Codes:
+      type: string
+      enum:
+        - Day
+        - Week
+        - Month
+        - Year
+      description: >-
+        |Period Type|Description|
+
+        |-----------|-----------|
+
+        |Day|A continuous period of time, consisting of 24 consecutive hours, starting from midnight (00:00:00) and
+        finishing at 23:59:59 of the same day. |
+
+        |Week|A continuous period of time, consisting of seven consecutive days, starting from midnight (00:00:00) and
+        finishing at 23:59:59 of the 7th day. |
+
+        |Month|A continuous period of time starting from midnight (00:00:00) of the first day of a month and finishing
+        at 23:59:59 of the last day of that month.|
+
+        |Year|A continuous period of time, consisting of 12 months.|
+    PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties:
+      type: object
+      required:
+        - Amount
+        - Currency
+      properties:
+        Amount:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+        Currency:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+      description: The maximum cumulative payment value of all payment initiations per Period Type.
+      additionalProperties: false
+    PaymentInitiation.PossessionFactorType1Codes:
+      type: string
+      enum:
+        - FIDO2SecurityKey
+        - Passkey
+        - OTPDevice
+        - OTPApp
+        - SMSOTP
+        - EmailOTP
+        - PushNotification
+        - WebauthnToken
+        - SecureEnclaveKey
+        - HardwareOTPKey
+        - TrustedDevice
+        - Other
+      description: Possession factor used by the User when authenticated at the TPP.
+    PaymentInitiation.PreOrderPurchaseIndicator1Codes:
+      type: string
+      enum:
+        - MerchandiseAvailable
+        - FutureAvailability
+      description: Indicates whether the merchandise is currently available or is a pre-order for future availability.
+    PaymentInitiation.QcbIban1Type:
+      type: string
+      pattern: ^QA[0-9]{2}[A-Z]{4}[0-9]{21}$
+      description: >-
+        A domestic IBAN, as [defined](https://www.qcb.gov.qa/Documents/BankInstructions/EN/13-193.pdf) by Qatar Central
+        Bank.
+    PaymentInitiation.ReadFixedDefinedScheduleAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:fixed-defined-schedule:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadFixedDefinedScheduleConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Fixed Defined Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadFixedDefinedScheduleConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: array
+          items:
+            type: object
+            properties:
+              PaymentExecutionDate:
+                type: string
+                format: date
+                description: |-
+                  Used to specify the expected payment execution date/time.
+
+                  All dates in the JSON payloads are represented in ISO 8601 date format, for example is: 2023-04-05
+              Amount:
+                type: object
+                required:
+                  - Amount
+                  - Currency
+                properties:
+                  Amount:
+                    $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                  Currency:
+                    $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+                description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+                additionalProperties: false
+            required:
+              - PaymentExecutionDate
+              - Amount
+            additionalProperties: false
+          minItems: 1
+          maxItems: 53
+          description: |-
+            Payment Schedule denoting a list of pre-defined future dated payments all with fixed amounts and dates.
+
+            Up to 53 payments are supported in a given schedule.
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Fixed Defined Schedule of payments.
+      additionalProperties: false
+    PaymentInitiation.ReadFixedOnDemandAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:fixed-on-demand:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadFixedOnDemandConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Fixed On-Demand Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadFixedOnDemandConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: object
+          properties:
+            PeriodType:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodType1Codes'
+            PeriodStartDate:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodStartDate1Type'
+            Amount:
+              type: object
+              required:
+                - Amount
+                - Currency
+              properties:
+                Amount:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                Currency:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+              description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+              additionalProperties: false
+            Controls:
+              type: object
+              properties:
+                MaximumCumulativeValueOfPaymentsPerPeriod:
+                  $ref: '#/components/schemas/PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties'
+                MaximumCumulativeNumberOfPaymentsPerPeriod:
+                  type: integer
+              minProperties: 1
+              description: Controls for maximum cumulative payments that apply to the payment schedule.
+              additionalProperties: false
+          required:
+            - PeriodType
+            - PeriodStartDate
+            - Amount
+            - Controls
+          description: >-
+            Payment Controls that apply to all payment instructions in a given period under this payment  The payments
+            for this consent may be executed on any date, as long as they are within the Controls for a PeriodType.
+          additionalProperties: false
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Fixed On-Demand Schedule of payments.
+      additionalProperties: false
+    PaymentInitiation.ReadFixedPeriodicScheduleAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:fixed-periodic-schedule:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadFixedPeriodicScheduleConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Fixed Periodic Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadFixedPeriodicScheduleConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: object
+          properties:
+            PeriodType:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodType1Codes'
+            PeriodStartDate:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodStartDate1Type'
+            Amount:
+              type: object
+              required:
+                - Amount
+                - Currency
+              properties:
+                Amount:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                Currency:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+              description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+              additionalProperties: false
+          required:
+            - PeriodType
+            - PeriodStartDate
+            - Amount
+          description: >-
+            Payment Controls that apply to all payment instructions in a given period under this payment  
+
+
+            The payments for this consent must be executed only on the PeriodStartDate, and dates recurring based on the
+            PeriodType.
+          additionalProperties: false
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Fixed Periodic Schedule of payments.
+      additionalProperties: false
+    PaymentInitiation.ReadOpenPaymentsAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:open-payments:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadOpenPaymentsConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties for creating a Consent object for a Variable On-Demand Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadOpenPaymentsConsent1Properties:
+      type: object
+      required:
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      additionalProperties: false
+    PaymentInitiation.ReadSingleFutureDatedPaymentAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:single-future-dated-payment:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadSingleFutureDatedPaymentConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Single Future Dated Payment initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadSingleFutureDatedPaymentConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: object
+          properties:
+            PaymentExecutionDate:
+              type: string
+              format: date
+              description: |-
+                Used to specify the expected payment execution date/time.
+
+                All dates in the JSON payloads are represented in ISO 8601 date format, for example is: 2023-04-05
+            Amount:
+              type: object
+              required:
+                - Amount
+                - Currency
+              properties:
+                Amount:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                Currency:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+              description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+              additionalProperties: false
+          required:
+            - PaymentExecutionDate
+            - Amount
+          description: Execution date, amount and currency for a Single Future Dated Payment.
+          additionalProperties: false
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Single Future Dated Payment.
+      additionalProperties: false
+    PaymentInitiation.ReadSingleInstantPaymentAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:single-instant-payment:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadSingleInstantPaymentConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Single Instant Payment initiated by a TPP.
+      additionalProperties: false
+    PaymentInitiation.ReadSingleInstantPaymentConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: object
+          properties:
+            Amount:
+              type: object
+              required:
+                - Amount
+                - Currency
+              properties:
+                Amount:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                Currency:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+              description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+              additionalProperties: false
+          required:
+            - Amount
+          description: Amount and currency for a Single Instant Payment. No other control parameters are required.
+          additionalProperties: false
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the Consent agreed by the User with the TPP for a Single Instant Payment.
+      additionalProperties: false
+    PaymentInitiation.ReadVariableDefinedScheduleAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:variable-defined-schedule:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadVariableDefinedScheduleConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Variable Defined Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadVariableDefinedScheduleConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: array
+          items:
+            type: object
+            properties:
+              PaymentExecutionDate:
+                type: string
+                format: date
+                description: |-
+                  Used to specify the expected payment execution date/time. 
+
+                  All dates in the JSON payloads are represented in ISO 8601 date format. An example is: 2023-04-05
+              MaximumIndividualAmount:
+                $ref: '#/components/schemas/PaymentInitiation.MaximumIndividualAmount1Properties'
+            required:
+              - PaymentExecutionDate
+              - MaximumIndividualAmount
+            additionalProperties: false
+          minItems: 1
+          maxItems: 53
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Variable Defined Schedule of payments.
+      additionalProperties: false
+    PaymentInitiation.ReadVariableOnDemandAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:variable-on-demand:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadVariableOnDemandConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Variable On-Demand Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadVariableOnDemandConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: object
+          properties:
+            PeriodType:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodType1Codes'
+            PeriodStartDate:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodStartDate1Type'
+            Controls:
+              type: object
+              properties:
+                MaximumIndividualAmount:
+                  $ref: '#/components/schemas/PaymentInitiation.MaximumIndividualAmount1Properties'
+                MaximumCumulativeValueOfPaymentsPerPeriod:
+                  $ref: '#/components/schemas/PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties'
+                MaximumCumulativeNumberOfPaymentsPerPeriod:
+                  type: integer
+              minProperties: 1
+              additionalProperties: false
+          required:
+            - PeriodType
+            - PeriodStartDate
+            - Controls
+          description: >-
+            Payment Controls that apply to all payment instructions in a given period under this payment  
+
+
+            The payments for this consent may be executed on any date, as long as they are within the Controls for a
+            PeriodType.
+          additionalProperties: false
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Variable On-Demand Schedule of payments.
+      additionalProperties: false
+    PaymentInitiation.ReadVariablePeriodicScheduleAuthorizationDetails1Properties:
+      type: object
+      required:
+        - type
+        - consent
+      properties:
+        type:
+          type: string
+          enum:
+            - urn:openfinanceqatar:payment-initiation:variable-periodic-schedule:v1.0
+          description: >-
+            The Rich Authorization Request type, as defined by [RFC
+            9396](https://datatracker.ietf.org/doc/html/rfc9396#section-2-2.2).
+        consent:
+          $ref: '#/components/schemas/PaymentInitiation.ReadVariablePeriodicScheduleConsent1Properties'
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: Properties of a Consent object for a Variable Periodic Schedule of payments initiated by a TPP
+      additionalProperties: false
+    PaymentInitiation.ReadVariablePeriodicScheduleConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          type: object
+          properties:
+            PeriodType:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodType1Codes'
+            PeriodStartDate:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodStartDate1Type'
+            MaximumIndividualAmount:
+              allOf:
+                - $ref: '#/components/schemas/PaymentInitiation.MaximumIndividualAmount1Properties'
+              description: This is the Maximum amount a variable payment can take per period.
+          required:
+            - PeriodType
+            - PeriodStartDate
+            - MaximumIndividualAmount
+          description: >-
+            Payment Controls that apply to all payment instructions in a given period under this payment  
+
+
+            The payments for this consent must be executed only on the PeriodStartDate, and dates recurring based on the
+            PeriodType.
+          additionalProperties: false
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the consent agreed by the User with the TPP for a Variable Periodic Schedule of payments.
+      additionalProperties: false
+    PaymentInitiation.RecipientType1Codes:
+      type: string
+      enum:
+        - Individual
+        - Corporate
+      description: Indicates whether the recipient of the delivery is an individual or a corporate entity.
+    PaymentInitiation.ReorderItemsIndicator1Codes:
+      type: string
+      enum:
+        - FirstTimeOrder
+        - Reorder
+      description: Indicates whether the transaction is a first-time order or a reorder of items.
+    PaymentInitiation.Risk1Properties:
+      type: object
+      properties:
+        DebtorIndicators:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorIndicators1Properties'
+        DestinationDeliveryAddress:
+          type: object
+          properties:
+            RecipientType:
+              $ref: '#/components/schemas/PaymentInitiation.RecipientType1Codes'
+            RecipientName:
+              type: object
+              properties:
+                en:
+                  type: string
+                  minLength: 1
+                  maxLength: 70
+                  description: Name provided in English language.
+                ar:
+                  type: string
+                  minLength: 1
+                  maxLength: 70
+                  description: Name provided in Arabic
+              additionalProperties: false
+            NationalAddress:
+              type: array
+              items:
+                $ref: '#/components/schemas/Address.QatarAddress1Properties'
+              minItems: 1
+              description: One-or-more addresses the goods or services are to be delivered to.
+          description: Destination Delivery Address
+          additionalProperties: false
+        TransactionIndicators:
+          $ref: '#/components/schemas/PaymentInitiation.TransactionIndicators1Properties'
+        CreditorIndicators:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorIndicators1Properties'
+      description: >-
+        Risk information is sent by the TPP to the LFI and is used to specify additional details for payment risk and
+        fraud scoring.
+      additionalProperties: false
+    PaymentInitiation.SingleInstantPayment1Properties:
+      type: object
+      required:
+        - Type
+        - Amount
+      properties:
+        Type:
+          type: string
+          enum:
+            - SingleInstantPayment
+          description: The Payment Type.
+        Amount:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+          additionalProperties: false
+      description: >-
+        A single immediate payment consent that **MUST** be used for a single payment, which will be initiated
+        immediately after User authorization at the LFI.
+      additionalProperties: false
+    PaymentInitiation.SinglePaymentConsentSchedule1Properties:
+      type: object
+      required:
+        - SinglePayment
+      properties:
+        SinglePayment:
+          $ref: '#/components/schemas/PaymentInitiation.SingleInstantPayment1Properties'
+      description: A Consent Schedule for a Single Payment, initiated immediately after the User authorizes the Consent at the LFI.
+      additionalProperties: false
+    PaymentInitiation.SubChannelType1Codes:
+      type: string
+      enum:
+        - WebBrowser
+        - MobileApp
+        - SmartTV
+        - WearableDevice
+        - POSTerminal
+        - ATM
+        - KioskTerminal
+        - Other
+      description: More specific classification of the transaction channel.
+    PaymentInitiation.SuspiciousActivity1Codes:
+      type: string
+      enum:
+        - NoSuspiciousActivity
+        - SuspiciousActivityDetected
+      description: Indicates whether suspicious activity has been detected on the account.
+    PaymentInitiation.TradingName1Properties:
+      type: object
+      properties:
+        en:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: English language value of the trading name.
+        ar:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Arabic language value of the trading name.
+      description: |-
+        The trading name (if applicable) for the Creditor, as defined by local organization registration requirements.
+
+        Omitted if not account name and trading name match.
+      additionalProperties: false
+    PaymentInitiation.TransactionIndicators1Properties:
+      type: object
+      properties:
+        IsCustomerPresent:
+          type: boolean
+          description: This field differentiates between automatic and manual payment initiation.
+        IsContractPresent:
+          type: boolean
+          description: Indicates if the Creditor has a contractual relationship with the TPP.
+        Channel:
+          $ref: '#/components/schemas/PaymentInitiation.Channel1Codes'
+        ChannelType:
+          $ref: '#/components/schemas/PaymentInitiation.ChannelType1Codes'
+        SubChannelType:
+          $ref: '#/components/schemas/PaymentInitiation.SubChannelType1Codes'
+        PaymentProcess:
+          type: object
+          properties:
+            TotalDuration:
+              type: integer
+              minimum: 0
+            CurrentSessionAttempts:
+              type: integer
+              minimum: 1
+            CurrentSessionFailedAttempts:
+              type: integer
+              minimum: 0
+            Last24HourAttempts:
+              type: integer
+              minimum: 0
+            Last24HourFailedAttempts:
+              type: integer
+              minimum: 0
+          description: Metrics related to the payment process duration and attempts
+          additionalProperties: false
+        MerchantRisk:
+          type: object
+          properties:
+            DeliveryTimeframe:
+              $ref: '#/components/schemas/PaymentInitiation.DeliveryTimeframe1Codes'
+            ReorderItemsIndicator:
+              $ref: '#/components/schemas/PaymentInitiation.ReorderItemsIndicator1Codes'
+            PreOrderPurchaseIndicator:
+              $ref: '#/components/schemas/PaymentInitiation.PreOrderPurchaseIndicator1Codes'
+            IsGiftCardPurchase:
+              type: boolean
+            IsDeliveryAddressMatchesBilling:
+              type: boolean
+            AddressMatchLevel:
+              $ref: '#/components/schemas/PaymentInitiation.AddressMatchLevel1Codes'
+          description: Risk indicator details provided by the merchant
+          additionalProperties: false
+        SupplementaryData:
+          type: object
+          description: Additional information that cannot be captured in the structured fields and/or any other specific block
+          additionalProperties: false
+      description: Transaction Indicators
+      additionalProperties: false
+    PaymentInitiation.VariableOnDemand1Properties:
+      type: object
+      required:
+        - Type
+        - PeriodType
+        - PeriodStartDate
+        - Controls
+      properties:
+        Type:
+          type: string
+          enum:
+            - VariableOnDemand
+          description: The Periodic Schedule Type.
+        PeriodType:
+          $ref: '#/components/schemas/PaymentInitiation.PeriodType1Codes'
+        PeriodStartDate:
+          $ref: '#/components/schemas/PaymentInitiation.PeriodStartDate1Type'
+        Controls:
+          type: object
+          properties:
+            MaximumIndividualAmount:
+              $ref: '#/components/schemas/PaymentInitiation.MaximumIndividualAmount1Properties'
+            MaximumCumulativeValueOfPaymentsPerPeriod:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties'
+            MaximumCumulativeNumberOfPaymentsPerPeriod:
+              type: integer
+          minProperties: 1
+          description: Controls that apply to the payment schedule.
+          additionalProperties: false
+      description: >-
+        Payment Controls that apply to all payment instructions in a given period under this payment consent.
+
+
+        The payments for this consent may be executed on any date, as long as they are within the Controls for a
+        PeriodType.
+      additionalProperties: false
+    PaymentPurposeCode1Type:
+      type: string
+      minLength: 1
+      maxLength: 4
+      description: >-
+        A category code that relates to the type of services or goods that corresponds to the underlying purpose of the
+        payment. 
+
+
+        The code must conform to the published code list provided by QCB.
+      x-ozone-discovery-requires-analysis: Source mandated payment purpose code list from QCB.
+    PushedAuthorizationRequestAuthorizationDetailTypesV1_0:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/AccountInformation.CreateAccountInformationAuthorizationDetails1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.CreatePaymentInitiationAuthorizationDetails1Properties'
+      discriminator:
+        propertyName: type
+        mapping:
+          urn:openfinanceqatar:bank-data-sharing:account-information:v1.0: '#/components/schemas/AccountInformation.CreateAccountInformationAuthorizationDetails1Properties'
+          urn:openfinanceqatar:bank-service-initiation:payment-initiation:v1.0: '#/components/schemas/PaymentInitiation.CreatePaymentInitiationAuthorizationDetails1Properties'
+    PushedAuthorizationRequestBody1Properties:
+      type: object
+      required:
+        - client_assertion_type
+        - client_assertion
+        - request
+      properties:
+        client_assertion_type:
+          type: string
+          enum:
+            - urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+          description: >-
+            Client Assertion Type indicating JWT Authentication, as described by [RFC
+            7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).
+
+
+            The value `urn:ietf:params:oauth:client-assertion-type:jwt-bearer` is prescribed, and is implemented with
+            URL encoding.
+        client_assertion:
+          type: string
+          pattern: ^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$
+          description: >-
+            Client Assertion value, which **must** be a single JWT.
+
+
+            Implemented using the `private_key_jwt` method, as defined by [OpenID
+            Connect](https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication).
+        request:
+          oneOf:
+            - $ref: '#/components/schemas/AuthorizationRequest1Properties'
+            - $ref: '#/components/schemas/PushedAuthorizationRequestJws1Type'
+      additionalProperties: false
+    PushedAuthorizationRequestJws1Type:
+      type: string
+      minLength: 1
+      maxLength: 32768
+      description: The Authorization Request object as a JWS, defined as a string.
+    PushedAuthorizationResponse1Properties:
+      type: object
+      required:
+        - request_uri
+        - expires_in
+      properties:
+        request_uri:
+          allOf:
+            - $ref: '#/components/schemas/FAPI.RequestUri1Type'
+          description: The URI corresponding to the Authorization Request posted as a PAR.
+        expires_in:
+          type: integer
+          description: A JSON number that represents the lifetime of the request URI in seconds as a positive integer.
+      additionalProperties: false
+    RefreshTokenGrantTokenRequest1Properties:
+      type: object
+      required:
+        - client_id
+        - client_assertion_type
+        - client_assertion
+        - grant_type
+        - refresh_token
+      properties:
+        client_id:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: The OAuth 2.0 Client ID of the Client, as set in the Trust Framework.
+        client_assertion_type:
+          type: string
+          enum:
+            - urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+          description: >-
+            Client Assertion Type indicating JWT Authentication, as described by [RFC
+            7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).
+
+
+            The value `urn:ietf:params:oauth:client-assertion-type:jwt-bearer` is prescribed, and is implemented with
+            URL encoding.
+        client_assertion:
+          type: string
+          pattern: ^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$
+          description: >-
+            Client Assertion value, which **must** be a single JWT.
+
+
+            Implemented using the `private_key_jwt` method, as defined by [OpenID
+            Connect](https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication).
+        grant_type:
+          type: string
+          enum:
+            - refresh_token
+          description: The grant type, which must be set to `refresh_token`.
+        refresh_token:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: |-
+            [OAuth 2.0 Refresh Token](https://datatracker.ietf.org/doc/html/rfc6749#section-1.5).
+
+            Omitted from responses where not supported by a given consent type.
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: Access Token scope. Omitted if not required.
+      additionalProperties: false
+    TokenResponse1Types:
+      oneOf:
+        - $ref: '#/components/schemas/AuthorizationCodeGrantTokenAuthorizationDetailsResponse1Properties'
+        - $ref: '#/components/schemas/ClientCredentialsGrantTokenResponse1Properties'
+      description: |-
+        Token response properties, which vary by the grant type of the request.
+
+        Rich Authorization Request (RAR) objects are returned for grants associated with a Consent agreed by a User.
+    Values.ActiveOrHistoricAmount1Type:
+      type: string
+      pattern: ^\d{1,13}$|^\d{1,13}\.\d{1,5}$
+      description: >-
+        A number of monetary units specified in an active currency where the unit of currency is explicit and compliant
+        with ISO 4217.
+      example: '100.00'
+    Values.ActiveOrHistoricCurrencyCode1Type:
+      type: string
+      pattern: ^[A-Z]{3,3}$
+      description: |-
+        A 3 character alphabetic code allocated to a currency under an international currency identification scheme.
+
+        Values **MUST** be in accordance with ISO 4217 'Codes for the representation of currencies and funds'.
+    Values.Latitude1Type:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: Latitude value.
+    Values.Longitude1Type:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: Longitude value.
+servers:
+  - url: /open-finance/auth/v1.0

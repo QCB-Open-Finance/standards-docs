@@ -1,0 +1,4106 @@
+openapi: 3.0.0
+info:
+  title: 'QCB Open Finance: Payment Initiation API'
+  description: |-
+    # QCB Open Finance: Payment Initiation
+
+    This API description provides the API operations for Payment Initiation, exposed by the API Hub.
+  version: v1.0-draft1
+  x-sf-docs-util-menu-item-name: Payment Initiation
+  x-sf-typescript-util-family: Qcb
+  x-sf-typescript-util-api-type: standards
+  x-sf-typescript-util-class-prefix: QcbPymtInit
+tags:
+  - name: Payment Consents
+    description: Payment Consent Operations
+  - name: Payments
+    description: Payments Operations
+paths:
+  /payment-consents:
+    get:
+      operationId: ReadPaymentInitiationConsentsByBaseConsentId_read
+      summary: Read all Payment Initiation Consents by Base Consent ID
+      description: Read all Payment Initiation Consents that match a given Base Consent ID.
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/Consent.BaseConsentIdQueryParameter1Properties'
+      responses:
+        '200':
+          description: The request has succeeded.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/ReadPaymentInitiationBaseConsentsSigned1Response'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payment Consents
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+  /payment-consents/{ConsentId}:
+    get:
+      operationId: ReadPaymentInitiationConsent_read
+      summary: Read a Payment Initiation Consent
+      description: Read the properties of a Payment Initiation Consent.
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/Consent.ConsentIdPathParameter1Properties'
+      responses:
+        '200':
+          description: The request has succeeded.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/ReadPaymentInitiationConsentSigned1Response'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payment Consents
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+    patch:
+      operationId: UpdatePaymentInitiationConsentStatus_update
+      summary: Update the status of a Payment Initiation Consent
+      description: |-
+        Update the status of a Payment Initiation Consent to `Revoked`.
+
+        TPPs can only revoked a given Consent. No other statuses can be applied by TPPs.
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/Consent.ConsentIdPathParameter1Properties'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payment Consents
+      requestBody:
+        required: true
+        content:
+          application/jwt:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentInitiationConsentSigned1Request'
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+  /payment-consents/{ConsentId}/debtor-account:
+    get:
+      operationId: ReadPaymentInitiationConsentsDebtorAccount_read
+      summary: Read Debtor Account Details
+      description: |-
+        Read the Debtor Account details for a given Payment Initiation Consent, to facilitate a refund.
+
+        The permission code `ReadRefundAccount` must be granted by the User to the TPP to allow the details to be read.
+
+        Response includes a list of links to related Payment Initiation Requests.
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/Consent.ConsentIdPathParameter1Properties'
+      responses:
+        '200':
+          description: The request has succeeded.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/ReadPaymentInitiationConsentDebtorAccountSigned1Response'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payment Consents
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+  /payments:
+    post:
+      operationId: CreatePaymentInitiationRequest_create
+      summary: Create a Payment
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/Headers.x-idempotency-key'
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentInitiationSigned1Response'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '409':
+          description: |-
+            Conflict.
+
+            Returned where an `x-idempotency-key` value is replayed with a request body that differs from the
+            request the key was first used for.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/jwt:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentInitiationSigned1Request'
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+    get:
+      operationId: QueryPaymentInitiationRequest_read
+      summary: Query for a Payment using the Idempotency Key
+      description: >-
+        Query for a Payment Initiation Request using the `x-idempotency-key` header field value.
+
+
+        If an idempotency key is matched the Links object will be returned with the Self value populated. This will
+        provide a pointer to the correct resource.
+
+
+        Provided to allow TPPs to obtain the response to a Payment Initiation Request operation where they did not
+        receive a response due to a transient failure.
+
+
+        Examples of such transient failures include are network issues or a client timeout where no response is
+        returned.
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/Headers.x-idempotency-key'
+      responses:
+        '200':
+          description: The request has succeeded.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/QueryPaymentInitiationSigned1Response'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payments
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+  /payments/{PaymentId}:
+    get:
+      operationId: ReadPaymentInitiationRequest_read
+      summary: Read a Payment
+      description: Read the properties of a Payment Initiation Request.
+      parameters:
+        - $ref: '#/components/parameters/Headers.Authorization'
+        - $ref: '#/components/parameters/Headers.x-fapi-auth-date'
+        - $ref: '#/components/parameters/Headers.x-fapi-customer-ip-address'
+        - $ref: '#/components/parameters/Headers.x-fapi-interaction-id'
+        - $ref: '#/components/parameters/Headers.x-customer-user-agent'
+        - $ref: '#/components/parameters/PaymentIdPathParameter1Properties'
+      responses:
+        '200':
+          description: The request has succeeded.
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/ReadPaymentInitiationSigned1Response'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error400ResponseBodySigned1Properties'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error403ResponseBodySigned1Properties'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '406':
+          description: Not Acceptable
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '415':
+          description: Unsupported Media Type
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+        '429':
+          description: Too Many Requests
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+            retry-after:
+              required: true
+              description: Number in seconds to wait
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              required: false
+              description: An RFC4122 UID used as a correlation ID.
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 256
+          content:
+            application/jwt:
+              schema:
+                $ref: '#/components/schemas/Errors.Error500ResponseBodySigned1Properties'
+      tags:
+        - Payments
+      security:
+        - UserOAuth2Security1Properties:
+            - openid
+            - accounts
+components:
+  parameters:
+    Consent.BaseConsentIdQueryParameter1Properties:
+      name: baseConsentId
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/Consent.ConsentId1Type'
+      explode: false
+    Consent.ConsentIdPathParameter1Properties:
+      name: ConsentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Consent.ConsentId1Type'
+    Headers.Authorization:
+      name: authorization
+      in: header
+      required: true
+      description: An Access Token as per https://tools.ietf.org/html/rfc6750
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 1024
+    Headers.x-customer-user-agent:
+      name: x-customer-user-agent
+      in: header
+      required: false
+      description: Indicates the user-agent that the User is using.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 256
+    Headers.x-fapi-auth-date:
+      name: x-fapi-auth-date
+      in: header
+      required: false
+      description: |-
+        The time when the User last logged in with the TPP.
+
+        All dates in the HTTP headers are represented as RFC 7231 Full Dates. 
+
+        An example is as follows: Sun, 10 Sep 2017 19:43:31 UTC.
+      schema:
+        type: string
+        pattern: >-
+          ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}
+          \d{2}:\d{2}:\d{2} UTC$
+    Headers.x-fapi-customer-ip-address:
+      name: x-fapi-customer-ip-address
+      in: header
+      required: false
+      description: The User's IP address if the User is currently logged in with the TPP.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 50
+    Headers.x-fapi-interaction-id:
+      name: x-fapi-interaction-id
+      in: header
+      required: false
+      description: An RFC4122 UID used as a correlation ID.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 256
+    Headers.x-idempotency-key:
+      name: x-idempotency-key
+      in: header
+      required: true
+      schema:
+        $ref: '#/components/schemas/Headers.IdempotencyKey1Type'
+    PaymentIdPathParameter1Properties:
+      name: PaymentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/PaymentInitiation.PaymentId1Type'
+  schemas:
+    Address.Address1Types:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/Address.QatarAddress1Properties'
+        - $ref: '#/components/schemas/Address.InternationalQualifiedAddress1Properties'
+        - $ref: '#/components/schemas/Address.InternationalUnqualifiedAddress1Properties'
+      discriminator:
+        propertyName: AddressFormatType
+        mapping:
+          Qatar: '#/components/schemas/Address.QatarAddress1Properties'
+          InternationalQualifiedAddress: '#/components/schemas/Address.InternationalQualifiedAddress1Properties'
+          InternationalUnqualifiedAddress: '#/components/schemas/Address.InternationalUnqualifiedAddress1Properties'
+      description: >-
+        An address related to a given person or organization, based on ISO 20022.
+
+
+        Qatar address structures are mapped as follows:
+
+
+        * Zone: `CountrySubDivision`.
+
+
+        * Street: `StreetName`.
+
+
+        * Building Number: `BuildingNumber`.
+
+
+        Other properties are retained in this object to support non-Qatar addresses.
+
+
+        Implementers can choose, where appropriate, to provide `AddressLine` and `Country` where disambiguation of
+        address properties is impossible.
+    Address.AddressLine1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: A freeform address entry that is not specified using specific address properties.
+    Address.AddressType1Codes:
+      type: string
+      enum:
+        - Billing
+        - Business
+        - Correspondence
+        - DeliveryTo
+        - MailTo
+        - POBox
+        - Postal
+        - Permanent
+        - Residential
+        - Statement
+        - Other
+      description: Qualifies the type of address.
+    Address.InternationalQualifiedAddress1Properties:
+      type: object
+      required:
+        - AddressFormatType
+        - AddressType
+        - BuildingNumber
+        - StreetName
+        - CountrySubDivision
+        - Country
+      properties:
+        AddressFormatType:
+          type: string
+          enum:
+            - InternationalQualifiedAddress
+          description: Address format, defaults to `InternationalQualifiedAddress`
+        AddressType:
+          $ref: '#/components/schemas/Address.AddressType1Codes'
+        BuildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifies the position of a given building on a street.
+        BuildingName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of the house or building.
+        Floor:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Floor or storey within a building.
+        StreetName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a street or thoroughfare.
+        DistrictName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Identifies a subdivision within a country sub-division.
+        PostBox:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Numbered box ina post office assigned to a given Party where post is kept until collected.
+        PostCode:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifier that qualifies a postal address to assist with the sorting and delivery of mail.
+        TownName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a built-up area.
+        CountrySubDivision:
+          type: string
+          minLength: 1
+          maxLength: 35
+          description: Country sub-division based on standards for stated country.
+        Country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: International address in the qualified address format, implemented using separate address properties.
+      additionalProperties: false
+    Address.InternationalUnqualifiedAddress1Properties:
+      type: object
+      required:
+        - AddressFormatType
+        - AddressType
+        - Country
+      properties:
+        AddressFormatType:
+          type: string
+          enum:
+            - InternationalUnqualifiedAddress
+          description: Address format, defaults to `InternationalUnqualifiedAddress`
+        AddressType:
+          $ref: '#/components/schemas/Address.AddressType1Codes'
+        AddressLine:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address.AddressLine1Type'
+          minItems: 1
+          maxItems: 7
+          description: One-or-more address lines provided using freeform text.
+        Country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: International address in the unqualified address format, implemented using `AddressLine` and `Country`.
+      additionalProperties: false
+    Address.QatarAddress1Properties:
+      type: object
+      required:
+        - AddressFormatType
+        - AddressType
+        - BuildingNumber
+        - StreetName
+        - CountrySubDivision
+        - Country
+      properties:
+        AddressFormatType:
+          type: string
+          enum:
+            - Qatar
+          description: Address format, defaults to `Qatar`
+        AddressType:
+          $ref: '#/components/schemas/Address.AddressType1Codes'
+        BuildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifies the position of a given building on a street.
+        StreetName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a street or thoroughfare.
+        CountrySubDivision:
+          type: string
+          pattern: ^Zone [0-9]{1,2}$
+          description: Country sub-division, provided as as a Zone for Qatar addresses.
+        Country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: Address in the Qatar address format.
+      x-ozone-discovery-requires-analysis: Confirm that address format introduced for Qatar is appropriate for all use cases.
+      additionalProperties: false
+    Billing.CustomerType1Properties:
+      type: object
+      required:
+        - IsLargeCorporate
+      properties:
+        IsLargeCorporate:
+          type: boolean
+          description: Account holder is classified as a large corporate customer by the LFI.
+      description: Billing parameters specified by the LFI.
+      x-ozone-discovery-requires-analysis: Confirm the billing parameters for Qatar and what a large corporate is classified as.
+      additionalProperties: false
+    Billing.TppBillingPaymentType1Codes:
+      type: string
+      enum:
+        - Collection
+        - LargeValueCollection
+        - PushP2P
+        - PullP2P
+        - Me2Me
+      description: The type of payment being initiated. Provided for billing purposes.
+      x-ozone-discovery-requires-analysis: Confirm that the payment types for billing are correct for Qatar.
+    Billing.TppBillingPaymentType1Properties:
+      type: object
+      required:
+        - Type
+      properties:
+        Type:
+          $ref: '#/components/schemas/Billing.TppBillingPaymentType1Codes'
+        MerchantId:
+          type: string
+          minLength: 5
+          maxLength: 20
+          description: |-
+            The identifier for the merchant the payment is initiated on behalf of.
+
+            Omitted where the TPP is not initiating payment on behalf of a merchant.
+          x-ozone-discovery-requires-analysis: Confirm the correct merchant identifier for Qatar market.
+      description: Billing parameters specified by the TPP for a Payment Initiation Request.
+      additionalProperties: false
+    Charges.Charge1Properties:
+      type: object
+      required:
+        - ChargeBearer
+        - Type
+        - Amount
+      properties:
+        ChargeBearer:
+          $ref: '#/components/schemas/Charges.ChargeBearerType1Codes'
+        Type:
+          $ref: '#/components/schemas/Charges.PaymentChargeType1Codes'
+        Amount:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+          additionalProperties: false
+      description: Charges related to a given payment or transaction.
+      additionalProperties: false
+    Charges.ChargeBearerType1Codes:
+      type: string
+      enum:
+        - BorneByCreditor
+        - BorneByDebtor
+        - Shared
+      description: Bearer of the charges associated with a given payment or transaction.
+    Charges.PaymentChargeType1Codes:
+      type: string
+      enum:
+        - VAT
+        - Fees
+      description: Charge type codes, indicating what the charge relates to.
+    Consent.ConsentCreationDateTime1Type:
+      type: string
+      pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+      format: date-time
+      description: >-
+        Consent creation date and time, as recorded by Consent Manager.
+
+
+        Date and time is represented in RFC 3339 date-time format, qualified as Arabia Standard Time, with seconds being
+        the maximum supported precision.
+    Consent.ConsentExpirationDateTime1Type:
+      type: string
+      pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+      format: date-time
+      description: >-
+        Date and time at which the consent will expire, as agreed at Consent Setup between the User and the TPP.
+
+
+        Date and time is represented in RFC 3339 date-time format, qualified as Arabia Standard Time, with seconds being
+        the maximum supported precision.
+    Consent.ConsentId1Type:
+      type: string
+      minLength: 1
+      maxLength: 128
+      format: uuid
+      description: >-
+        Unique identification assigned by the TPP to identify the Consent.
+          
+        Indicates either a unique Consent or is used to identify a series of Consents linked by the TPP to indicate
+        continuity of service across two-or-more Consent durations.
+
+
+        Where used to indicate a series of Consents the value is described as the "Base Consent ID" (`baseConsentId`).
+    Consent.ConsentMeta1Properties:
+      type: object
+      properties:
+        MultipleAuthorizers:
+          allOf:
+            - $ref: '#/components/schemas/Consent.MultiAuthorization1Properties'
+          description: Information on multi-authorization
+      description: Metadata associated with a Consent Resource.
+      additionalProperties: false
+    Consent.ConsentRevokedBy1Codes:
+      type: string
+      enum:
+        - LFI
+        - TPP
+        - LFI.InitiatedByUser
+        - TPP.InitiatedByUser
+      description: |-
+        Indicates who the Consent was revoked by.
+
+        | Identifier            | Description                              |
+        |-----------------------|------------------------------------------|
+        | `LFI`                 | Revoked by LFI without User interaction. |
+        | `TPP`                 | Revoked by TPP without User interaction. |
+        | `LFI.InitiatedByUser` | Initiated by the User at the LFI.        |
+        | `TPP.InitiatedByUser` | Initiated by the User the TPP.           |
+    Consent.ConsentStatus1Codes:
+      type: string
+      enum:
+        - AwaitingAuthorization
+        - Authorized
+        - Rejected
+        - Revoked
+        - Expired
+        - Consumed
+        - Suspended
+      description: |-
+        Specifies the status of a Consent as recorded at Consent Manager.
+         
+        | Consent Status           | State Type | Description                                                       |
+        |--------------------------|------------|-------------------------------------------------------------------|
+        | `AwaitingAuthorization`  | Pending    | The Consent is awaiting authorization by the User.                |
+        | `Authorized`             | In Use     | The Consent has been successfully authorized.                     |
+        | `Rejected`               | Terminal   | The unauthorized Consent has been rejected at the LFI.            |
+        | `Revoked`                | Terminal   | The Consent has been revoked at the TPP or LFI.                   |
+        | `Expired`                | Terminal   | The Consent has expired.                                          |
+        | `Consumed`               | Terminal   | The consented action(s) have been completed successfully.         |
+        | `Suspended`              | In Use     | The Consent has been suspended.                                   |
+    Consent.ConsentStatusUpdateDateTime1Type:
+      type: string
+      pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+      format: date-time
+      description: >-
+        Consent status update data and time, as recorded by Consent Manager.
+
+
+        Date and time is represented in RFC 3339 date-time format, qualified as Arabia Standard Time, with seconds being
+        the maximum supported precision.
+    Consent.MultiAuthorization1Properties:
+      type: object
+      required:
+        - TotalRequired
+        - Authorizations
+      properties:
+        TotalRequired:
+          type: integer
+          description: The total number of Authorizers required to process the request, as provided by the LFI.
+        Authorizations:
+          type: array
+          items:
+            type: object
+            properties:
+              AuthorizerId:
+                type: string
+                minLength: 1
+                maxLength: 128
+                description: Authorizer identifier, as assigned by the LFI.
+              AuthorizerType:
+                type: string
+                minLength: 1
+                maxLength: 50
+                description: The Type of Authorizer. For example, Financial, Management, etc.
+              AuthorizationDate:
+                type: string
+                pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+                format: date-time
+                description: The date and time when the Authorization occurred.
+              AuthorizationStatus:
+                type: string
+                enum:
+                  - Pending
+                  - Approved
+                  - Rejected
+                description: Status that reflects the authorizers decision in granted Consent.
+            required:
+              - AuthorizerId
+              - AuthorizationDate
+              - AuthorizationStatus
+            additionalProperties: false
+          minItems: 1
+      description: Metadata that describes the multi-authorization characteristics of the Consent, as prescribed by the LFI.
+      additionalProperties: false
+    CreatePaymentInitiation1Request:
+      type: object
+      required:
+        - Data
+      properties:
+        Data:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationRequest1Properties'
+      description: Payment Initiation Request Data.
+      additionalProperties: false
+    CreatePaymentInitiation1Response:
+      type: object
+      required:
+        - Data
+        - Links
+      properties:
+        Data:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationResponse1Properties'
+        Links:
+          $ref: '#/components/schemas/JsonApi.LinksRelatedResources1Properties'
+        Meta:
+          $ref: '#/components/schemas/JsonApi.MetaResource1Properties'
+      description: Payment Initiation Response Data.
+      additionalProperties: false
+    CreatePaymentInitiationSigned1Request:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/CreatePaymentInitiation1Request'
+      description: Signed Payment Initiation Request, based on permission granted by the User.
+      additionalProperties: false
+    CreatePaymentInitiationSigned1Response:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/CreatePaymentInitiation1Response'
+      description: Signed Payment Initiation Response.
+      additionalProperties: false
+    CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties:
+      type: object
+      required:
+        - UnitCurrency
+        - RateType
+      properties:
+        UnitCurrency:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Currency in which the rate of exchange is expressed in a currency exchange. Often referred to as the "sell"
+            side in a currency conversion.
+
+
+            In the example 1GBP = xxxCUR, the unit currency is GBP.
+        RateType:
+          $ref: '#/components/schemas/CurrencyExchange.RateType1Codes'
+        ContractIdentification:
+          $ref: '#/components/schemas/CurrencyExchange.ContractIdentification1Type'
+        ExchangeRate:
+          type: number
+          description: |-
+            The factor used for conversion of an amount from one currency to another.
+
+            Reflects the price at which one currency was bought with another currency.
+        ExpirationDateTime:
+          type: string
+          format: date-time
+          description: |-
+            Specified date and time the exchange rate agreement will expire.
+
+            All dates in the JSON payloads are represented in ISO 8601 date-time format.
+
+            All date-time fields in responses must include the timezone, for example: 2023-04-05T10:43:07+00:00
+      description: |-
+        Details of the currency exchange recorded against a Consent.
+
+        `ExchangeRate` is optional, as the rate may not have been established at the point the Consent is
+        read — unlike a payment, which reports the rate that was applied.
+      additionalProperties: false
+    CurrencyExchange.ContractIdentification1Type:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: >-
+        Unique and unambiguous reference to the foreign exchange contract agreed between the initiating party/Creditor
+        and the Debtor Agent.
+    CurrencyExchange.CurrencyExchangeRateInformation1Properties:
+      type: object
+      required:
+        - UnitCurrency
+        - RateType
+      properties:
+        UnitCurrency:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Currency in which the rate of exchange is expressed in a currency exchange. Often referred to as the "sell"
+            side in a currency conversion.
+
+
+            In the example 1GBP = xxxCUR, the unit currency is GBP.
+        RateType:
+          $ref: '#/components/schemas/CurrencyExchange.RateType1Codes'
+        ContractIdentification:
+          $ref: '#/components/schemas/CurrencyExchange.ContractIdentification1Type'
+        ExchangeRate:
+          type: number
+          description: |-
+            The factor used for conversion of an amount from one currency to another.
+
+            Reflects the price at which one currency was bought with another currency.
+      description: |-
+        Provides details on the currency exchange rate and contract requested for a payment.
+
+        `ExchangeRate` is omitted where the rate is not known at the point the request is made, and is
+        resolved by the LFI.
+      additionalProperties: false
+    CurrencyExchange.FinalizedCurrencyExchangeRateInformation1Properties:
+      type: object
+      required:
+        - UnitCurrency
+        - RateType
+        - ExchangeRate
+      properties:
+        UnitCurrency:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Currency in which the rate of exchange is expressed in a currency exchange. Often referred to as the "sell"
+            side in a currency conversion.
+
+
+            In the example 1GBP = xxxCUR, the unit currency is GBP.
+        RateType:
+          $ref: '#/components/schemas/CurrencyExchange.RateType1Codes'
+        ContractIdentification:
+          $ref: '#/components/schemas/CurrencyExchange.ContractIdentification1Type'
+        ExchangeRate:
+          type: number
+          description: |-
+            The factor used for conversion of an amount from one currency to another.
+
+            Reflects the price at which one currency was bought with another currency. Mandatory, as the
+            finalized information reports the rate that was applied.
+        ExpirationDateTime:
+          type: string
+          format: date-time
+          description: |-
+            Specified date and time the exchange rate agreement will expire.
+
+            All dates in the JSON payloads are represented in ISO 8601 date-time format.
+
+            All date-time fields in responses must include the timezone, for example: 2023-04-05T10:43:07+00:00
+      description: >-
+        Further detailed information on the exchange rate that has been used in the payment transaction, as returned by
+        the LFI.
+      additionalProperties: false
+    CurrencyExchange.InstructionPriority1Codes:
+      type: string
+      enum:
+        - Normal
+        - Urgent
+      description: >-
+        Indicator of the urgency or order of importance that the instructing party would like the instructed party to
+        apply to the processing of the instruction.
+
+
+        Payment Initiation Request may not require this code where it is not supported or the payment can proceed
+        without specific prioritization.
+    CurrencyExchange.RateType1Codes:
+      type: string
+      enum:
+        - Actual
+        - Agreed
+        - Indicative
+      description: Specifies the type used to complete the currency exchange.
+    CurrencyExchange.RequestedCurrencyExchange1Properties:
+      type: object
+      required:
+        - ExtendedPurpose
+        - CurrencyOfTransfer
+      properties:
+        InstructionPriority:
+          $ref: '#/components/schemas/CurrencyExchange.InstructionPriority1Codes'
+        ExtendedPurpose:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Specifies the purpose of an international payment, using freeform text.
+          x-ozone-discovery-requires-analysis: Does QCB mandate extended purpose codes for international payments.
+        ChargeBearer:
+          $ref: '#/components/schemas/Charges.ChargeBearerType1Codes'
+        CurrencyOfTransfer:
+          type: string
+          pattern: ^[A-Z]{3,3}$
+          description: >-
+            Specifies the currency of the to be transferred amount, which is different from the currency of the Debtor
+            Account.
+
+
+            Often referred to as the "buy" side in a currency conversion.
+        DestinationCountryCode:
+          type: string
+          pattern: '[A-Z]{2,2}'
+          description: >-
+            Country in which Credit Account is domiciled. Code to identify a country, a dependency, or another area of
+            particular geopolitical interest, on the basis of country names obtained from the United Nations (ISO 3166,
+            Alpha-2 code).
+
+
+            Provides visibility to the LFI of the destination country for payment routing and risk screening purposes.
+        ExchangeRateInformation:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyExchange.CurrencyExchangeRateInformation1Properties'
+          description: >-
+            Details of the request currency exchange.
+
+
+            Omitted where the TPP has no visibility of available rates at Consent Setup, with resolution of the
+            requested currency exchange details happening at the LFI.
+      description: >-
+        The details of the non-local currency or currency exchange request that has been agreed between the User and the
+        TPP.
+
+
+        The requested Charge Bearer and Exchange Rate Information included in this object may be superseded by updated
+        information supplied by the LFI, which will be recorded on the Consent record at Consent Manager.
+      additionalProperties: false
+    Errors.CustomErrorCode1Type:
+      type: string
+      pattern: ^[A-Za-z]+\.[A-Za-z0-9]+$
+      description: A custom error code implemented by the LFI that is not included in the list of prescribed API Hub error codes.
+    Errors.Error4001Codes:
+      type: string
+      enum:
+        - Consent.Invalid
+        - Consent.BusinessRuleViolation
+        - Consent.FailsControlParameters
+        - Consent.InvalidUserIdentifier
+        - JWS.InvalidSignature
+        - JWS.Malformed
+        - JWS.InvalidClaim
+        - JWS.InvalidHeader
+        - JWS.InvalidPayload
+        - JWE.DecryptionError
+        - JWE.InvalidHeader
+        - GenericRecoverableError
+        - GenericError
+        - Event.UnexpectedEvent
+        - Body.InvalidFormat
+        - Resource.InvalidFormat
+      description: Prescribed error codes for 400 errors.
+    Errors.Error4001Types:
+      anyOf:
+        - $ref: '#/components/schemas/Errors.Error4001Codes'
+        - $ref: '#/components/schemas/Errors.CustomErrorCode1Type'
+    Errors.Error400ResponseBody1Properties:
+      type: object
+      required:
+        - Errors
+      properties:
+        Errors:
+          type: array
+          items:
+            type: object
+            properties:
+              Code:
+                $ref: '#/components/schemas/Errors.Error4001Types'
+              Message:
+                type: string
+                minLength: 1
+                maxLength: 500
+                description: >-
+                  A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or
+                  'RequestedExecutionDateTime must be in future'
+
+                  UAEOF doesn't standardise this field
+              Path:
+                type: string
+                minLength: 1
+                maxLength: 500
+                description: >-
+                  Recommended but optional reference to the JSON Path of the field with error, e.g.,
+                  $.Data.Initiation.InstructedAmount.Currency
+              Url:
+                type: string
+                minLength: 1
+                maxLength: 1024
+                description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
+            required:
+              - Code
+              - Message
+            additionalProperties: false
+          minItems: 1
+          description: List of one-or-more errors.
+      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
+      additionalProperties: false
+    Errors.Error400ResponseBodySigned1Properties:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/Errors.Error400ResponseBody1Properties'
+      additionalProperties: false
+    Errors.Error4031Codes:
+      type: string
+      enum:
+        - AccessToken.InvalidScope
+        - Consent.TransientAccountAccessFailure
+        - Consent.AccountTemporarilyBlocked
+        - Consent.PermanentAccountAccessFailure
+        - GenericRecoverableError
+        - GenericError
+      description: Prescribed error codes for 403 errors.
+    Errors.Error4031Types:
+      anyOf:
+        - $ref: '#/components/schemas/Errors.Error4031Codes'
+        - $ref: '#/components/schemas/Errors.CustomErrorCode1Type'
+    Errors.Error403ResponseBody1Properties:
+      type: object
+      required:
+        - Errors
+      properties:
+        Errors:
+          type: array
+          items:
+            type: object
+            properties:
+              Code:
+                $ref: '#/components/schemas/Errors.Error4031Types'
+              Message:
+                type: string
+                minLength: 1
+                maxLength: 500
+                description: >-
+                  A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or
+                  'RequestedExecutionDateTime must be in future'
+
+                  UAEOF doesn't standardise this field
+              Path:
+                type: string
+                minLength: 1
+                maxLength: 500
+                description: >-
+                  Recommended but optional reference to the JSON Path of the field with error, e.g.,
+                  $.Data.Initiation.InstructedAmount.Currency
+              Url:
+                type: string
+                minLength: 1
+                maxLength: 1024
+                description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
+            required:
+              - Code
+              - Message
+            additionalProperties: false
+          minItems: 1
+          description: List of one-or-more errors.
+      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
+      additionalProperties: false
+    Errors.Error403ResponseBodySigned1Properties:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/Errors.Error403ResponseBody1Properties'
+      additionalProperties: false
+    Errors.Error5001Types:
+      anyOf:
+        - $ref: '#/components/schemas/Errors.ErrorGeneric1Codes'
+        - $ref: '#/components/schemas/Errors.CustomErrorCode1Type'
+    Errors.Error500ResponseBody1Properties:
+      type: object
+      required:
+        - Errors
+      properties:
+        Errors:
+          type: array
+          items:
+            type: object
+            properties:
+              Code:
+                $ref: '#/components/schemas/Errors.Error5001Types'
+              Message:
+                type: string
+                minLength: 1
+                maxLength: 500
+                description: >-
+                  A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or
+                  'RequestedExecutionDateTime must be in future'
+
+                  UAEOF doesn't standardise this field
+              Path:
+                type: string
+                minLength: 1
+                maxLength: 500
+                description: >-
+                  Recommended but optional reference to the JSON Path of the field with error, e.g.,
+                  $.Data.Initiation.InstructedAmount.Currency
+              Url:
+                type: string
+                minLength: 1
+                maxLength: 1024
+                description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
+            required:
+              - Code
+              - Message
+            additionalProperties: false
+          minItems: 1
+          description: List of one-or-more errors.
+      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
+      additionalProperties: false
+    Errors.Error500ResponseBodySigned1Properties:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/Errors.Error500ResponseBody1Properties'
+      additionalProperties: false
+    Errors.ErrorGeneric1Codes:
+      type: string
+      enum:
+        - GenericRecoverableError
+        - GenericError
+      description: Generic error codes for 500 or other errors.
+    Events.Subscription1Properties:
+      type: object
+      required:
+        - Webhook
+      properties:
+        Webhook:
+          type: object
+          properties:
+            Url:
+              type: string
+              pattern: https:\/\/.+
+              description: |-
+                The TPP Webhook URL being registered with the LFI.
+
+                The URL **MUST** use HTTPS.
+            IsActive:
+              type: boolean
+              description: >-
+                The TPP specifying whether the API Hub should emit Events, where `isActive` is `true` (Events are sent)
+                or `false` (Events are not sent).
+          required:
+            - Url
+            - IsActive
+          description: Properties of the TPP Webhook and the state of the subscription.
+          additionalProperties: false
+      description: >-
+        Properties of the a Event Notification Subscription created by the TPP for a given Consent.
+
+
+        Additional guidance on supported Events is provided separately in the Developer Portal, and in the Webhook
+        Template API description.
+      additionalProperties: false
+    Headers.IdempotencyKey1Type:
+      type: string
+      minLength: 1
+      maxLength: 40
+      description: >-
+        Ensures the LFI processes the resource successfully only once per `x-idempotency-key` value.
+
+
+        The TPP must not change the request body while using the same x-idempotency-key. Any changes to the request body
+        will not result any action on the end resource.
+
+
+        The API Hub will treat a request as idempotent if it had received the first request with the same
+        x-idempotency-key from the same TPP in the preceding 24 hours.
+    Identity.BusinessIdentity1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - CommercialRegistrationNumber
+          description: |-
+            The scheme name that specifies the identification type value.
+
+            `CommercialRegistrationNumber` is the only supported value for businesses.
+        Identification:
+          type: string
+          minLength: 1
+          maxLength: 12
+          description: Identification value, qualified by `schemeName`
+        ExpiryDate:
+          type: string
+          pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]
+          format: date
+          description: |-
+            Date on which the identification expires.
+
+            Omitted if not held.
+        Name:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in English language.
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in Arabic
+          description: Name of the organization. Omitted if not held.
+          additionalProperties: false
+      additionalProperties: false
+    Identity.Identity1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          $ref: '#/components/schemas/Identity.NationalIdentifier1Codes'
+        Identification:
+          type: string
+          minLength: 1
+          maxLength: 12
+          description: Identification value, qualified by `schemeName`
+        Name:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in English language.
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in Arabic
+          description: Name of the person or organization. Omitted if not held.
+          additionalProperties: false
+      additionalProperties: false
+    Identity.NationalIdentifier1Codes:
+      type: string
+      enum:
+        - QID
+        - CommercialRegistrationNumber
+      description: |-
+        Identifier type, based on following values:
+
+        * QID: A Qatar ID, issued to individuals.
+
+        * CommercialRegistrationNumber: Commercial Registration Certificate, issued to organizations.
+      x-ozone-discovery-requires-analysis: Verify that these schemes are the only required, or others need to be brought into scope.
+    JsonApi.LinksRelatedResources1Properties:
+      type: object
+      required:
+        - Self
+      properties:
+        Self:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          format: uri
+          description: A link to the current resource.
+        Related:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1024
+            format: uri
+            description: A URI supported by the API Hub.
+          minItems: 1
+          description: A list of links to related resources. Omitted where no related resources exist.
+      description: Links relevant to the resource.
+      additionalProperties: false
+    JsonApi.LinksResource1Properties:
+      type: object
+      required:
+        - Self
+      properties:
+        Self:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          format: uri
+          description: A link to the current resource.
+      description: Links relevant to the resource.
+      additionalProperties: false
+    JsonApi.MetaResource1Properties:
+      type: object
+      description: Metadata relevant to the resource.
+      additionalProperties: false
+    PaymentInitiation.AccountName1Properties:
+      type: object
+      properties:
+        en:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: English language value of the account name.
+        ar:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Arabic language value of the account name.
+      description: Name of the account holder on the account as recorded by the FI.
+      additionalProperties: false
+    PaymentInitiation.AccountType1Codes:
+      type: string
+      enum:
+        - CurrentAccount
+        - Savings
+        - CreditCard
+        - Mortgage
+        - Finance
+      description: The type of account held by the Creditor.
+    PaymentInitiation.AddressMatchLevel1Codes:
+      type: string
+      enum:
+        - FullMatch
+        - PartialMatch
+        - NoMatch
+        - NotApplicable
+      description: The level to which the delivery address matches the billing address.
+    PaymentInitiation.AuthenticationChannel1Codes:
+      type: string
+      enum:
+        - App
+        - Web
+      description: Indicates whether the User authenticated at the TPP using a mobile app or website.
+    PaymentInitiation.AuthenticationFlow1Codes:
+      type: string
+      enum:
+        - MFA
+        - Other
+      description: The authentication flow used by the User when authenticated at the TPP.
+    PaymentInitiation.AuthenticationValue1Type:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: Value of authentication code.
+    PaymentInitiation.BicFi1Type:
+      type: string
+      pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+      description: A BIC as defined by ISO 9302.
+    PaymentInitiation.BindingStatus1Codes:
+      type: string
+      enum:
+        - Active
+        - Expired
+        - Revoked
+        - Suspended
+      description: The status of the binding between the device and the session established by the TPP with the User.
+    PaymentInitiation.BiometricType1Codes:
+      type: string
+      enum:
+        - Fingerprint
+        - FacialRecognition
+        - Iris
+        - VoicePrint
+        - Other
+      description: The type of biometric supported by the User's device.
+    PaymentInitiation.ChallengeOutcome1Codes:
+      type: string
+      enum:
+        - Pass
+        - Fail
+        - NotPerformed
+      description: The outcome of the authentication challenge performed by the User at the TPP.
+    PaymentInitiation.Channel1Codes:
+      type: string
+      enum:
+        - Web
+        - Mobile
+      description: Where the payment has been initiated from.
+    PaymentInitiation.ChannelType1Codes:
+      type: string
+      enum:
+        - ECommerce
+        - InStore
+        - InApp
+        - Telephone
+        - Mail
+        - RecurringPayment
+        - Other
+      description: The channel through which the transaction is being conducted.
+    PaymentInitiation.ConnectionType1Codes:
+      type: string
+      enum:
+        - WiFi
+        - Cellular
+        - Other
+      description: The type of network connection used by the User's device.
+    PaymentInitiation.Creditor1Properties:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Creditor name.
+        PostalAddress:
+          allOf:
+            - $ref: '#/components/schemas/Address.Address1Types'
+          description: Creditor postal address.
+      description: Party to which an amount of money is due.
+      additionalProperties: false
+    PaymentInitiation.CreditorAccountType1Codes:
+      type: string
+      enum:
+        - Individual
+        - Merchant
+        - Business
+        - Charity
+        - GovernmentBody
+        - Other
+      description: |-
+        The Creditor (Payee) Type, based on an allowed list.
+
+        This value is populated by TPPs to inform the User of the type of Creditor being authorized
+
+        Used to provide information to the User during the Consent journey.
+    PaymentInitiation.CreditorAgent1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - BICFI
+            - Other
+          description: |-
+            The name of the scheme that qualifies the `identification` value for the Agent.
+
+            The following values are supported:
+
+            * `BICFI`: A Business Identification Code, as defined under ISO9362.
+
+            * `Other`: An alternative identifier, as prescribed under local market regulations.
+        Identification:
+          anyOf:
+            - $ref: '#/components/schemas/PaymentInitiation.BicFi1Type'
+            - $ref: '#/components/schemas/PaymentInitiation.OtherFiIdentification1Type'
+          description: Identification for the financial institution who is the Agent, qualified by `SchemeName`.
+        Name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Creditor Agent name.
+        PostalAddress:
+          allOf:
+            - $ref: '#/components/schemas/Address.Address1Types'
+          description: Creditor Agent postal address.
+      description: >-
+        Properties of the Creditor Agent, which provides information on the Financial Institution that holds the
+        Creditor Account.
+      additionalProperties: false
+    PaymentInitiation.CreditorIndicators1Properties:
+      type: object
+      properties:
+        AccountType:
+          $ref: '#/components/schemas/PaymentInitiation.AccountType1Codes'
+        IsCreditorPrePopulated:
+          type: boolean
+          description: Creditor details are provided by the TPP and the User has not entered them at Consent Setup.
+        TradingName:
+          $ref: '#/components/schemas/PaymentInitiation.TradingName1Properties'
+        IsVerifiedByTPP:
+          type: boolean
+          description: The TPP has onboarded the Creditor and verified their identity.
+        AdditionalAccountHolderIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity.Identity1Properties'
+        MerchantDetails:
+          type: object
+          properties:
+            MerchantIdentification:
+              $ref: '#/components/schemas/Identity.BusinessIdentity1Properties'
+            MerchantSICCode:
+              type: string
+              minLength: 3
+              maxLength: 4
+            MerchantCategoryCode:
+              type: string
+              minLength: 3
+              maxLength: 4
+          required:
+            - MerchantIdentification
+          description: >-
+            Details of the Merchant involved in the transaction.
+
+
+            Merchant details are specified only for those merchant categories that are generally expected to originate
+            retail financial transactions.
+          x-ozone-discovery-requires-analysis: Confirm that the Merchant model makes sense, is freely available, and can be supplied by TPPs.
+          additionalProperties: false
+        SupplementaryData:
+          type: object
+          description: Additional information that cannot be captured in the structured fields and/or any other specific block
+          additionalProperties: false
+      description: Creditor Indicators
+      additionalProperties: false
+    PaymentInitiation.CreditorReference1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[A-Za-z0-9 \/?:().,'+-]+$
+      description: >-
+        Creditor Reference that provides information to the Creditor on the source of the payment.
+
+
+        If included in the Consent displayed during Consent Authorization and recorded with payment on the Creditor
+        account ledger of transactions by the LFI, where supported by the LFI.
+
+
+        If included in the Payment Initiation operation included in the request payload.
+
+
+        If included in Account Information, provides a record of the Creditor Reference recorded with the transaction.
+    PaymentInitiation.DebtorIndicators1Properties:
+      type: object
+      properties:
+        Authentication:
+          type: object
+          properties:
+            AuthenticationChannel:
+              $ref: '#/components/schemas/PaymentInitiation.AuthenticationChannel1Codes'
+            PossessionFactor:
+              type: object
+              properties:
+                IsUsed:
+                  type: boolean
+                Type:
+                  $ref: '#/components/schemas/PaymentInitiation.PossessionFactorType1Codes'
+              additionalProperties: false
+            KnowledgeFactor:
+              type: object
+              properties:
+                IsUsed:
+                  type: boolean
+                Type:
+                  $ref: '#/components/schemas/PaymentInitiation.KnowledgeFactorType1Codes'
+              additionalProperties: false
+            InherenceFactor:
+              type: object
+              properties:
+                IsUsed:
+                  type: boolean
+                Type:
+                  $ref: '#/components/schemas/PaymentInitiation.InherenceFactorType1Codes'
+              additionalProperties: false
+            ChallengeOutcome:
+              $ref: '#/components/schemas/PaymentInitiation.ChallengeOutcome1Codes'
+            AuthenticationFlow:
+              $ref: '#/components/schemas/PaymentInitiation.AuthenticationFlow1Codes'
+            AuthenticationValue:
+              $ref: '#/components/schemas/PaymentInitiation.AuthenticationValue1Type'
+            ChallengeDateTime:
+              type: string
+              format: date-time
+          description: The authentication method used by the User to access their account with the TPP.
+          additionalProperties: false
+        UserName:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in English language.
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+              description: Name provided in Arabic
+          description: The Name of the User initiating the Payment
+          additionalProperties: false
+        GeoLocation:
+          type: object
+          properties:
+            Latitude:
+              $ref: '#/components/schemas/Values.Latitude1Type'
+            Longitude:
+              $ref: '#/components/schemas/Values.Longitude1Type'
+          required:
+            - Latitude
+            - Longitude
+          description: GPS to identify and track the whereabouts of the connected electronic device.
+          additionalProperties: false
+        DeviceInformation:
+          type: object
+          properties:
+            DeviceId:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceId1Type'
+            AlternativeDeviceId:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceId1Type'
+            DeviceOperatingSystem:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceOperatingSystem1Type'
+            DeviceOperatingSystemVersion:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceOperatingSystemVersion1Type'
+            DeviceBindingId:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceBindingId1Type'
+            LastBindingDateTime:
+              type: string
+              format: date-time
+            BindingDuration:
+              type: string
+              format: duration
+            BindingStatus:
+              $ref: '#/components/schemas/PaymentInitiation.BindingStatus1Codes'
+            DeviceType:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceType1Codes'
+            DeviceManufacturer:
+              type: object
+              properties:
+                Model:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+                Manufacturer:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+              description: Device manufacturer information.
+              additionalProperties: false
+            DeviceLanguage:
+              $ref: '#/components/schemas/PaymentInitiation.DeviceLanguage1Type'
+            DeviceLocalDateTime:
+              type: string
+              format: date-time
+              description: Date and time as set on the device.
+            ConnectionType:
+              $ref: '#/components/schemas/PaymentInitiation.ConnectionType1Codes'
+            ScreenInformation:
+              type: object
+              properties:
+                PixelDensity:
+                  type: integer
+                  format: int64
+                Orientation:
+                  $ref: '#/components/schemas/PaymentInitiation.Orientation1Codes'
+              description: Device screen information
+              additionalProperties: false
+            BatteryStatus:
+              type: object
+              properties:
+                Level:
+                  type: integer
+                  format: int64
+                  minimum: 0
+                  maximum: 100
+                IsCharging:
+                  type: boolean
+              description: Device battery information.
+              additionalProperties: false
+            TouchSupport:
+              type: object
+              properties:
+                Supported:
+                  type: boolean
+                MaxTouchPoints:
+                  type: integer
+                  minimum: 0
+              description: Device touch support information.
+              additionalProperties: false
+            MotionSensors:
+              type: object
+              properties:
+                Status:
+                  $ref: '#/components/schemas/PaymentInitiation.MotionSensorStatus1Codes'
+                Accelerometer:
+                  type: boolean
+                Gyroscope:
+                  type: boolean
+              description: Device motion sensor information.
+              additionalProperties: false
+            DeviceEnvironmentContext:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentInitiation.DeviceEnvironmentContext1Codes'
+              minItems: 1
+              description: Device environment context information.
+          description: Detailed device information
+          additionalProperties: false
+        BiometricCapabilities:
+          type: object
+          properties:
+            SupportsBiometric:
+              type: boolean
+            BiometricTypes:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentInitiation.BiometricType1Codes'
+          description: Device biometric capabilities
+          additionalProperties: false
+        AppInformation:
+          type: object
+          properties:
+            AppVersion:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: TPP app version number or label.
+            PackageName:
+              type: string
+              minLength: 1
+              maxLength: 256
+              description: TPP app package name.
+            BuildNumber:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: TPP app build number.
+          minProperties: 1
+          description: Mobile application specific information
+          additionalProperties: false
+        BrowserInformation:
+          type: object
+          properties:
+            UserAgent:
+              type: string
+              minLength: 1
+              maxLength: 1024
+              description: User agent information.
+            IsCookiesEnabled:
+              type: boolean
+              description: Whether cookies are enabled indicator.
+            AvailableFonts:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 140
+                description: Font family name.
+              minItems: 1
+            Plugins:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 140
+                description: Plug-in name.
+              minItems: 1
+            PixelRatio:
+              type: integer
+              format: int64
+              description: Browser pixel ratio.
+          minProperties: 1
+          description: Browser-specific information
+          additionalProperties: false
+        UserBehavior:
+          type: object
+          properties:
+            ScrollBehavior:
+              type: object
+              properties:
+                Direction:
+                  $ref: '#/components/schemas/PaymentInitiation.Direction1Codes'
+                Speed:
+                  type: integer
+                  format: int64
+                Frequency:
+                  type: integer
+                  format: int64
+              additionalProperties: false
+          description: User behavior indicators
+          additionalProperties: false
+        AccountRiskIndicators:
+          type: object
+          properties:
+            UserOnboardingDateTime:
+              type: string
+              format: date-time
+              description: Date and time at which the User was onboarded with the TPP.
+            LastAccountChangeDate:
+              type: string
+              format: date
+              description: Date at which the User last changed their account settings at the TPP.
+            LastPasswordChangeDate:
+              type: string
+              format: date
+              description: Date at which the User last changed their password at the TPP.
+            SuspiciousActivity:
+              $ref: '#/components/schemas/PaymentInitiation.SuspiciousActivity1Codes'
+            TransactionHistory:
+              type: object
+              properties:
+                LastDay:
+                  type: integer
+                  minimum: 0
+                LastYear:
+                  type: integer
+                  minimum: 0
+              description: Summary of User transaction history at the TPP.
+              additionalProperties: false
+          description: Risk indicators related to the account
+          additionalProperties: false
+        SupplementaryData:
+          type: object
+          description: >-
+            Additional information that cannot be captured in the structured fields and/or any other specific block.
+            This may include information that is not available in the structured fields, such as a user's behavioural
+            data like their typing speed and typing patterns.
+          additionalProperties: false
+      description: Indicators associated with the User (Debtor) that agreed the Consent with the TPP.
+      additionalProperties: false
+    PaymentInitiation.DebtorReference1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[A-Za-z0-9 \/?:().,'+-]+$
+      description: >-
+        Debtor Reference that provides information to the User on the source of the payment.
+
+
+        If included in the Consent displayed during Consent Authorization and recorded with payment on the account
+        ledger of transactions by the LFI.
+
+
+        If included in the Payment Initiation operation included in the request payload or returned by the financial
+        institution for information for the User.
+    PaymentInitiation.DeliveryTimeframe1Codes:
+      type: string
+      enum:
+        - ElectronicDelivery
+        - SameDayShipping
+        - OvernightShipping
+        - MoreThan1DayShipping
+      description: The delivery timeframe for the merchandise as provided by the merchant.
+    PaymentInitiation.DeviceBindingId1Type:
+      type: string
+      minLength: 1
+      maxLength: 8192
+      description: Device binding identifier that binds a device to the session established by the TPP with the User.
+    PaymentInitiation.DeviceEnvironmentContext1Codes:
+      type: string
+      enum:
+        - VPNDetected
+        - EmulatorDetected
+      description: Contextual indicators detected in the environment of the User's device.
+    PaymentInitiation.DeviceId1Type:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: Device identifier (primary or alternative) as elicited by the TPP from the appropriate device interface.
+    PaymentInitiation.DeviceLanguage1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      description: Device language setting.
+    PaymentInitiation.DeviceOperatingSystem1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: Device operating system as elicited by the TPP from the appropriate device interface.
+    PaymentInitiation.DeviceOperatingSystemVersion1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: Device operating system version as elicited by the TPP from the appropriate device interface.
+    PaymentInitiation.DeviceType1Codes:
+      type: string
+      enum:
+        - Mobile
+        - Desktop
+        - Tablet
+        - Wearable
+        - Other
+      description: The type of device used by the User to access their account with the TPP.
+    PaymentInitiation.Direction1Codes:
+      type: string
+      enum:
+        - Up
+        - Down
+        - Both
+      description: The direction of the User's scroll behaviour.
+    PaymentInitiation.DomesticCreditor1Properties:
+      type: object
+      required:
+        - CreditorAccount
+      properties:
+        CreditorAgent:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorAgent1Properties'
+        Creditor:
+          $ref: '#/components/schemas/PaymentInitiation.Creditor1Properties'
+        CreditorAccount:
+          $ref: '#/components/schemas/PaymentInitiation.DomesticCreditorAccount1Properties'
+      description: Identification elements for a Creditor for a domestic payment instruction.
+      additionalProperties: false
+    PaymentInitiation.DomesticCreditorAccount1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+        - Name
+      properties:
+        Type:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorAccountType1Codes'
+        SchemeName:
+          type: string
+          enum:
+            - IBAN
+          description: Domestic payment scheme, restricted to `IBAN`.
+        Identification:
+          $ref: '#/components/schemas/PaymentInitiation.QcbIban1Type'
+        Name:
+          $ref: '#/components/schemas/PaymentInitiation.AccountName1Properties'
+        TradingName:
+          $ref: '#/components/schemas/PaymentInitiation.TradingName1Properties'
+      description: Unambiguous identification of the account of the Creditor to which a payment will be made.
+      additionalProperties: false
+    PaymentInitiation.DomesticPaymentInitiationPersonalIdentifiableInformation1Properties:
+      type: object
+      required:
+        - Initiation
+        - Risk
+      properties:
+        Initiation:
+          $ref: '#/components/schemas/PaymentInitiation.DomesticCreditor1Properties'
+        Risk:
+          $ref: '#/components/schemas/PaymentInitiation.Risk1Properties'
+      description: >-
+        Domestic Payment Personal Identifiable Information (PII) Schema Object.
+
+
+        This Schema Object is provided for guidance only, and **must be implemented as a JWE when a Payment Initiation
+        Request is sent**.
+      additionalProperties: false
+    PaymentInitiation.InherenceFactorType1Codes:
+      type: string
+      enum:
+        - Biometric
+        - Fingerprint
+        - FaceRecognition
+        - IrisSca
+        - VoiceRecognition
+        - FIDOBiometric
+        - DeviceBiometrics
+        - Other
+    PaymentInitiation.InternationalCreditor1Properties:
+      type: object
+      required:
+        - CreditorAgent
+        - Creditor
+        - CreditorAccount
+      properties:
+        CreditorAgent:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorAgent1Properties'
+        Creditor:
+          $ref: '#/components/schemas/PaymentInitiation.Creditor1Properties'
+        CreditorAccount:
+          $ref: '#/components/schemas/PaymentInitiation.InternationalCreditorAccount1Properties'
+      description: >-
+        Identification elements for a Creditor for an international payment instruction.
+
+
+        Creditor Agent and Creditor are mandatory in order to correct route a payment to the target, non-Qatar financial
+        institution.
+      additionalProperties: false
+    PaymentInitiation.InternationalCreditorAccount1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+        - Name
+      properties:
+        Type:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorAccountType1Codes'
+        SchemeName:
+          type: string
+          enum:
+            - IBAN
+            - Other
+          description: >-
+            The name of the scheme that qualifies the `identification` value for the Creditor Account.
+
+
+            The following values are supported:
+
+
+            * `IBAN`: An IBAN provided according to the regulations enacted in the destination jurisdiction.
+
+
+            * `Other`: An alternative identifier, as prescribed by the destination jurisdiction for account
+            identification.
+        Identification:
+          type: string
+          minLength: 1
+          maxLength: 34
+          description: Identification of the account as defined by the destination FI and understood by the Debtor.
+        Name:
+          $ref: '#/components/schemas/PaymentInitiation.AccountName1Properties'
+        TradingName:
+          $ref: '#/components/schemas/PaymentInitiation.TradingName1Properties'
+      description: Unambiguous identification of the account of the creditor to which a credit entry will be posted.
+      additionalProperties: false
+    PaymentInitiation.InternationalPaymentInitiationPersonalIdentifiableInformation1Properties:
+      type: object
+      required:
+        - Initiation
+        - Risk
+      properties:
+        Initiation:
+          $ref: '#/components/schemas/PaymentInitiation.InternationalCreditor1Properties'
+        Risk:
+          $ref: '#/components/schemas/PaymentInitiation.Risk1Properties'
+      description: >-
+        International Payment Personal Identifiable Information (PII) Schema Object.
+
+
+        This Schema Object is provided for guidance only, and **must be implemented as a JWE when a Payment Initiation
+        Request is sent**.
+      additionalProperties: false
+    PaymentInitiation.KnowledgeFactorType1Codes:
+      type: string
+      enum:
+        - PIN
+        - Password
+        - SecurityQuestion
+        - SMSOTP
+        - EmailOTP
+        - OTPPush
+        - Other
+    PaymentInitiation.LongLivedPaymentConsent1Properties:
+      type: object
+      required:
+        - PeriodicSchedule
+      properties:
+        MaximumCumulativeValueOfPayments:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties'
+          description: >-
+            The maximum cumulative value of all successful payment rails executions under the Consent.
+
+
+            Each successful payment rails execution amount (related to the Consent) is added to the total cumulative
+            value of the Consent, which cannot exceed the maximum value agreed with the User at the point of consent.
+        MaximumCumulativeNumberOfPayments:
+          type: integer
+          description: >-
+            The maximum cumulative number of all successful payment rails executions under the Consent.
+
+
+            Each successful payment rails execution (related to the Consent) is added to the total cumulative number of
+            payments for the Consent, which cannot exceed the maximum value agreed with the User at the point of
+            consent.
+        PeriodicSchedule:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationPeriodicSchedule1Types'
+      description: A Consent definition for defining Multi Payments.
+      additionalProperties: false
+    PaymentInitiation.MaximumIndividualAmount1Properties:
+      type: object
+      required:
+        - Amount
+        - Currency
+      properties:
+        Amount:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+        Currency:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+      description: This is the Maximum amount a variable payment can take per period.
+      additionalProperties: false
+    PaymentInitiation.MotionSensorStatus1Codes:
+      type: string
+      enum:
+        - InMotion
+        - Stationary
+      description: Indicates whether the User's device is in motion or stationary.
+    PaymentInitiation.MultiPaymentConsentSchedule1Properties:
+      type: object
+      required:
+        - MultiPayment
+      properties:
+        MultiPayment:
+          $ref: '#/components/schemas/PaymentInitiation.LongLivedPaymentConsent1Properties'
+      description: A Consent Schedule for a Multi-Payment, initiated under a payment schedule agreed between the User and the TPP.
+      additionalProperties: false
+    PaymentInitiation.Orientation1Codes:
+      type: string
+      enum:
+        - Portrait
+        - Landscape
+      description: The screen orientation of the User's device.
+    PaymentInitiation.OtherFiIdentification1Type:
+      type: string
+      minLength: 1
+      maxLength: 35
+      description: Alternative FI identification, where BICFI is not supplied or supported.
+    PaymentInitiation.PaymentConsumption1Properties:
+      type: object
+      required:
+        - CumulativeNumberOfPayments
+        - CumulativeValueOfPayments
+      properties:
+        CumulativeNumberOfPayments:
+          type: integer
+          description: |-
+            The cumulative number of payment instructions initiated under the consent schedule.
+
+            Excludes instructions in a Rejected state.
+        CumulativeValueOfPayments:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: >-
+            The cumulative value of payment instructions initiated under the consent schedule, excluding instructions in
+            a Rejected state.
+
+
+            A number of monetary units specified in an active currency where the unit of currency is explicit and
+            compliant with ISO 4217.
+          additionalProperties: false
+        CumulativeNumberOfPaymentsInCurrentPeriod:
+          type: integer
+          description: |-
+            The cumulative number of payment instructions in the current period initiated under the consent schedule.
+
+            Excludes instructions in a Rejected state.
+        CumulativeValueOfPaymentsInCurrentPeriod:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: >-
+            The cumulative value of payment instructions in the current period initiated under the consent schedule.
+
+
+            Excludes instructions in a Rejected state.
+
+
+            A number of monetary units specified in an active currency where the unit of currency is explicit and
+            compliant with ISO 4217.
+          additionalProperties: false
+      additionalProperties: false
+    PaymentInitiation.PaymentId1Type:
+      type: string
+      minLength: 1
+      maxLength: 40
+      description: Unique identifier for a given Payment Initiation Request.
+    PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes:
+      type: string
+      enum:
+        - ReadAccountsBasic
+        - ReadAccountsDetail
+        - ReadBalances
+        - ReadRefundAccount
+    PaymentInitiation.PaymentInitiationConsentSchedule1Types:
+      oneOf:
+        - $ref: '#/components/schemas/PaymentInitiation.SinglePaymentConsentSchedule1Properties'
+        - $ref: '#/components/schemas/PaymentInitiation.MultiPaymentConsentSchedule1Properties'
+      description: |-
+        The Consent Schedule agreed between the User and the TPP.
+
+        Exactly one payment type **MUST** be provided.
+    PaymentInitiation.PaymentInitiationControlParameters1Properties:
+      type: object
+      required:
+        - ConsentSchedule
+      properties:
+        ConsentSchedule:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationConsentSchedule1Types'
+          description: |-
+            The various payment types that can be initiated. Exactly one payment type **MUST** be provided:
+
+            * A Single Payment, initiated immediately after the User authorizes the Consent at the LFI.
+
+            * A Multi-Payment, initiated under a payment schedule agreed between the User and the TPP.
+      description: Control Parameters set the overall rules for the Payment Schedule.
+      additionalProperties: false
+    PaymentInitiation.PaymentInitiationPeriodicSchedule1Types:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/PaymentInitiation.VariableOnDemand1Properties'
+      discriminator:
+        propertyName: Type
+        mapping:
+          VariableOnDemand: '#/components/schemas/PaymentInitiation.VariableOnDemand1Properties'
+      description: The definition for a payment schedule, discriminated by the `Type` property.
+    PaymentInitiation.PaymentInitiationRequest1Properties:
+      type: object
+      required:
+        - ConsentId
+        - Instruction
+        - PersonalIdentifiableInformation
+        - PaymentPurposeCode
+        - CreditorReference
+        - OpenFinanceBilling
+      properties:
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        Instruction:
+          type: object
+          properties:
+            Amount:
+              type: object
+              required:
+                - Amount
+                - Currency
+              properties:
+                Amount:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                Currency:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+              description: The payment initiation currency and amount.
+              additionalProperties: false
+          required:
+            - Amount
+          description: |-
+            The currency and amount instructed by the TPP based on the payment authorized by the User. 
+
+            Used to instruct the movement of funds from the Debtor to the Creditor.
+          additionalProperties: false
+        PersonalIdentifiableInformation:
+          oneOf:
+            - $ref: >-
+                #/components/schemas/PaymentInitiation.DomesticPaymentInitiationPersonalIdentifiableInformation1Properties
+            - $ref: >-
+                #/components/schemas/PaymentInitiation.InternationalPaymentInitiationPersonalIdentifiableInformation1Properties
+            - type: string
+              minLength: 1
+              maxLength: 131072
+          description: >-
+            Personal Identifiable Information for the Payment Request.
+
+
+            This information **MUST** be sent as a JWE when submitting the Request.
+
+
+            The Schema Objects are provided for guidance only, to ensure the JSON Web Token (JWT) payload is created
+            correctly.
+        PaymentPurposeCode:
+          $ref: '#/components/schemas/PaymentPurposeCode1Type'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.TppBillingPaymentType1Properties'
+        CurrencyRequest:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+          description: Currency exchange requested for an International Payment. Omitted for a Domestic Payment.
+      description: |-
+        Payment Initiation Request for a Domestic or International Payment.
+
+        A single request object is used for both payment types, as in the UAE standard. The payment type is
+        evident from the Personal Identifiable Information supplied, and `CurrencyRequest` is provided only
+        for an International Payment.
+      additionalProperties: false
+    PaymentInitiation.PaymentInitiationResponse1Properties:
+      type: object
+      required:
+        - PaymentId
+        - ConsentId
+        - Instruction
+        - PaymentPurposeCode
+        - OpenFinanceBilling
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+      properties:
+        PaymentId:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PaymentId1Type'
+          description: Unique identifier assigned by the LFI to identify the Payment Initiation Request resource.
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        Instruction:
+          type: object
+          properties:
+            Amount:
+              type: object
+              required:
+                - Amount
+                - Currency
+              properties:
+                Amount:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+                Currency:
+                  $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+              description: The payment initiation currency and amount.
+              additionalProperties: false
+          required:
+            - Amount
+          description: |-
+            The currency and amount instructed by the TPP based on the payment authorized by the User. 
+
+            Used to instruct the movement of funds from the Debtor to the Creditor.
+          additionalProperties: false
+        PaymentPurposeCode:
+          $ref: '#/components/schemas/PaymentPurposeCode1Type'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.TppBillingPaymentType1Properties'
+        CreationDateTime:
+          type: string
+          pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+          format: date-time
+          description: >-
+            Date and time at which the resource was created, formatted as defined by ISO 8601/RFC 3339
+            [`date-time`](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
+        Status:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationStatus1Codes'
+        StatusUpdateDateTime:
+          type: string
+          pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
+          format: date-time
+          description: >-
+            Date and time at which the payment status was updated, formatted as defined by ISO 8601/RFC 3339
+            [`date-time`](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
+        PaymentTransactionId:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentTransactionId1Type'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: Charges incurred in transacting the payment.
+        RejectReasonCode:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.RejectReasonCode1Properties'
+          minItems: 1
+          description: Reject reason code(s) provided by payment system serving the Payment Initiation Request.
+        CurrencyRequest:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+          description: Currency exchange requested for an International Payment. Omitted for a Domestic Payment.
+        ExchangeRate:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyExchange.FinalizedCurrencyExchangeRateInformation1Properties'
+          description: >-
+            Finalized currency exchange for an International Payment. Omitted for a Domestic Payment, or where the rate
+            is not yet available.
+      description: Payment Initiation Request for an International Payment.
+      x-ozone-discovery-requires-analysis: >-
+        Solicit feedback on whether to introduce properties to explicitly target a given payment rail, as per UK and
+        Berlin Group.
+      additionalProperties: false
+    PaymentInitiation.PaymentInitiationStatus1Codes:
+      type: string
+      enum:
+        - Pending
+        - AcceptedSettlementCompleted
+        - AcceptedCreditSettlementCompleted
+        - AcceptedWithoutPosting
+        - Rejected
+      description: >
+        Describes the status of the Payment Initiation Request.
+
+
+        | Code |
+        Description                                                                                                                                                                    
+        |
+
+        | --------------------------------- |
+        --------------------------------------------------------------------------------------------------------------------------------------------------
+        |
+
+        | Pending                           | Payment initiation or individual transaction included in the payment
+        initiation is pending.<br>Further checks and status update will be performed. |
+
+        | Rejected                          | The payment initiation has been
+        rejected.                                                                                                         
+        |
+
+        | AcceptedSettlementCompleted       | Settlement of the Debtor account has been
+        completed.                                                                                               |
+
+        | AcceptedCreditSettlementCompleted | When the Creditor account has been credited with the funds of the payment
+        initiated via the TPP.                                                   |
+
+        | AcceptedWithoutPosting            | When the Recipient Bank has accepted the payment but has not applied the
+        credit to the Creditor account yet.                                       |
+    PaymentInitiation.PaymentTransactionId1Type:
+      type: string
+      minLength: 1
+      maxLength: 140
+      description: >-
+        An identifier for a given Payment Initiation Request generated by the Debtor financial institution or payment
+        system acting on their behalf to identify the transaction.
+
+
+        An example of this value is the `EndToEndIdentification` value, which is commonly implemented in ISO 20022-based
+        payment systems.
+
+
+        This value is optional as it may not be available when the Payment Initiation Request resource is initially
+        created, due to the asynchronous nature of payment systems.
+    PaymentInitiation.PeriodStartDate1Type:
+      type: string
+      format: date
+      description: Specifies the start date of when a payment schedule begins.
+    PaymentInitiation.PeriodType1Codes:
+      type: string
+      enum:
+        - Day
+        - Week
+        - Month
+        - Year
+      description: >-
+        |Period Type|Description|
+
+        |-----------|-----------|
+
+        |Day|A continuous period of time, consisting of 24 consecutive hours, starting from midnight (00:00:00) and
+        finishing at 23:59:59 of the same day. |
+
+        |Week|A continuous period of time, consisting of seven consecutive days, starting from midnight (00:00:00) and
+        finishing at 23:59:59 of the 7th day. |
+
+        |Month|A continuous period of time starting from midnight (00:00:00) of the first day of a month and finishing
+        at 23:59:59 of the last day of that month.|
+
+        |Year|A continuous period of time, consisting of 12 months.|
+    PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties:
+      type: object
+      required:
+        - Amount
+        - Currency
+      properties:
+        Amount:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+        Currency:
+          $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+      description: The maximum cumulative payment value of all payment initiations per Period Type.
+      additionalProperties: false
+    PaymentInitiation.PossessionFactorType1Codes:
+      type: string
+      enum:
+        - FIDO2SecurityKey
+        - Passkey
+        - OTPDevice
+        - OTPApp
+        - SMSOTP
+        - EmailOTP
+        - PushNotification
+        - WebauthnToken
+        - SecureEnclaveKey
+        - HardwareOTPKey
+        - TrustedDevice
+        - Other
+      description: Possession factor used by the User when authenticated at the TPP.
+    PaymentInitiation.PreOrderPurchaseIndicator1Codes:
+      type: string
+      enum:
+        - MerchandiseAvailable
+        - FutureAvailability
+      description: Indicates whether the merchandise is currently available or is a pre-order for future availability.
+    PaymentInitiation.QcbIban1Type:
+      type: string
+      pattern: ^QA[0-9]{2}[A-Z]{4}[0-9]{21}$
+      description: >-
+        A domestic IBAN, as [defined](https://www.qcb.gov.qa/Documents/BankInstructions/EN/13-193.pdf) by Qatar Central
+        Bank.
+    PaymentInitiation.ReadDebtorAccount1Properties:
+      type: object
+      required:
+        - SchemeName
+        - Identification
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - IBAN
+          description: Scheme name for the Debtor Account. The Debtor Account must be an IBAN.
+        Identification:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.QcbIban1Type'
+          description: The Identification of the Debtor Account.
+        Name:
+          type: object
+          properties:
+            en:
+              type: string
+              minLength: 1
+              maxLength: 70
+            ar:
+              type: string
+              minLength: 1
+              maxLength: 70
+          minProperties: 1
+          description: The Debtor Account, which can be provided in both English and Arabic. Omitted if not held by the TPP.
+          additionalProperties: false
+      description: |-
+        Provides the Debtor Account from which funds are drawn for one-or-more Payment Initiation Requests.
+
+        The TPP requires the `ReadRefundAccount` to invoke this operation.
+      additionalProperties: false
+    PaymentInitiation.ReadPaymentInitiationConsent1Properties:
+      type: object
+      required:
+        - ControlParameters
+        - ConsentId
+        - IsSingleAuthorization
+        - ExpirationDateTime
+        - DebtorReference
+        - PaymentPurposeCode
+        - CreationDateTime
+        - Status
+        - StatusUpdateDateTime
+        - PaymentConsumption
+      properties:
+        ControlParameters:
+          allOf:
+            - $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationControlParameters1Properties'
+          description: Control Parameters set the overall rules for the Payment Schedule.
+        ConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        BaseConsentId:
+          $ref: '#/components/schemas/Consent.ConsentId1Type'
+        IsSingleAuthorization:
+          type: boolean
+          description: >-
+            TPP is request authorization by a single User, with no multi-authorization requirement.
+
+
+            Used to indicate the requirement time-bound authorization of the payment, in order to release goods or
+            services in a timely fashion.
+
+
+            Can be ignored by LFIs where the access control model for the account requires multiple authorizations of
+            the 
+
+
+            Set to `false` where immediate authorization is not required.
+        AuthorizationExpirationDateTime:
+          type: string
+          format: date-time
+          x-ozone-discovery-requires-analysis: >-
+            Check on existing usage as this may not make sense, and should be set by default after the Consent is
+            created.
+        ExpirationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentExpirationDateTime1Type'
+        Permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
+          minItems: 2
+          uniqueItems: true
+          description: >-
+            Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
+            User, and requested for authorization with the LFI. 
+
+
+            Allows TPPs to check the User balance at the payment account.
+
+
+            TPPs **MUST** select `ReadAccountsBasic` and `ReadBalances` to implement a balance check before making
+            payment.
+        CurrencyRequest:
+          $ref: '#/components/schemas/CurrencyExchange.RequestedCurrencyExchange1Properties'
+        DebtorReference:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorReference1Type'
+        CreditorReference:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorReference1Type'
+        PaymentPurposeCode:
+          allOf:
+            - $ref: '#/components/schemas/PaymentPurposeCode1Type'
+          x-ozone-discovery-requires-analysis: What are the applicable payment purpose codes under QCB payment schemes.
+        CreationDateTime:
+          $ref: '#/components/schemas/Consent.ConsentCreationDateTime1Type'
+        Status:
+          $ref: '#/components/schemas/Consent.ConsentStatus1Codes'
+        StatusUpdateDateTime:
+          $ref: '#/components/schemas/Consent.ConsentStatusUpdateDateTime1Type'
+        RevokedBy:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentRevokedBy1Codes'
+          description: |-
+            Indicates who the Consent was revoked by.
+
+            Omitted where the Consent has not been revoked.
+        OpenFinanceBilling:
+          $ref: '#/components/schemas/Billing.CustomerType1Properties'
+        Charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charges.Charge1Properties'
+          minItems: 1
+          description: |-
+            Charges applied to a given payment initiation instruction, as stated by the LFI.
+
+            Omitted if no charges apply to the payment.
+        ExchangeRate:
+          $ref: '#/components/schemas/CurrencyExchange.ConsentCurrencyExchangeRateInformation1Properties'
+        PaymentConsumption:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentConsumption1Properties'
+        Meta:
+          allOf:
+            - $ref: '#/components/schemas/Consent.ConsentMeta1Properties'
+          description: >-
+            Metadata recorded against the Consent by the LFI, which currently carries multi-authorization progress.
+
+
+            Response-only: it reports state established after Consent Authorization, so it is **not** submitted in the
+            Pushed Authorization Request.
+
+
+            Omitted where the LFI does not require multiple authorizers for the Consent.
+      description: Properties of the Consent agreed by the User with the TPP for Payment Initiation.
+      additionalProperties: false
+    PaymentInitiation.ReadPaymentInitiationConsentData1Properties:
+      type: object
+      required:
+        - Data
+        - Links
+      properties:
+        Data:
+          $ref: '#/components/schemas/PaymentInitiation.ReadPaymentInitiationConsent1Properties'
+        Links:
+          $ref: '#/components/schemas/JsonApi.LinksRelatedResources1Properties'
+        Meta:
+          $ref: '#/components/schemas/JsonApi.MetaResource1Properties'
+        Subscription:
+          $ref: '#/components/schemas/Events.Subscription1Properties'
+      additionalProperties: false
+    PaymentInitiation.RecipientType1Codes:
+      type: string
+      enum:
+        - Individual
+        - Corporate
+      description: Indicates whether the recipient of the delivery is an individual or a corporate entity.
+    PaymentInitiation.RejectReasonCode1Properties:
+      type: object
+      required:
+        - Code
+        - Message
+      properties:
+        Code:
+          type: string
+          minLength: 1
+          maxLength: 35
+          description: Reject reason code as defined in the payment system.
+        Message:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: A description of the error that occurred.
+      additionalProperties: false
+    PaymentInitiation.ReorderItemsIndicator1Codes:
+      type: string
+      enum:
+        - FirstTimeOrder
+        - Reorder
+      description: Indicates whether the transaction is a first-time order or a reorder of items.
+    PaymentInitiation.Risk1Properties:
+      type: object
+      properties:
+        DebtorIndicators:
+          $ref: '#/components/schemas/PaymentInitiation.DebtorIndicators1Properties'
+        DestinationDeliveryAddress:
+          type: object
+          properties:
+            RecipientType:
+              $ref: '#/components/schemas/PaymentInitiation.RecipientType1Codes'
+            RecipientName:
+              type: object
+              properties:
+                en:
+                  type: string
+                  minLength: 1
+                  maxLength: 70
+                  description: Name provided in English language.
+                ar:
+                  type: string
+                  minLength: 1
+                  maxLength: 70
+                  description: Name provided in Arabic
+              additionalProperties: false
+            NationalAddress:
+              type: array
+              items:
+                $ref: '#/components/schemas/Address.QatarAddress1Properties'
+              minItems: 1
+              description: One-or-more addresses the goods or services are to be delivered to.
+          description: Destination Delivery Address
+          additionalProperties: false
+        TransactionIndicators:
+          $ref: '#/components/schemas/PaymentInitiation.TransactionIndicators1Properties'
+        CreditorIndicators:
+          $ref: '#/components/schemas/PaymentInitiation.CreditorIndicators1Properties'
+      description: >-
+        Risk information is sent by the TPP to the LFI and is used to specify additional details for payment risk and
+        fraud scoring.
+      additionalProperties: false
+    PaymentInitiation.SingleInstantPayment1Properties:
+      type: object
+      required:
+        - Type
+        - Amount
+      properties:
+        Type:
+          type: string
+          enum:
+            - SingleInstantPayment
+          description: The Payment Type.
+        Amount:
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricAmount1Type'
+            Currency:
+              $ref: '#/components/schemas/Values.ActiveOrHistoricCurrencyCode1Type'
+          description: An Amount qualified by an active Currency, using amount and currency as prescribed by ISO 4217.
+          additionalProperties: false
+      description: >-
+        A single immediate payment consent that **MUST** be used for a single payment, which will be initiated
+        immediately after User authorization at the LFI.
+      additionalProperties: false
+    PaymentInitiation.SinglePaymentConsentSchedule1Properties:
+      type: object
+      required:
+        - SinglePayment
+      properties:
+        SinglePayment:
+          $ref: '#/components/schemas/PaymentInitiation.SingleInstantPayment1Properties'
+      description: A Consent Schedule for a Single Payment, initiated immediately after the User authorizes the Consent at the LFI.
+      additionalProperties: false
+    PaymentInitiation.SubChannelType1Codes:
+      type: string
+      enum:
+        - WebBrowser
+        - MobileApp
+        - SmartTV
+        - WearableDevice
+        - POSTerminal
+        - ATM
+        - KioskTerminal
+        - Other
+      description: More specific classification of the transaction channel.
+    PaymentInitiation.SuspiciousActivity1Codes:
+      type: string
+      enum:
+        - NoSuspiciousActivity
+        - SuspiciousActivityDetected
+      description: Indicates whether suspicious activity has been detected on the account.
+    PaymentInitiation.TradingName1Properties:
+      type: object
+      properties:
+        en:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: English language value of the trading name.
+        ar:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Arabic language value of the trading name.
+      description: |-
+        The trading name (if applicable) for the Creditor, as defined by local organization registration requirements.
+
+        Omitted if not account name and trading name match.
+      additionalProperties: false
+    PaymentInitiation.TransactionIndicators1Properties:
+      type: object
+      properties:
+        IsCustomerPresent:
+          type: boolean
+          description: This field differentiates between automatic and manual payment initiation.
+        IsContractPresent:
+          type: boolean
+          description: Indicates if the Creditor has a contractual relationship with the TPP.
+        Channel:
+          $ref: '#/components/schemas/PaymentInitiation.Channel1Codes'
+        ChannelType:
+          $ref: '#/components/schemas/PaymentInitiation.ChannelType1Codes'
+        SubChannelType:
+          $ref: '#/components/schemas/PaymentInitiation.SubChannelType1Codes'
+        PaymentProcess:
+          type: object
+          properties:
+            TotalDuration:
+              type: integer
+              minimum: 0
+            CurrentSessionAttempts:
+              type: integer
+              minimum: 1
+            CurrentSessionFailedAttempts:
+              type: integer
+              minimum: 0
+            Last24HourAttempts:
+              type: integer
+              minimum: 0
+            Last24HourFailedAttempts:
+              type: integer
+              minimum: 0
+          description: Metrics related to the payment process duration and attempts
+          additionalProperties: false
+        MerchantRisk:
+          type: object
+          properties:
+            DeliveryTimeframe:
+              $ref: '#/components/schemas/PaymentInitiation.DeliveryTimeframe1Codes'
+            ReorderItemsIndicator:
+              $ref: '#/components/schemas/PaymentInitiation.ReorderItemsIndicator1Codes'
+            PreOrderPurchaseIndicator:
+              $ref: '#/components/schemas/PaymentInitiation.PreOrderPurchaseIndicator1Codes'
+            IsGiftCardPurchase:
+              type: boolean
+            IsDeliveryAddressMatchesBilling:
+              type: boolean
+            AddressMatchLevel:
+              $ref: '#/components/schemas/PaymentInitiation.AddressMatchLevel1Codes'
+          description: Risk indicator details provided by the merchant
+          additionalProperties: false
+        SupplementaryData:
+          type: object
+          description: Additional information that cannot be captured in the structured fields and/or any other specific block
+          additionalProperties: false
+      description: Transaction Indicators
+      additionalProperties: false
+    PaymentInitiation.UpdatePaymentConsentStatus1Properties:
+      type: object
+      required:
+        - Status
+      properties:
+        Status:
+          type: string
+          enum:
+            - Revoked
+          description: Consent updated to `Revoked` status by User at TPP or unilaterally by TPP.
+        RevokedBy:
+          anyOf:
+            - type: string
+              enum:
+                - TPP
+            - type: string
+              enum:
+                - TPP.InitiatedByUser
+          description: "Indicates whether the revocation was initiated by User or unilaterally by TPP.\n\n\n| Identifier          | Description                             |\n| ------------------- | --------------------------------------- |\n| TPP                 | Revoked by TPP without User initiation. |\n| TPP.InitiatedByUser |\tInitiated by User via the TPP.          |\n"
+      additionalProperties: false
+    PaymentInitiation.VariableOnDemand1Properties:
+      type: object
+      required:
+        - Type
+        - PeriodType
+        - PeriodStartDate
+        - Controls
+      properties:
+        Type:
+          type: string
+          enum:
+            - VariableOnDemand
+          description: The Periodic Schedule Type.
+        PeriodType:
+          $ref: '#/components/schemas/PaymentInitiation.PeriodType1Codes'
+        PeriodStartDate:
+          $ref: '#/components/schemas/PaymentInitiation.PeriodStartDate1Type'
+        Controls:
+          type: object
+          properties:
+            MaximumIndividualAmount:
+              $ref: '#/components/schemas/PaymentInitiation.MaximumIndividualAmount1Properties'
+            MaximumCumulativeValueOfPaymentsPerPeriod:
+              $ref: '#/components/schemas/PaymentInitiation.PeriodTypeMaximumCumulativeValueOfPayments1Properties'
+            MaximumCumulativeNumberOfPaymentsPerPeriod:
+              type: integer
+          minProperties: 1
+          description: Controls that apply to the payment schedule.
+          additionalProperties: false
+      description: >-
+        Payment Controls that apply to all payment instructions in a given period under this payment consent.
+
+
+        The payments for this consent may be executed on any date, as long as they are within the Controls for a
+        PeriodType.
+      additionalProperties: false
+    PaymentPurposeCode1Type:
+      type: string
+      minLength: 1
+      maxLength: 4
+      description: >-
+        A category code that relates to the type of services or goods that corresponds to the underlying purpose of the
+        payment. 
+
+
+        The code must conform to the published code list provided by QCB.
+      x-ozone-discovery-requires-analysis: Source mandated payment purpose code list from QCB.
+    QueryPaymentInitiation1Response:
+      type: object
+      required:
+        - Data
+        - Links
+      properties:
+        Data:
+          type: object
+          description: Empty Data object, as resolution to resource is provided by `$.Links.Self`.
+          additionalProperties: false
+        Links:
+          $ref: '#/components/schemas/JsonApi.LinksResource1Properties'
+        Meta:
+          $ref: '#/components/schemas/JsonApi.MetaResource1Properties'
+      description: Provides a link to the resource created with the matching `x-idempotency-key` value.
+      additionalProperties: false
+    QueryPaymentInitiationSigned1Response:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/QueryPaymentInitiation1Response'
+      description: Signed response to a query for a Payment Initiation Request by Idempotency Key.
+      additionalProperties: false
+    ReadPaymentInitiation1Response:
+      type: object
+      required:
+        - Data
+        - Links
+      properties:
+        Data:
+          $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationResponse1Properties'
+        Links:
+          $ref: '#/components/schemas/JsonApi.LinksRelatedResources1Properties'
+        Meta:
+          $ref: '#/components/schemas/JsonApi.MetaResource1Properties'
+      description: Payment Initiation Response Data.
+      additionalProperties: false
+    ReadPaymentInitiationBaseConsentsSigned1Response:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInitiation.ReadPaymentInitiationConsentData1Properties'
+      description: |-
+        Signed Payment Consent Data linked by Base Consent ID.
+
+        Returned as an array of Consent resources, each carrying its own `Links` and `Meta`, matching the
+        UAE standard. The collection is therefore not paginated, and carries no collection-level metadata.
+      additionalProperties: false
+    ReadPaymentInitiationConsentDebtorAccount1Response:
+      type: object
+      required:
+        - Data
+        - Links
+      properties:
+        Data:
+          $ref: '#/components/schemas/PaymentInitiation.ReadDebtorAccount1Properties'
+        Links:
+          $ref: '#/components/schemas/JsonApi.LinksRelatedResources1Properties'
+        Meta:
+          $ref: '#/components/schemas/JsonApi.MetaResource1Properties'
+      description: Debtor Account details used to facilitate a refund.
+      additionalProperties: false
+    ReadPaymentInitiationConsentDebtorAccountSigned1Response:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/ReadPaymentInitiationConsentDebtorAccount1Response'
+      description: Signed Payment Consent Response.
+      additionalProperties: false
+    ReadPaymentInitiationConsentSigned1Response:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/PaymentInitiation.ReadPaymentInitiationConsentData1Properties'
+      description: Signed Payment Consent Response.
+      additionalProperties: false
+    ReadPaymentInitiationSigned1Response:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          $ref: '#/components/schemas/ReadPaymentInitiation1Response'
+      description: Signed Payment Initiation Response.
+      additionalProperties: false
+    UpdatePaymentInitiationConsent1Request:
+      type: object
+      properties:
+        Data:
+          $ref: '#/components/schemas/PaymentInitiation.UpdatePaymentConsentStatus1Properties'
+        Subscription:
+          $ref: '#/components/schemas/Events.Subscription1Properties'
+      description: Updated Payment Consent Data.
+      additionalProperties: false
+    UpdatePaymentInitiationConsentSigned1Request:
+      type: object
+      required:
+        - iss
+        - exp
+        - nbf
+        - message
+      properties:
+        iss:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1)'
+        exp:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4)'
+        nbf:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5)'
+        aud:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3)'
+        iat:
+          type: integer
+          format: unixtime
+          description: '[https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6)'
+        message:
+          allOf:
+            - $ref: '#/components/schemas/UpdatePaymentInitiationConsent1Request'
+          minProperties: 1
+      description: Signed Updated Payment Consent Data.
+      additionalProperties: false
+    Values.ActiveOrHistoricAmount1Type:
+      type: string
+      pattern: ^\d{1,13}$|^\d{1,13}\.\d{1,5}$
+      description: >-
+        A number of monetary units specified in an active currency where the unit of currency is explicit and compliant
+        with ISO 4217.
+      example: '100.00'
+    Values.ActiveOrHistoricCurrencyCode1Type:
+      type: string
+      pattern: ^[A-Z]{3,3}$
+      description: |-
+        A 3 character alphabetic code allocated to a currency under an international currency identification scheme.
+
+        Values **MUST** be in accordance with ISO 4217 'Codes for the representation of currencies and funds'.
+    Values.Latitude1Type:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: Latitude value.
+    Values.Longitude1Type:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: Longitude value.
+  securitySchemes:
+    UserOAuth2Security1Properties:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://authserver.example/authorization
+          tokenUrl: https://authserver.example/token
+          scopes:
+            openid: ''
+            accounts: ''
+servers:
+  - url: /open-finance/payment-initiation/v1.0
