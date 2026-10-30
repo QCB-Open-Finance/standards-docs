@@ -1661,13 +1661,8 @@
 				</a>
 				
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#10-access-beneficiaries-data-conditional" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">10. Access Beneficiaries data (conditional)</span>
-				</a>
-				
-			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#11-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">11. Account for journey variations</span>
+				<a href="#10-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">10. Account for journey variations</span>
 				</a>
 				
 			</li>
@@ -1736,13 +1731,8 @@
 				</a>
 				
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#10-access-beneficiaries-data-conditional" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">10. Access Beneficiaries data (conditional)</span>
-				</a>
-				
-			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#11-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">11. Account for journey variations</span>
+				<a href="#10-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">10. Account for journey variations</span>
 				</a>
 				
 			</li>
@@ -1791,9 +1781,8 @@
 	
 										<p>This guide is for TPPs implementing Bank Data Sharing: retrieving a User’s account data held at an
 LFI, with the User’s consent, under an Account Access Consent that may be Single-Use or Long-Lived.
-See
-<a href="../../../rules/business/account-info/01-description/">Account Information | Description</a> for the full
-scope (Consumer and SME data-sharing segments).</p>
+See <a href="../../../rules/business/account-info/01-description/">Account Information | Description</a> for
+the full scope (Consumer and SME data-sharing segments).</p>
 <p>Every step below cites the exact rule it implements, drawing on
 <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/">Account Information | Consent Set-up &amp; Authorization | ACCI rules</a>,
 <a href="../../../rules/business/account-info/04-data-sharing-requests/">Account Information | Data Sharing Requests | ACCI rules</a>,
@@ -1801,7 +1790,8 @@ the <a href="../../../rules/business/common/01-common-rules-and-guidelines/">Com
 <a href="../../../rules/business/common-components/consent-setup/general/01-overview/">Common Components</a>,
 and <a href="../../../rules/business/constants-and-limits/01-limits/">Constants and Limits</a>.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="1-onboard-the-user-where-required">1. Onboard the User (where required)</h2><a class="sl-anchor-link" href="#1-onboard-the-user-where-required"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “1. Onboard the User (where required)”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#initiate-user-set-up-conditional">Initiate User Set-up (Conditional)</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#initiate-user-set-up-conditional">Initiate User Set-up (Conditional)</a>.</em></p>
 <p>Depending on the use case, onboard the User before requesting data-sharing consent:</p>
 <ol>
 <li>Provide Terms &amp; Conditions and a Privacy Notice covering the applicable rights and
@@ -1812,23 +1802,24 @@ basis for processing it. See
 <li>Give the User an option to cancel the flow at this stage.</li>
 </ol>
 <div class="sl-heading-wrapper level-h2"><h2 id="2-collect-and-review-the-data-sharing-consent-parameters">2. Collect and review the data sharing consent parameters</h2><a class="sl-anchor-link" href="#2-collect-and-review-the-data-sharing-consent-parameters"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “2. Collect and review the data sharing consent parameters”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#data-sharing-consent">Data Sharing Consent</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#data-sharing-consent">Data Sharing Consent</a>.</em></p>
 <p>Ground every consent screen in the codification rules that apply to all Data Sharing consent.
 Clearly explain the purpose data is being shared for and how long it’s shared for, using five
 plain-language agreement parameters: Purpose Statement, Direct Benefit Statement, Data Request
-Statement, Duration Period Statement, and the Agreement itself. Purpose statements specifically
-must use simple language an average User can understand, tied to the actual benefit, without vague
-or excessive detail. See
+Statement, Duration Period Statement, and the Agreement itself. Purpose statements specifically must
+use simple language an average User can understand, tied to the actual benefit, without vague or
+excessive detail. See
 <a href="../../../rules/business/common-components/consent-setup/general/02-codification/#data-sharing-consent">Consent Setup | Consent Codification | Data Sharing Consent</a>.</p>
 <p>On top of that baseline, build:</p>
 <ol>
 <li><strong>Scope the request.</strong> Only request the data required for the service or use case.</li>
 <li><strong>Describe it in Data Cluster language.</strong> Use the standard Data Cluster names and descriptions,
-not raw permission names, so the User understands what’s being requested, and let them drill
-into the underlying permissions. See
+not raw permission names, so the User understands what’s being requested, and let them drill into
+the underlying permissions. See
 <a href="../../../rules/business/account-info/06-permissions-and-data-clusters/">Permissions and Data Clusters</a>
-for the full Data Cluster table (Your Account Details, Your Regular Payments, Your Account
-Transactions, Your Account Statements, Your Product Information, Contact and Party Details).
+for the full Data Cluster table (Your Account Details, Your Account Balances, Your Account
+Transactions).
 <ul>
 <li>If the use case lets the User choose which data to share, offer that selection before the
 Consent screen, not on it.</li>
@@ -1862,15 +1853,16 @@ any other party you’re supporting, if applicable. See
 <ol start="8">
 <li><strong>Single Authorization Indicator.</strong> Set or clear it as appropriate. See
 <a href="../../../rules/business/common/consent-lifecycle-and-authorization/7-is-single-auth-flag/">Is Single Authorization flag</a>.</li>
-<li><strong>Authorization Expiration DateTime.</strong> Set it where there are specific timing requirements
-(this matters for multi-authorizer consents too). See
+<li><strong>Authorization Expiration DateTime.</strong> Set it where there are specific timing requirements (this
+matters for multi-authorizer consents too). See
 <a href="../../../rules/business/common/consent-lifecycle-and-authorization/18-multi-user-auth-flow/">Multi User Authorization Flow</a>
 and
 <a href="../../../rules/business/common/consent-lifecycle-and-authorization/8-auth-exp-date-time/">Authorization Expiration Date Time</a>.</li>
 <li><strong>Capture explicit consent</strong> to access the products held at the selected LFI.</li>
 </ol>
 <div class="sl-heading-wrapper level-h2"><h2 id="3-stage-the-consent">3. Stage the consent</h2><a class="sl-anchor-link" href="#3-stage-the-consent"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “3. Stage the consent”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#consent-staging">Consent Staging</a>,
+<p><em>Implements:
+<a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#consent-staging">Consent Staging</a>,
 which applies
 <a href="../../../rules/business/common/consent-lifecycle-and-authorization/10-consent-staging/">Consent Staging</a>.</em></p>
 <p>Submit the codified consent, as one or more RARs via a PAR request, per
@@ -1879,7 +1871,8 @@ to the OFP before you redirect the User to the LFI. See the
 <a href="../../making-a-single-instant-payment/tpp-guide/#3-stage-the-consent">Making a Single Instant Payment</a>
 guide’s equivalent step for the general staging mechanics, which apply here unchanged.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="4-hand-off-the-user-to-the-lfi">4. Hand off the User to the LFI</h2><a class="sl-anchor-link" href="#4-hand-off-the-user-to-the-lfi"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “4. Hand off the User to the LFI”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#hand-off-to-lfi">Hand-off to LFI</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#hand-off-to-lfi">Hand-off to LFI</a>.</em></p>
 <p>Notify the User they’re being transferred to the selected LFI to authenticate and authorize, per
 <a href="../../../rules/business/common/journey-handoffs/11-hand-off-to-lfi/">Hand-off to LFI</a>. The same
 redirection-screen mechanics described in the
@@ -1892,16 +1885,18 @@ handles account selection (including the no-account-list variation, see
 <a href="../lfi-guide/#3-authenticate-the-user">LFI Implementation Guide</a> for the full detail. There’s
 nothing for you to build at this step beyond handling the hand-off back.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="6-receive-the-hand-off-back-from-the-lfi">6. Receive the hand-off back from the LFI</h2><a class="sl-anchor-link" href="#6-receive-the-hand-off-back-from-the-lfi"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “6. Receive the hand-off back from the LFI”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#hand-off-back-to-the-tpp">Hand-off back to the TPP</a>,
+<p><em>Implements:
+<a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#hand-off-back-to-the-tpp">Hand-off back to the TPP</a>,
 which applies
 <a href="../../../rules/business/common/journey-handoffs/14-handoff-back-to-tpp/">Hand-off back to the TPP</a>.</em></p>
 <p>Resume control once the OFP redirects the User back with the required authorization code.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="7-submit-data-sharing-requests">7. Submit data sharing requests</h2><a class="sl-anchor-link" href="#7-submit-data-sharing-requests"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “7. Submit data sharing requests”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/04-data-sharing-requests/#data-sharing-request">Data Sharing Request</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/account-info/04-data-sharing-requests/#data-sharing-request">Data Sharing Request</a>.</em></p>
 <ol>
 <li>Only request data within the scope of your service or use case.</li>
-<li>Only submit requests to the OFP for the data clusters and permissions the User actually
-consented to.</li>
+<li>Only submit requests to the OFP for the data clusters and permissions the User actually consented
+to.</li>
 </ol>
 <p>The OFP validates the request against the authorized Consent (state, clusters, permissions) before
 forwarding it to the LFI. See the
@@ -1910,12 +1905,13 @@ Handle a rejection from the OFP, whether from an invalid or expired Consent stat
 against the authorized clusters and permissions, with an appropriate error rather than a generic
 failure.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="8-confirm-to-the-user">8. Confirm to the User</h2><a class="sl-anchor-link" href="#8-confirm-to-the-user"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “8. Confirm to the User”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#confirmation-to-user">Confirmation to User</a>,
+<p><em>Implements:
+<a href="../../../rules/business/account-info/03-bank-data-sharing-consent-setup-authorization-copy/#confirmation-to-user">Confirmation to User</a>,
 which applies
 <a href="../../../rules/business/common/execution-status-and-notification/16-confirmation-to-user/">Confirmation to User</a>.</em></p>
 <p>Confirm to the User the outcome of their Consent Authorization with the LFI, for Long-lived
-Consents, including whether further authorizations are required, and confirm the outcome again
-once data is retrieved.</p>
+Consents, including whether further authorizations are required, and confirm the outcome again once
+data is retrieved.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="9-manage-the-consent-over-its-lifetime">9. Manage the consent over its lifetime</h2><a class="sl-anchor-link" href="#9-manage-the-consent-over-its-lifetime"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “9. Manage the consent over its lifetime”</span></a></div>
 <p>Long-Lived data-sharing consents don’t end at authorization. Build a Consent Management Interface
 (CMI) so Users can view, revoke, pause, and update them, per
@@ -1928,8 +1924,8 @@ User-facing entity yourself, in both the Consent and the CMI.</li>
 <li><strong>Present each Consent individually</strong>, including each Consent inside a Consent Group.</li>
 <li><strong>Keep your systems in sync</strong> with the Consent’s actual state at the OFP.</li>
 <li><strong>Notify the OFP the moment a User revokes</strong> a Consent through your CMI.</li>
-<li><strong>Respect Combined Consent Group (CCG) constraints</strong> when building a PAR: number of RARs,
-allowed combinations, and minimum and maximum RAR counts, as defined in the CCG-aware OpenAPI
+<li><strong>Respect Combined Consent Group (CCG) constraints</strong> when building a PAR: number of RARs, allowed
+combinations, and minimum and maximum RAR counts, as defined in the CCG-aware OpenAPI
 description.</li>
 </ol>
 <p><strong>Revocation.</strong> Build the CMI’s cancellation journey per
@@ -1944,25 +1940,17 @@ or validity duration, up to the Max Consent Validity Period, from the CMI, per
 <a href="../../../rules/business/account-info/05-consent-updates/">Consent Updates</a> and
 <a href="../../../rules/business/common-components/consents-mgmt-interface/tpp-consent-mgmt-interface/06-consent-update-journey/">Consent Update Journey</a>.
 Highlight which parameters are changeable, require the User to authenticate with their LFI and
-authorize the update, and set the original Consent’s status to <code dir="auto">Revoked</code> before forwarding the
-new one. The LFI, in turn, must let the User amend the related accounts before authorizing the
-update.</p>
+authorize the update, and set the original Consent’s status to <code dir="auto">Revoked</code> before forwarding the new
+one. The LFI, in turn, must let the User amend the related accounts before authorizing the update.</p>
 <p><strong>Naming.</strong> Label the CMI “Open Finance Connections,” or “Open Finance Connected Accounts” if you
 also operate an LFI CMI under the same brand, per
 <a href="../../../rules/business/common-components/consents-mgmt-interface/general/04-naming-of-consent-management-interfaces-cmis/">Naming of Consent Management Interfaces</a>.
 Design it to be easy to find, intuitive, and transparent, with a visible history of finished,
 rejected, and cancelled consents, retained at least a year, per
 <a href="../../../rules/business/common-components/consents-mgmt-interface/general/03-principles-behind-effective-consent-management-interfaces-cmis/">Principles Behind Effective CMIs</a>.</p>
-<div class="sl-heading-wrapper level-h2"><h2 id="10-access-beneficiaries-data-conditional">10. Access Beneficiaries data (conditional)</h2><a class="sl-anchor-link" href="#10-access-beneficiaries-data-conditional"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “10. Access Beneficiaries data (conditional)”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/account-info/04-data-sharing-requests/#beneficiaries-data-sharing">Data Sharing Requests | Beneficiaries Data Sharing</a>.</em></p>
-<p>Where the Consent grants <code dir="auto">ReadBeneficiariesBasic</code> or <code dir="auto">ReadBeneficiariesDetail</code>, retrieve the User’s
-trusted beneficiaries for a given account via <code dir="auto">GET /accounts/{AccountId}/beneficiaries</code>. The
-response includes beneficiaries from both Open Finance and the LFI’s own channels, distinguished
-by <code dir="auto">AddedViaOF: true</code>.</p>
-<div class="sl-heading-wrapper level-h2"><h2 id="11-account-for-journey-variations">11. Account for journey variations</h2><a class="sl-anchor-link" href="#11-account-for-journey-variations"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “11. Account for journey variations”</span></a></div>
-<p>Where the Consent includes only User-level data permissions, the Parties endpoint, for example,
-and no account-specific permissions, don’t display any list of eligible accounts to the User. See
-<a href="../journey-variations/">Handle Journey Variations</a> for the full detail.</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="10-account-for-journey-variations">10. Account for journey variations</h2><a class="sl-anchor-link" href="#10-account-for-journey-variations"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “10. Account for journey variations”</span></a></div>
+<p>Where the Consent includes only User-level data permissions and no account-specific permissions, do
+not display any list of eligible accounts to the User.</p>
 									
 	<span id="docsearch-lvl0" hidden>Learn</span>
 </div>

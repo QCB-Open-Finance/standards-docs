@@ -216,10 +216,13 @@ paths:
     get:
       operationId: ReadAccountOperationV1_0
       summary: Read Account
-      description: |-
+      description: >-
         Read an account granted to a TPP, based on a given Consent and account selection by the User.
 
-        The `ReadAccounts` Permission and `accounts` OAuth scope are required to access this resource.
+
+        Either the `ReadAccountsBasic` or `ReadAccountsDetail` permission and the `accounts` OAuth scope are required to
+        access this resource.
+
 
         TPPs **must** invoke the `get /accounts` operation to retrieve the available `AccountId` values.
       parameters:
@@ -268,8 +271,8 @@ paths:
         Read the balances for a given account, based on the `AccountId`.
 
 
-        The `ReadAccounts` and `ReadBalances` permissions and `accounts` OAuth scope are required to access this
-        resource.
+        The `ReadBalances` permission, either the `ReadAccountsBasic` or `ReadAccountsDetail` permission, and the
+        `accounts` OAuth scope are required to access this resource.
 
 
         TPPs **MUST** invoke the `get /accounts` operation to retrieve the available `AccountId` values before accessing
@@ -320,8 +323,8 @@ paths:
         Read the transactions for a given account, based on the `AccountId`.
 
 
-        The `ReadAccounts` and `ReadTransactions` permissions and `accounts` OAuth scope are required to access this
-        resource.
+        Either the `ReadTransactionsBasic` or `ReadTransactionsDetail` permission, either the `ReadAccountsBasic` or
+        `ReadAccountsDetail` permission, and the `accounts` OAuth scope are required to access this resource.
 
 
         TPPs **MUST** invoke the `get /accounts` operation to retrieve the available `AccountId` values before accessing
@@ -494,11 +497,12 @@ components:
           format: date-time
           description: 'Date and time at which the account resource status was updated. '
       description: >-
-        Properties of a given Account, as indicated by the `AccountId` value, that are provided by the `ReadAccounts`
-        permissions.
+        Properties of a given Account, as indicated by the `AccountId` value, that are provided by either the
+        `ReadAccountsBasic` or `ReadAccountsDetail` permission.
 
 
-        Where a TPP holds **_only_** `ReadAccounts` the properties describe will be provided to access other operations.
+        These properties are always provided, so that a TPP can retrieve the `AccountId` it needs to access other
+        operations.
 
 
         For example, a TPP may only require balance information and not need all the properties of the account. The TPP

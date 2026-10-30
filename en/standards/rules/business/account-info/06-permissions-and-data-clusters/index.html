@@ -1743,21 +1743,47 @@
 	<div class="sl-container astro-sbad6ign">
 									<div class="sl-markdown-content">
 	
-										<p>In the Bank Data Sharing API design, data elements are logically grouped together into “permissions”. Grouping permissions together and adding another layer of logical grouping and description helps Users’ understanding of the data they are being asked to consent to share.</p>
+										<p>In the Bank Data Sharing API design, data elements are logically grouped together into
+“permissions”. Grouping permissions together and adding another layer of logical grouping and
+description helps Users’ understanding of the data they are being asked to consent to share.</p>
 <p>All fields in the standards are required. Fields can only be optional if not stored at all.</p>
-<p>If mandatory fields are not stored, they need to start being captured, stored, and included in the OF APIs.</p>
-<p>The fields returned by each Bank Data Sharing endpoint, and whether each is technically required, are defined in the <a href="../../../../apis/standards/qcb-standards-account-information/">QCB Account Information API</a>. A field that is not technically required in the API is still required by the Standard where the LFI stores it.</p>
-<p>Some data fields are not technically required but are conditionally mandatory in certain circumstances. These are defined in the business rules.</p>
-<p>As a principle, the Standards require that all available data be supplied when the corresponding data permission has been granted by the User through an authorized data sharing consent.</p>
+<p>If mandatory fields are not stored, they need to start being captured, stored, and included in the
+OF APIs.</p>
+<p>The fields returned by each Bank Data Sharing endpoint, and whether each is technically required,
+are defined in the
+<a href="../../../../apis/standards/qcb-standards-account-information/">QCB Account Information API</a>. A
+field that is not technically required in the API is still required by the Standard where the LFI
+stores it.</p>
+<p>Some data fields are not technically required but are conditionally mandatory in certain
+circumstances. These are defined in the business rules.</p>
+<p>As a principle, the Standards require that all available data be supplied when the corresponding
+data permission has been granted by the User through an authorized data sharing consent.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="permissions">Permissions</h2><a class="sl-anchor-link" href="#permissions"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Permissions”</span></a></div>
-<p>As stated above, data elements are logically grouped together into “permissions”. It is at this level that TPPs request data access. If they request access to a specific permission, they will have access to all the data elements within that permission. This provides a pragmatic approach, allowing TPPs to be selective while at the same time creating a consent process that is at an acceptable level of granularity for Users. Details of the data elements within each permission will be included in the API technical specifications.</p>
+<p>As stated above, data elements are logically grouped together into “permissions”. It is at this
+level that TPPs request data access. If they request access to a specific permission, they will have
+access to all the data elements within that permission. This provides a pragmatic approach, allowing
+TPPs to be selective while at the same time creating a consent process that is at an acceptable
+level of granularity for Users. Details of the data elements within each permission will be included
+in the API technical specifications.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="data-clusters">Data Clusters</h2><a class="sl-anchor-link" href="#data-clusters"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Data Clusters”</span></a></div>
-<p>Grouping permissions together and adding another layer of description aids Users’ understanding of the data they are being asked to consent to share. This approach also allows consistency of language across TPPs and LFIs, providing additional comfort to Users that they are sharing the data they intended to. Consistent language used across all member organizations drives User familiarity and adoption. These groups of permissions are known as Data Clusters. Data Clusters are not reflected in the API specifications; they are purely a presentational layer on top of permissions to aid User understanding.</p>
+<p>Grouping permissions together and adding another layer of description aids Users’ understanding of
+the data they are being asked to consent to share. This approach also allows consistency of language
+across TPPs and LFIs, providing additional comfort to Users that they are sharing the data they
+intended to. Consistent language used across all member organizations drives User familiarity and
+adoption. These groups of permissions are known as Data Clusters. Data Clusters are not reflected in
+the API specifications; they are purely a presentational layer on top of permissions to aid User
+understanding.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="data-cluster-structure--language">Data Cluster Structure &amp; Language</h2><a class="sl-anchor-link" href="#data-cluster-structure--language"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Data Cluster Structure &amp; Language”</span></a></div>
 <div class="sl-heading-wrapper level-h3"><h3 id="data-cluster-definitions">Data Cluster Definitions</h3><a class="sl-anchor-link" href="#data-cluster-definitions"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Data Cluster Definitions”</span></a></div>
-<p id="ACCI-073" class="req-rule"><span class="req-head"><span class="req-id">ACCI-073</span></span>The following table describes how permissions MUST be grouped into Data Clusters, and the language that MUST be used to describe the data at each of these clusters.</p>
-<p id="ACCI-074" class="req-rule"><span class="req-head"><span class="req-id">ACCI-074</span></span>Both TPPs and LFIs MUST describe the data being shared at a Data Cluster level, and allow Users to “drill down” to see the detail at the Permission level, using the permission language set out in the table below.</p>
-<p>Where both Basic and Detail permissions are available for a set of data elements, the Detail permission contains all data elements of the Basic permission plus the additional elements described in the table. For more details about the information in the Data Clusters and permissions, please refer to the Bank Data Sharing API Specifications.</p>
+<p id="ACCI-073" class="req-rule"><span class="req-head"><span class="req-id">ACCI-073</span></span>The following table describes how permissions MUST be grouped into Data Clusters, and the
+language that MUST be used to describe the data at each of these clusters.</p>
+<p id="ACCI-074" class="req-rule"><span class="req-head"><span class="req-id">ACCI-074</span></span>Both TPPs and LFIs MUST describe the data being shared at a Data Cluster level, and allow
+Users to “drill down” to see the detail at the Permission level, using the permission language set
+out in the table below.</p>
+<p>Where both Basic and Detail permissions are available for a set of data elements, the Detail
+permission contains all data elements of the Basic permission plus the additional elements described
+in the table. For more details about the information in the Data Clusters and permissions, please
+refer to the Bank Data Sharing API Specifications.</p>
 <table>
 <thead>
 <tr>
@@ -1800,12 +1826,21 @@
 </tr>
 </tbody>
 </table>
-<p id="ACCI-075" class="req-rule"><span class="req-head"><span class="req-id">ACCI-075</span></span>With respect to the Data Clusters and Permissions language, LFIs SHOULD consider whether the language displayed to Users is appropriate when the information being accessed relates to more than one party. For example, “Your data” may need to be adapted to just “data” to indicate to Users that the account information being displayed may not be solely specific to them - for example, in the case of joint accounts, when the account information of both parties is requested.</p>
+<p id="ACCI-075" class="req-rule"><span class="req-head"><span class="req-id">ACCI-075</span></span>With respect to the Data Clusters and Permissions language, LFIs SHOULD consider whether
+the language displayed to Users is appropriate when the information being accessed relates to more
+than one party. For example, “Your data” may need to be adapted to just “data” to indicate to Users
+that the account information being displayed may not be solely specific to them - for example, in
+the case of joint accounts, when the account information of both parties is requested.</p>
 <div class="sl-heading-wrapper level-h3"><h3 id="data-cluster-requirements">Data Cluster Requirements</h3><a class="sl-anchor-link" href="#data-cluster-requirements"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Data Cluster Requirements”</span></a></div>
-<p>The <a href="../../../../apis/standards/qcb-standards-account-information/">QCB Account Information API</a> defines the response payload of each Bank Data Sharing endpoint. The permissions granted for each Data Cluster, as set out in the table above, determine which of those fields the LFI returns.</p>
+<p>The <a href="../../../../apis/standards/qcb-standards-account-information/">QCB Account Information API</a>
+defines the response payload of each Bank Data Sharing endpoint. The permissions granted for each
+Data Cluster, as set out in the table above, determine which of those fields the LFI returns.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="relevance-of-data-clusters-by-product-type">Relevance of Data Clusters by Product Type</h2><a class="sl-anchor-link" href="#relevance-of-data-clusters-by-product-type"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Relevance of Data Clusters by Product Type”</span></a></div>
-<p id="ACCI-076" class="req-rule"><span class="req-head"><span class="req-id">ACCI-076</span></span>TPPs MUST ensure they have business rules that manage the relationship between Data Clusters and product types, and omit access to Data Clusters that are irrelevant to a specific product type, as well as to their service offering.</p>
-<p id="ACCI-077" class="req-rule"><span class="req-head"><span class="req-id">ACCI-077</span></span>If a TPP requests a Data Cluster of data that is irrelevant to the product type associated with the payment account — for example, the Scheduled Transfers Data Cluster is requested for a Savings Account product type — the LFI MAY provide that Data Cluster as empty.</p>
+<p id="ACCI-076" class="req-rule"><span class="req-head"><span class="req-id">ACCI-076</span></span>TPPs MUST ensure they have business rules that manage the relationship between Data
+Clusters and product types, and omit access to Data Clusters that are irrelevant to a specific
+product type, as well as to their service offering.</p>
+<p id="ACCI-077" class="req-rule"><span class="req-head"><span class="req-id">ACCI-077</span></span>If a TPP requests a Data Cluster of data that is irrelevant to the product type
+associated with the payment account the LFI MAY provide that Data Cluster as empty.</p>
 
 									
 	<span id="docsearch-lvl0" hidden>Learn</span>

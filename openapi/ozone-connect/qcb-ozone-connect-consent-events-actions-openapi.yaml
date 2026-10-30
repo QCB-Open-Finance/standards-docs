@@ -823,7 +823,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
-          minItems: 2
+          minItems: 1
           uniqueItems: true
           description: >-
             Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the
@@ -1382,7 +1382,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PaymentInitiation.PaymentInitiationAccountInformationPermission1Codes'
-          minItems: 2
+          minItems: 1
           uniqueItems: true
           description: >-
             Specifies the permitted Bank Data Sharing permissions, which is the data clusters being consented by the

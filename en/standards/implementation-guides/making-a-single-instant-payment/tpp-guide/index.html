@@ -1656,13 +1656,8 @@
 				</a>
 				
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#9-trusted-payee-retrieval-where-applicable" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">9. Trusted Payee retrieval (where applicable)</span>
-				</a>
-				
-			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#10-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">10. Account for journey variations</span>
+				<a href="#9-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">9. Account for journey variations</span>
 				</a>
 				
 			</li>
@@ -1726,13 +1721,8 @@
 				</a>
 				
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#9-trusted-payee-retrieval-where-applicable" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">9. Trusted Payee retrieval (where applicable)</span>
-				</a>
-				
-			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
-				<a href="#10-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
-					<span style="--depth: 0;" class="astro-w7eaxkoy">10. Account for journey variations</span>
+				<a href="#9-account-for-journey-variations" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">9. Account for journey variations</span>
 				</a>
 				
 			</li>
@@ -1787,17 +1777,18 @@ Payment Consent. See
 for the full scope (Consumer/SME Debtors and Creditors).</p>
 <p>Every step below cites the exact rule it implements. The primary source is
 <a href="../../../rules/business/single-instant-payment/3-customer-experience/">Single Instant Payment | Customer Experience | SIP rules</a>,
-which draws on the <a href="../../../rules/business/common/01-common-rules-and-guidelines/">Common Rules and Guidelines</a>,
+which draws on the
+<a href="../../../rules/business/common/01-common-rules-and-guidelines/">Common Rules and Guidelines</a>,
 <a href="../../../rules/business/common-components/authentication-and-authorization/authentication-by-lfi/01-overview/">Common Components</a>,
 and <a href="../../../rules/business/constants-and-limits/01-limits/">Constants and Limits</a>.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="1-meet-your-standing-obligations">1. Meet your standing obligations</h2><a class="sl-anchor-link" href="#1-meet-your-standing-obligations"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “1. Meet your standing obligations”</span></a></div>
 <p>Before you build a consent, you carry standing obligations that apply to every journey you run:</p>
 <ul>
-<li><strong>Carry out KYC and verification of the User</strong>, proportionate to the product. Run full customer due
-diligence, under Qatar’s AML/CFT framework, for any customer-facing product with its own
-regulatory due diligence requirement. Run at least basic verification
-(email or mobile) for every product. Where the product supports multiple users on one account,
-give each user their own permission profile. See
+<li><strong>Carry out KYC and verification of the User</strong>, proportionate to the product. Run full customer
+due diligence, under Qatar’s AML/CFT framework, for any customer-facing product with its own
+regulatory due diligence requirement. Run at least basic verification (email or mobile) for every
+product. Where the product supports multiple users on one account, give each user their own
+permission profile. See
 <a href="../../../rules/business/common/participant-eligibility-and-compliance/24-tpp-obligations/">TPP Obligations towards Customer Verification</a>.</li>
 <li><strong>Capture the customer’s public IP address</strong> on login. Populate the <code dir="auto">x-fapi-customer-ip-address</code>
 header on every customer-present request. Never send a masked, default, or TPP-own IP. Never
@@ -1809,13 +1800,14 @@ the country is genuinely unknown or defunct. See
 <a href="../../../rules/business/common/consent-parameters/27-iso-country-and-currency-codes/">Use of ISO Country and Currency Codes</a>.</li>
 </ul>
 <div class="sl-heading-wrapper level-h2"><h2 id="2-collect-and-review-the-consent-parameters">2. Collect and review the consent parameters</h2><a class="sl-anchor-link" href="#2-collect-and-review-the-consent-parameters"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “2. Collect and review the consent parameters”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/single-instant-payment/3-customer-experience/#single-instant-payment-consent">Single Instant Payment Consent</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#single-instant-payment-consent">Single Instant Payment Consent</a>.</em></p>
 <p>Let the User provide and review each of the following before you capture consent:</p>
 <ol>
-<li><strong>User Payment Account or User LFI.</strong> Offer at least one option: the User’s saved Payment
-Account Identification (an IBAN, for a returning User with a long-term profile), or LFI-only
-selection, where the User picks their account later at the LFI. Identify the LFI by its Trust
-Framework Directory trading name and logo. See
+<li><strong>User Payment Account or User LFI.</strong> Offer at least one option: the User’s saved Payment Account
+Identification (an IBAN, for a returning User with a long-term profile), or LFI-only selection,
+where the User picks their account later at the LFI. Identify the LFI by its Trust Framework
+Directory trading name and logo. See
 <a href="../../../rules/business/common/consent-parameters/2-user-payment-account-selection/">User Payment Account Selection</a>.</li>
 <li><strong>Payment Amount &amp; Currency.</strong> Let the User enter the amount, or pre-populate it. State clearly
 that the amount is in QAR. Enforce a minimum of 0.01 QAR at a maximum of 2 decimal digits, and
@@ -1823,17 +1815,18 @@ cap any Creditor account outside the User’s own LFI at the
 <a href="../../../rules/business/constants-and-limits/01-limits/#LIMT-010">Max Inter-bank Payment Amount</a>
 (intra-bank payments carry no cap). See
 <a href="../../../rules/business/common/consent-parameters/3-payment-amount-and-currency/">Payment Amount &amp; Currency</a>.</li>
-<li><strong>Creditor Identification.</strong> Let the User manually enter or select it, or pre-populate it,
-using at minimum an IBAN plus the Creditor name. Show the full IBAN if the User entered it.
-Mask it to the last 4 digits if you populated it yourself (for example, a merchant refund).
-Validate the format and ask the User to re-enter it on failure. Send the Merchant Category Code
-if the Creditor is a merchant you onboarded. See
+<li><strong>Creditor Identification.</strong> Let the User manually enter or select it, or pre-populate it, using
+at minimum an IBAN plus the Creditor name. Show the full IBAN if the User entered it. Mask it to
+the last 4 digits if you populated it yourself (for example, a merchant refund). Validate the
+format and ask the User to re-enter it on failure. Send the Merchant Category Code if the
+Creditor is a merchant you onboarded. See
 <a href="../../../rules/business/common/consent-parameters/4-creditor-identification/">Creditor Identification</a>.</li>
-<li><strong>Debtor Reference</strong> (optional). If you offer one, prefer a Structured Reference over free
-text: Free Text (22 characters or fewer) plus Bank Name (8 characters or fewer) plus an optional
-Merchant Name (8 characters or fewer) plus TPP Name, hyphen-separated, up to the Max Payment Reference Length in total. If
-it overflows, truncate the TPP Name first, then the Merchant Name, then the Bank Name. Never
-truncate the Free Text Reference itself. Include it on every Payment Initiation Request. See
+<li><strong>Debtor Reference</strong> (optional). If you offer one, prefer a Structured Reference over free text:
+Free Text (22 characters or fewer) plus Bank Name (8 characters or fewer) plus an optional
+Merchant Name (8 characters or fewer) plus TPP Name, hyphen-separated, up to the Max Payment
+Reference Length in total. If it overflows, truncate the TPP Name first, then the Merchant Name,
+then the Bank Name. Never truncate the Free Text Reference itself. Include it on every Payment
+Initiation Request. See
 <a href="../../../rules/business/common/consent-parameters/5-debtor-reference/">Debtor Reference</a>.</li>
 <li><strong>Creditor Reference.</strong> Optionally let the User enter one, or pre-populate and lock it where the
 use case needs a specific value (card clearing, invoices). Apply the same Structured Reference
@@ -1863,8 +1856,8 @@ page is the definitive, field-by-field source, covering User, Authentication, Ge
 Device, Biometric, App, Browser, Behavior, Account-Risk, Transaction, and Merchant indicators.
 Two standing obligations sit alongside it:
 <ul>
-<li>Never substitute stale authentication or device data from an unrelated session. Leave the
-field null if you can’t reliably retrieve the original consent-setup context.</li>
+<li>Never substitute stale authentication or device data from an unrelated session. Leave the field
+null if you can’t reliably retrieve the original consent-setup context.</li>
 <li>When onboarding merchants for Pay-by-Account, verify Trading Name and Bank Account details as
 part of KYC/KYB, and capture the User’s Qatar ID before the consent journey for any long-lived
 consent or data-sharing use case. You don’t need to verify the Qatar ID itself.</li>
@@ -1877,7 +1870,8 @@ consent or data-sharing use case. You don’t need to verify the Qatar ID itself
 exactly as specified in the parameters above.</li>
 </ol>
 <div class="sl-heading-wrapper level-h2"><h2 id="3-stage-the-consent">3. Stage the consent</h2><a class="sl-anchor-link" href="#3-stage-the-consent"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “3. Stage the consent”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/single-instant-payment/3-customer-experience/#consent-staging">Consent Staging</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#consent-staging">Consent Staging</a>.</em></p>
 <ul>
 <li>Provide all of the Consent parameters from Step 2 to the OFP before you redirect the User to the
 LFI.</li>
@@ -1889,7 +1883,8 @@ either check fails, expect a rejection with an appropriate error. See
 <li>You can query the Consent’s status from the OFP at any time.</li>
 </ul>
 <div class="sl-heading-wrapper level-h2"><h2 id="4-hand-off-the-user-to-the-lfi">4. Hand off the User to the LFI</h2><a class="sl-anchor-link" href="#4-hand-off-the-user-to-the-lfi"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “4. Hand off the User to the LFI”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/single-instant-payment/3-customer-experience/#hand-off-to-lfi">Hand-off to LFI</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#hand-off-to-lfi">Hand-off to LFI</a>.</em></p>
 <ul>
 <li>Show messaging that makes clear the User is about to leave you for their LFI. Suggested wording:
 “We will securely transfer you to your LFI to authenticate and make the payment.” See
@@ -1901,39 +1896,40 @@ Ask the User to identify their LFI first, so the request matches the LFI’s cap
 LFI’s Trust Framework logo and trading name. Keep it to a single screen with no extra steps. The
 exact redirect mechanics (app-to-app deep link, browser-to-browser QR code and call to action,
 app-to-browser) depend on the User’s device and whether the LFI app is installed.</li>
-<li>Show the name and logo of the party the User is being sent to on both redirection screens,
-inbound and outbound, and keep each on screen long enough for the User to register the
-transition. See
+<li>Show the name and logo of the party the User is being sent to on both redirection screens, inbound
+and outbound, and keep each on screen long enough for the User to register the transition. See
 <a href="../../../rules/business/common-components/authentication-and-authorization/authentication-by-lfi/04-effective-use-of-redirection-screens/">Effective Use of Redirection Screens</a>.</li>
 <li>If the LFI’s authorization request turns out malformed, you receive no response at all. The User
-depends entirely on the LFI to show an error. If the User instead cancels or fails to
-authenticate at the LFI, you do receive an OIDC error code on redirect back. Use it to show a
-more specific message. See
+depends entirely on the LFI to show an error. If the User instead cancels or fails to authenticate
+at the LFI, you do receive an OIDC error code on redirect back. Use it to show a more specific
+message. See
 <a href="../../../rules/business/common-components/authentication-and-authorization/authentication-by-lfi/05-error-scenarios-during-redirection/">Error Scenarios During Redirection</a>.</li>
 </ul>
 <div class="sl-heading-wrapper level-h2"><h2 id="5-wait-for-the-lfi-to-authenticate-and-authorize">5. Wait for the LFI to authenticate and authorize</h2><a class="sl-anchor-link" href="#5-wait-for-the-lfi-to-authenticate-and-authorize"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “5. Wait for the LFI to authenticate and authorize”</span></a></div>
-<p>The LFI takes over here. It authenticates the User once with MFA. That single authentication
-covers everything that follows, including any account selection or supplementary-information step.
-See the
+<p>The LFI takes over here. It authenticates the User once with MFA. That single authentication covers
+everything that follows, including any account selection or supplementary-information step. See the
 <a href="../../../rules/business/single-instant-payment/3-customer-experience/#standard-journey">General Notes</a>.
 The LFI then retrieves the staged Consent, presents it, and captures the User’s authorization or
 cancellation. Full detail on what the LFI does at this stage sits in the
 <a href="../lfi-guide/#3-authenticate-the-user">LFI Implementation Guide</a>. You have nothing to build for
 this step beyond handling the hand-off back.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="6-receive-the-hand-off-back-from-the-lfi">6. Receive the hand-off back from the LFI</h2><a class="sl-anchor-link" href="#6-receive-the-hand-off-back-from-the-lfi"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “6. Receive the hand-off back from the LFI”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/single-instant-payment/3-customer-experience/#hand-off-back-to-the-tpp">Hand-off back to the TPP</a>.</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#hand-off-back-to-the-tpp">Hand-off back to the TPP</a>.</em></p>
 <p>The OFP redirects the User back to you with the required authorization code once the LFI confirms
 session completion. See
 <a href="../../../rules/business/common/journey-handoffs/14-handoff-back-to-tpp/">Hand-off back to the TPP</a>.
 From here you resume control and move straight to payment initiation.</p>
 <div class="sl-heading-wrapper level-h2"><h2 id="7-submit-the-payment-initiation-request">7. Submit the payment initiation request</h2><a class="sl-anchor-link" href="#7-submit-the-payment-initiation-request"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “7. Submit the payment initiation request”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/single-instant-payment/3-customer-experience/#payment-initiation">Payment Initiation</a> (TPP obligations).</em></p>
+<p><em>Implements:
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#payment-initiation">Payment Initiation</a>
+(TPP obligations).</em></p>
 <ol>
 <li>Submit the payment initiation request to the OFP with exactly the same parameters as the
 authorized Consent, immediately after you receive the authorization confirmation.</li>
 <li>Do this within the
-<a href="../../../rules/business/constants-and-limits/01-limits/">Max SIP Payment Initiation Time Interval</a> (LIMT-012),
-currently 10 minutes, or the OFP rejects it outright.</li>
+<a href="../../../rules/business/constants-and-limits/01-limits/">Max SIP Payment Initiation Time Interval</a>
+(LIMT-012), currently 10 minutes, or the OFP rejects it outright.</li>
 <li>Provide a unique value in the mandatory <code dir="auto">x-idempotency-key</code> header on the <code dir="auto">POST /payments</code>
 request. If the OFP has already seen that key from you within the last 24 hours for the same
 amount, it short-circuits and replays the original response (the <code dir="auto">201 Created</code>, or the original
@@ -1951,44 +1947,39 @@ authorized Consent’s state or parameters exactly, or if the LFI rejected it fo
 insufficient funds. Surface that error to the User rather than a generic failure.</li>
 </ol>
 <div class="sl-heading-wrapper level-h2"><h2 id="8-track-status-confirm-and-notify">8. Track status, confirm, and notify</h2><a class="sl-anchor-link" href="#8-track-status-confirm-and-notify"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “8. Track status, confirm, and notify”</span></a></div>
-<p><em>Implements: <a href="../../../rules/business/single-instant-payment/3-customer-experience/#payment-status-update">Payment Status Update</a>,
-<a href="../../../rules/business/single-instant-payment/3-customer-experience/#confirmation-to-user">Confirmation to User</a>, and
+<p><em>Implements:
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#payment-status-update">Payment Status Update</a>,
+<a href="../../../rules/business/single-instant-payment/3-customer-experience/#confirmation-to-user">Confirmation to User</a>,
+and
 <a href="../../../rules/business/single-instant-payment/3-customer-experience/#payment-notifications">Payment Notifications</a>.</em></p>
 <ol>
-<li><strong>Track status.</strong> Either poll the OFP for the payment status at intervals, subject to fair
-usage limits, or rely on the webhook you registered in <a href="#3-stage-the-consent">Step 3</a> to push
-status changes as they happen. See
+<li><strong>Track status.</strong> Either poll the OFP for the payment status at intervals, subject to fair usage
+limits, or rely on the webhook you registered in <a href="#3-stage-the-consent">Step 3</a> to push status
+changes as they happen. See
 <a href="../../../rules/business/common/execution-status-and-notification/15-payment-status-update/">Payment Status Update</a>
-for the full three-state Open Finance payment status model: <code dir="auto">Pending</code>,
-<code dir="auto">AcceptedWithoutPosting</code>, <code dir="auto">Rejected</code>.</li>
+for the full three-state Open Finance payment status model: <code dir="auto">Pending</code>, <code dir="auto">AcceptedWithoutPosting</code>,
+<code dir="auto">Rejected</code>.</li>
 <li><strong>Confirm to the User.</strong> Show the outcome of the Service Initiation based on the payment status
 you receive, using a confirmation screen that fits the customer journey, for every Service
 Initiation the User is present for. For Long-lived Consents, also show the Consent authorization
 outcome and any further-authorization requirements. See
 <a href="../../../rules/business/common/execution-status-and-notification/16-confirmation-to-user/">Confirmation to User</a>.</li>
 <li><strong>Notify the beneficiary</strong>, if they’re onboarded by you, of the outcome of the Service
-Initiation. Notify the Debtor a day ahead of any upcoming payment where applicable. In
-multi-user scenarios, keep every authorizer updated on who has accepted, rejected, or still
-needs to act. See
+Initiation. Notify the Debtor a day ahead of any upcoming payment where applicable. In multi-user
+scenarios, keep every authorizer updated on who has accepted, rejected, or still needs to act.
+See
 <a href="../../../rules/business/common/execution-status-and-notification/17-payment-notification/">Payment Notifications</a>.</li>
 <li>Every customer-facing notification (push, SMS, email, in-app) must clearly identify the
 beneficiary. Never lead with the beneficiary’s bank. Where the beneficiary can’t be explicitly
-identified (a pooled e-wallet top-up account, for example), include your own name instead, so
-the User still recognizes the action they approved.</li>
+identified (a pooled e-wallet top-up account, for example), include your own name instead, so the
+User still recognizes the action they approved.</li>
 </ol>
-<div class="sl-heading-wrapper level-h2"><h2 id="9-trusted-payee-retrieval-where-applicable">9. Trusted Payee retrieval (where applicable)</h2><a class="sl-anchor-link" href="#9-trusted-payee-retrieval-where-applicable"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “9. Trusted Payee retrieval (where applicable)”</span></a></div>
-<p>Where you also hold Data Sharing access to the User’s account, retrieve any Trusted Payee the LFI
-added during authorization. See
-<a href="../lfi-guide/#6-offer-to-save-a-trusted-payee">LFI guide | Offer to save a Trusted Payee</a>. Call
-<code dir="auto">GET /accounts/{AccountId}/beneficiaries</code>, check <code dir="auto">addedViaOF: true</code>, and use it to streamline
-future payments to the same Creditor. See
-<a href="../../../rules/business/common/consent-parameters/26-adding-a-trusted-payee-beneficiary/">Adding a Trusted Payee (Beneficiary)</a>.</p>
-<div class="sl-heading-wrapper level-h2"><h2 id="10-account-for-journey-variations">10. Account for journey variations</h2><a class="sl-anchor-link" href="#10-account-for-journey-variations"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “10. Account for journey variations”</span></a></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="9-account-for-journey-variations">9. Account for journey variations</h2><a class="sl-anchor-link" href="#9-account-for-journey-variations"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “9. Account for journey variations”</span></a></div>
 <p>Not every SIP journey follows the path above exactly. Build for these variations too. See
 <a href="../journey-variations/">Handle Journey Variations</a> for the full detail on each:</p>
 <ul>
-<li>The User selects their account at you, not the LFI, and the LFI still needs to show
-supplementary information, including the duplicate-payment case.</li>
+<li>The User selects their account at you, not the LFI, and the LFI still needs to show supplementary
+information, including the duplicate-payment case.</li>
 <li>The User selects their LFI at you, but a Merchant, not you, is the entity the User actually
 recognizes.</li>
 </ul>
