@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" font-family="Inter, Helvetica, Arial, sans-serif">
+  <title>Open Finance Payment Status Model: Pending, AcceptedWithoutPosting and Rejected, with the Fawran Core and Tahweel events that move a payment between them</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3D4451"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="600" rx="16" fill="#EDF3FD"/>
+
+  <!-- Phase bands -->
+  <rect x="20" y="20" width="960" height="330" rx="10" fill="none" stroke="#1E0B5C" stroke-width="3"/>
+  <text x="960" y="52" text-anchor="end" font-size="22" font-weight="700" fill="#2E3440">Payment Initiation and Processing</text>
+
+  <rect x="20" y="366" width="960" height="214" rx="10" fill="none" stroke="#1E0B5C" stroke-width="3"/>
+  <text x="960" y="398" text-anchor="end" font-size="22" font-weight="700" fill="#2E3440">Payment Execution</text>
+
+  <!-- Transitions -->
+  <g fill="none" stroke="#3D4451" stroke-width="1.5">
+    <!-- Pending -> Rejected -->
+    <line x1="370" y1="132" x2="656" y2="132" marker-end="url(#arrow)"/>
+    <!-- Pending -> AcceptedWithoutPosting -->
+    <line x1="260" y1="164" x2="260" y2="486" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Transition labels -->
+  <g font-size="14" fill="#2E3440">
+    <text x="513" y="120" text-anchor="middle">Rejected at any stage</text>
+
+    <text x="276" y="420">Creditor LFI accepts:</text>
+    <text x="276" y="440">Fawran: ACTC (U000)</text>
+    <text x="276" y="460">Tahweel: Creditor LFI's Payment Status Report (ACSP)</text>
+
+    <text x="276" y="200">Stays Pending until the payment rail reports the</text>
+    <text x="276" y="220">payment as accepted or rejected, including after</text>
+    <text x="276" y="240">Tahweel's validation status report (COMM-273)</text>
+  </g>
+
+  <!-- States -->
+  <rect x="150" y="100" width="220" height="64" rx="8" fill="#200F5A"/>
+  <text x="260" y="139" text-anchor="middle" font-size="20" fill="#FFFFFF">Pending</text>
+
+  <rect x="660" y="100" width="220" height="64" rx="8" fill="#200F5A"/>
+  <text x="770" y="139" text-anchor="middle" font-size="20" fill="#FFFFFF">Rejected</text>
+
+  <rect x="100" y="490" width="320" height="64" rx="8" fill="#200F5A"/>
+  <text x="260" y="529" text-anchor="middle" font-size="20" fill="#FFFFFF">AcceptedWithoutPosting</text>
+
+  <!-- Note -->
+  <g font-size="14" fill="#2E3440">
+    <text x="500" y="506">AcceptedWithoutPosting and Rejected are final.</text>
+    <text x="500" y="526">Fawran's settlement confirmation (ACSC) confirms</text>
+    <text x="500" y="546">AcceptedWithoutPosting and does not change it.</text>
+  </g>
+</svg>

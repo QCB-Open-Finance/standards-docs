@@ -1,0 +1,1709 @@
+openapi: 3.1.0
+info:
+  title: Ozone Connect - Bank Data Sharing
+  x-sf-docs-util-menu-item-name: Bank Data Sharing API
+  contact:
+    name: Ozone Financial Technology Limited
+  description: >
+    This document provides an API description in [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html) for Bank Data
+    Sharing APIs for Ozone Connect.
+
+    These APIs must be implemented by a Licensed Financial Institution (LFI) so that Ozone can deliver Bank Data Sharing
+    capabilities to TPPs.
+
+    ## Versioning
+
+    The `version` property implements the following pattern
+    `{standards-major}.{standards-minor}.{ozone-connect-version}`, where:
+
+    * `standards-major` is the major version of the latest QCB standard that the API description implements.
+
+    * `standards-minor` is the minor version of the latest QCB standard that the API description implements.
+
+    * `ozone-connect-version` is the version of the Ozone Connect API description.
+
+    So, for example, `v1.0.0` indicates the first version of the Ozone Connect API description that implements the QCB
+    standard version 1.0.
+
+    ## Changelog
+
+    The following sections describe high-level changes to this API description.
+
+    ### v1.0.0
+
+    * Added initial version of API description
+  version: v1.0.0
+servers:
+  - url: https://{hostName}
+    description: The address of your Ozone Connect API
+    variables:
+      hostName:
+        description: The hostname at which your Ozone Connect API is hosted
+        default: example.com
+tags:
+  - name: Accounts
+    description: Operations to support returning accounts data to TPPs
+  - name: Balances
+    description: Operations to support returning balances data to TPPs
+  - name: Transactions
+    description: Operations to support returning transactions data to TPPs
+security:
+  - OzoneConnectMutualTls: []
+  - OzoneConnectMutualTls: []
+    OzoneConnectApiKey: []
+  - OzoneConnectMutualTls: []
+    OzoneConnectClientCredentials:
+      - placeholder
+  - OzoneConnectMutualTls: []
+    OzoneConnectJwtAuth: []
+paths:
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Retrieve accounts
+      description: Return the list of accounts that match the value of the `accountIds` parameter.
+      operationId: findAccounts
+      parameters:
+        - $ref: '#/components/parameters/providerId'
+        - $ref: '#/components/parameters/callerOrgId'
+        - $ref: '#/components/parameters/callerClientId'
+        - $ref: '#/components/parameters/callerSoftwareStatementId'
+        - $ref: '#/components/parameters/apiUri'
+        - $ref: '#/components/parameters/apiOperation'
+        - $ref: '#/components/parameters/consentId'
+        - $ref: '#/components/parameters/callerInteractionId'
+        - $ref: '#/components/parameters/ozoneInteractionId'
+        - $ref: '#/components/parameters/psuIdentifier'
+        - name: accountIds
+          in: query
+          description: Comma separated ids of the accounts to be returned.
+          schema:
+            type: string
+            minLength: 1
+          required: true
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page-size'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/Error'
+  /accounts/{accountId}:
+    get:
+      tags:
+        - Accounts
+      summary: Retrieve an account
+      description: Return the account details for the account indicated by the value of the `accountId` parameter.
+      operationId: findByAccountId
+      parameters:
+        - $ref: '#/components/parameters/providerId'
+        - $ref: '#/components/parameters/callerOrgId'
+        - $ref: '#/components/parameters/callerClientId'
+        - $ref: '#/components/parameters/callerSoftwareStatementId'
+        - $ref: '#/components/parameters/apiUri'
+        - $ref: '#/components/parameters/apiOperation'
+        - $ref: '#/components/parameters/consentId'
+        - $ref: '#/components/parameters/callerInteractionId'
+        - $ref: '#/components/parameters/ozoneInteractionId'
+        - $ref: '#/components/parameters/psuIdentifier'
+        - name: accountId
+          in: path
+          description: Id of the account to be queried
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/Error'
+  /accounts/{accountId}/balances:
+    get:
+      tags:
+        - Balances
+      summary: Fetch the balances for the account specified by the account id.
+      operationId: findBalancesByAccountId
+      description: >-
+        The LFI may return more than one balance record for each account. Each array element represents a balance of a
+        different type, mapped to a specific ISO 20022 code.
+      parameters:
+        - $ref: '#/components/parameters/providerId'
+        - $ref: '#/components/parameters/callerOrgId'
+        - $ref: '#/components/parameters/callerClientId'
+        - $ref: '#/components/parameters/callerSoftwareStatementId'
+        - $ref: '#/components/parameters/apiUri'
+        - $ref: '#/components/parameters/apiOperation'
+        - $ref: '#/components/parameters/consentId'
+        - $ref: '#/components/parameters/callerInteractionId'
+        - $ref: '#/components/parameters/ozoneInteractionId'
+        - $ref: '#/components/parameters/psuIdentifier'
+        - name: accountId
+          in: path
+          description: Id of the account to be queried
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page-size'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalancesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/Error'
+  /accounts/{accountId}/transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Fetch transactions for the account specified by the accountId
+      description: Return all transactions for the account, filtered on date range parameters as required.
+      operationId: findTransactionsByAccountId
+      parameters:
+        - $ref: '#/components/parameters/providerId'
+        - $ref: '#/components/parameters/callerOrgId'
+        - $ref: '#/components/parameters/callerClientId'
+        - $ref: '#/components/parameters/callerSoftwareStatementId'
+        - $ref: '#/components/parameters/apiUri'
+        - $ref: '#/components/parameters/apiOperation'
+        - $ref: '#/components/parameters/consentId'
+        - $ref: '#/components/parameters/callerInteractionId'
+        - $ref: '#/components/parameters/ozoneInteractionId'
+        - $ref: '#/components/parameters/psuIdentifier'
+        - name: accountId
+          in: path
+          description: Id of the account to be queried
+          required: true
+          schema:
+            type: string
+          example: abc-123
+        - $ref: '#/components/parameters/transaction-fromBookingDateTime'
+        - $ref: '#/components/parameters/transaction-toBookingDateTime'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page-size'
+        - name: o3-fx-transactions
+          in: header
+          description: >-
+            Indicates that only FX-related transactions should be returned, based on permissions set in the related
+            consent
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/Error'
+components:
+  responses:
+    BadRequestError:
+      description: Operation failed due to a invalid request parameter
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    UnauthorizedError:
+      description: Operation failed due to an invalid credential or missing token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                description: >-
+                  Error code identifying the problem that occurred. Should be implemented based on guidance in standards
+                  and API Hub documentation, but custom error code lists maintained for backwards compatibility with
+                  v1.2.
+                type: string
+              errorMessage:
+                $ref: '#/components/schemas/ErrorMessage'
+    ForbiddenError:
+      description: Operation failed as access to the requested resource is forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    InternalServerError:
+      description: Operation failed due to an internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error500'
+    Error:
+      description: Default error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                description: >-
+                  Error code identifying the problem that occurred. Should be implemented based on guidance in standards
+                  and API Hub documentation, but custom error code lists maintained for backwards compatibility with
+                  v1.2.
+                type: string
+              errorMessage:
+                $ref: '#/components/schemas/ErrorMessage'
+  schemas:
+    AccountsResponse:
+      type: object
+      description: |
+        A descriptor for an account.
+        This is a composite object that may be expanded in the future to support
+        additional account types for new API standards and account types.
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QcbAccount'
+          description: Primary data for the resource
+        meta:
+          $ref: '#/components/schemas/Meta'
+    AccountResponse:
+      type: object
+      description: |
+        A descriptor for an account.
+        This is a composite object that may be expanded in the future to support
+        additional account types for new API standards and account types.
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/QcbAccount'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    QcbAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Unique identifier for the account resource
+        product:
+          $ref: '#/components/schemas/ProductIdentifier'
+        multiAuth:
+          type: boolean
+          description: Indicator that labels the account as requiring multiple authorizers
+        businessCustomer:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerIdentifier'
+          description: Provides the customer identifiers for an account when the account is a business account
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerIdentifier'
+          minItems: 1
+          description: Provides the customer identifiers for an account when the account is a non-business account
+        accountHolderName:
+          $ref: '#/components/schemas/AccountHolderName'
+        accountHolderShortName:
+          $ref: '#/components/schemas/AccountHolderShortName'
+        status:
+          description: |
+            Specifies the status of account resource based on a recognized codeset.
+          type: string
+          enum:
+            - Active
+            - Inactive
+            - Dormant
+            - Unclaimed
+            - Deceased
+            - Suspended
+            - Closed
+        statusUpdateDateTime:
+          description: Date and time at which the resource status was updated.
+          type: string
+          format: date-time
+        currency:
+          $ref: '#/components/schemas/TCurrency'
+        accountType:
+          description: Specifies the type of account (Retail, SME or Corporate).
+          type: string
+          enum:
+            - Retail
+            - SME
+            - Corporate
+        accountSubType:
+          $ref: '#/components/schemas/QAExternalAccountSubTypeCode'
+        description:
+          description: Specifies the description of the account sub-type.
+          type: string
+          minLength: 1
+          maxLength: 35
+        nickName:
+          description: >-
+            The nickname of the account, assigned by the User to provide an additional and easier means of
+            identification of the account at the LFI.
+          type: string
+          minLength: 1
+          maxLength: 70
+        openingDate:
+          description: Date on which the account and its related basic services at the LFI became operational for the User
+          type: string
+          format: date-time
+        maturityDate:
+          description: |
+
+            * Fixed Term Savings Account
+              MaturityDate is the date on which the savings mature and the balance can be withdrawn by the User without penalty
+          type: string
+          format: date-time
+        accountNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdentifiers'
+          minItems: 1
+          description: >-
+            Provides the account numbers that identity the account. This is separate to the `accountId`, which uniquely
+            identifies the account resource.
+        servicer:
+          $ref: '#/components/schemas/QABranchAndFinancialInstitutionIdentification5_0'
+        isShariaCompliant:
+          $ref: '#/components/schemas/QAShariaFlag'
+      required:
+        - id
+        - accountHolderName
+        - status
+        - currency
+        - accountType
+        - accountSubType
+        - accountNumbers
+        - servicer
+        - isShariaCompliant
+      additionalProperties: false
+      description: The properties of an account
+    AccountIdentifiers:
+      type: object
+      description: Provides the details to identify an account.
+      required:
+        - schemeName
+        - identification
+      properties:
+        schemeName:
+          $ref: '#/components/schemas/QAExternalAccountIdentificationCode'
+        identification:
+          $ref: '#/components/schemas/Identification_0'
+        name:
+          $ref: '#/components/schemas/Name_0'
+      additionalProperties: false
+    QAExternalAccountIdentificationCode:
+      description: Name of the identification scheme for the account. Encoded with allowable values published in an external list.
+      type: string
+      enum:
+        - IBAN
+        - AccountNumber
+        - MaskedPAN
+        - MobileNumber
+        - UtilityName
+        - EWallet
+        - MortgageReference
+        - FinanceReference
+    Identification_0:
+      description: >
+        Identification for the account assigned by the LFI based on the Account Scheme Name. This identification is
+        known by the the User account owner. For IBAN, refer to the ISO Standard 13616.
+      type: string
+      minLength: 1
+      maxLength: 400
+    Name_0:
+      description: >-
+        The account name is the name or names of the the User account owner(s) represented at an account level, as
+        displayed by the LFI's online channels. Note: The account name is not the product name or the nickname of the
+        account.
+      type: string
+      minLength: 1
+      maxLength: 70
+    QABranchAndFinancialInstitutionIdentification5_0:
+      type: object
+      required:
+        - schemeName
+        - identification
+      description: >-
+        Party that manages the account on behalf of the account owner, that is manages the registration and booking of
+        entries on the account, calculates balances on the account and provides information about the account.
+      properties:
+        schemeName:
+          $ref: '#/components/schemas/QAExternalFinancialInstitutionIdentificationCode'
+        identification:
+          $ref: '#/components/schemas/Identification_1'
+      additionalProperties: false
+    Identification_1:
+      description: >
+        Unique and unambiguous identification of a financial institution: the LFI servicing the account, or the creditor
+        or debtor agent of a transaction.
+
+        Based on the value of `schemeName`, this is either:
+
+        * `BICFI`: The BIC/SWIFT code.
+
+        * `Other`: An identification code that is not a BIC/SWIFT code and allows a financial institution to be
+        identified.
+      type: string
+      minLength: 1
+      maxLength: 35
+    QAExternalFinancialInstitutionIdentificationCode:
+      description: >
+        The name of the identification scheme for a financial institution: the LFI servicing the account, or the
+        creditor or debtor agent of a transaction. Encoded with an allowable value as published in an external list.
+      type: string
+      enum:
+        - BICFI
+        - Other
+    ProductIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier within the LFI for the product. Must be unique in the organisation.
+        productName:
+          type: string
+          description: Descriptive name for the product.
+        bundleName:
+          description: >-
+            Optional field to indicate if this account is part of a bundle that is providing additional benefit for to
+            the customer
+          type: string
+      description: Provides the details of a given product at the LFI
+    CustomerIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier within the LFI for the customer.
+        customerName:
+          type: string
+          description: Name of the customer.
+      required:
+        - id
+        - customerName
+      description: Provides the unique identifier and name for a given customer at the LFI
+    BalancesResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QcbBalance'
+          description: Primary data for the resource
+        meta:
+          $ref: '#/components/schemas/Meta'
+      description: List of Balances for an Account.
+    QcbBalanceType:
+      type: string
+      enum:
+        - ClosingAvailable
+        - ClosingBooked
+        - ClosingCleared
+        - Expected
+        - ForwardAvailable
+        - InterimAvailable
+        - InterimBooked
+        - InterimCleared
+        - OpeningAvailable
+        - OpeningBooked
+        - OpeningCleared
+      description: >
+        The type of balance for the account.
+
+        Encoded with allowable values of:
+
+        * 'ClosingAvailable' - end of day balance specifying the amount available to the User to withdraw or use.
+
+        * 'ClosingBooked' - end of day balance including value of payments for cheques or payments which have not been
+        cleared yet.
+
+        * 'ClosingCleared' - end of day balance including value of payments for cheques or payments which have been
+        cleared.
+
+        * 'Expected' - intra day balance including value of payments for cheques or payments which have been cleared.
+
+        * 'ForwardAvailable' - intraday balance specifying the amount available to the User to withdraw or use
+        considering forward dated payments or other intraday payments or cheques that will be clearing to the account.
+
+        * 'InterimAvailable' - intraday balance specifying the amount available to the User to withdraw or use (most
+        probably real-time.'InterimBooked' - intraday balance including value of payments for cheques or payments which
+        have not been cleared yet.
+
+        * 'InterimCleared' - intraday balance including value of payments for cheques or payments which have been
+        cleared (probably real-time).
+
+        * 'OpeningAvailable' - start of day balance specifying the amount available to the User to withdraw or use.
+
+        * 'OpeningBooked' - start of day balance including value of payments for cheques or payments which have not been
+        cleared yet.
+
+        * 'OpeningCleared' - start of day balance including value of payments for cheques or payments which have been
+        cleared.
+
+
+        Note: LFIs support different types for presenting account balance, so this list is used to support different LFI
+        systems in Qatar.
+    QcbBalance:
+      type: object
+      properties:
+        accountId:
+          description: >-
+            A unique and immutable identifier produced by the LFI to identify the account resource. This identifier has
+            no meaning to the account owner (the User).
+          type: string
+          minLength: 1
+          maxLength: 256
+        creditDebitIndicator:
+          $ref: '#/components/schemas/QACreditDebitIndicator'
+        balanceType:
+          $ref: '#/components/schemas/QcbBalanceType'
+        timestamp:
+          $ref: '#/components/schemas/QABalanceCheckDateTime'
+        amount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_8'
+        creditLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/QcbCreditLine'
+          description: Set of elements used to provide details of credit lines available for the account.
+        components:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/QAAmountWithCategorization'
+      required:
+        - accountId
+        - balanceType
+        - amount
+        - creditDebitIndicator
+        - timestamp
+      description: The properties of a given balance.
+    QcbCreditLine:
+      description: Set of elements used to provide details on the credit line.
+      type: object
+      required:
+        - included
+        - creditType
+        - amount
+      properties:
+        included:
+          description: Boolean flag to Indicate whether or not a credit line is included in the balance of the account.
+          type: boolean
+        creditType:
+          description: >
+            Type of credit line provided to the account. The enumerations values are defined as follows.
+
+
+            - Available: The amount of credit limit available to the account holder
+
+            - Credit: The amount of a credit limit that has been agreed with the account holder
+
+            - Emergency: The amount of an arranged lending limit that can be borrowed on top of pre-agreed lending, that
+            has been agreed with the account holder
+
+            - Pre-Agreed: The amount of an arranged lending limit that has been agreed with the account holder
+
+            - Temporary: The amount of a temporary lending limit that has been agreed with the account holder
+          type: string
+          enum:
+            - Available
+            - Credit
+            - Emergency
+            - Pre-Agreed
+            - Temporary
+        amount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_8'
+    TransactionsResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QcbTransaction'
+          description: Primary data for the resource.
+        meta:
+          $ref: '#/components/schemas/PaginatedMeta'
+      description: List of Transactions for an Account.
+    QcbTransaction:
+      type: object
+      required:
+        - accountId
+        - transactionId
+        - transactionDateTime
+        - transactionType
+        - subTransactionType
+        - creditDebitIndicator
+        - status
+        - bookingDateTime
+        - amount
+      properties:
+        accountId:
+          description: A unique and immutable identifier produced by the LFI to identify the account resource
+          type: string
+          minLength: 1
+          maxLength: 256
+        transactionId:
+          description: Unique identifier for the transaction within an servicing institution.
+          type: string
+          minLength: 1
+          maxLength: 256
+        transactionDateTime:
+          $ref: '#/components/schemas/TransactionDateTime'
+        localTimeZone:
+          $ref: '#/components/schemas/LocalTimeZone'
+        statementReference:
+          description: Unique reference for the statement.
+          type: array
+          maxItems: 1
+          items:
+            type: string
+            minLength: 1
+            maxLength: 35
+            description: Unique reference for the statement. This reference may be optionally populated if available.
+        transactionReference:
+          description: Unique reference for the transaction.
+          type: string
+          minLength: 1
+          maxLength: 210
+        transactionType:
+          description: The type of transaction
+          type: string
+          enum:
+            - POS
+            - ECommerce
+            - ATM
+            - BillPayments
+            - LocalBankTransfer
+            - SameBankTransfer
+            - InternationalTransfer
+            - Teller
+            - Cheque
+            - Other
+        subTransactionType:
+          $ref: '#/components/schemas/QASubTransactionType'
+        terminalId:
+          $ref: '#/components/schemas/TerminalId'
+        flags:
+          type: array
+          items:
+            $ref: '#/components/schemas/QcbFlags'
+          description: One-or-more flags applied to the transaction.
+        paymentModes:
+          description: The mode of payment
+          type: string
+          enum:
+            - Online
+            - Offline
+            - Batch
+        creditDebitIndicator:
+          $ref: '#/components/schemas/QACreditDebitIndicator'
+        status:
+          description: Status of a transaction entry on the books of the account servicer.
+          type: string
+          enum:
+            - Booked
+            - Pending
+            - Rejected
+        transactionMutability:
+          description: Specifies the Mutability of the Transaction record.
+          type: string
+          enum:
+            - Mutable
+            - Immutable
+        bookingDateTime:
+          description: Date and time when a transaction entry is posted to an account on the account servicer's books.
+          type: string
+          format: date-time
+        valueDateTime:
+          description: >-
+            Date and time at which assets become available to the account owner in case of a credit entry, or cease to
+            be available to the account owner in case of a debit transaction entry.
+          type: string
+          format: date-time
+        transactionInformation:
+          description: Further details of the transaction.
+          type: string
+          minLength: 1
+          maxLength: 500
+        amount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_8'
+        chargeAmount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_6'
+        chargeAmountVat:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_8'
+        currencyExchange:
+          $ref: '#/components/schemas/CurrencyExchange'
+        bankTransactionCode:
+          $ref: '#/components/schemas/QABankTransactionCodeStructure'
+        proprietaryBankTransactionCode:
+          $ref: '#/components/schemas/ProprietaryBankTransactionCode'
+        balance:
+          type: object
+          required:
+            - creditDebitIndicator
+            - balanceType
+            - amount
+          properties:
+            creditDebitIndicator:
+              $ref: '#/components/schemas/QACreditDebitIndicator'
+            balanceType:
+              $ref: '#/components/schemas/QcbBalanceType'
+            amount:
+              $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_8'
+          description: >-
+            The balance of the account at the time of the transaction. The balance amount is qualified by the balance
+            type value.
+        merchantDetails:
+          $ref: '#/components/schemas/MerchantDetails'
+        creditorAgent:
+          $ref: '#/components/schemas/QABranchAndFinancialInstitutionIdentification6_1'
+        creditorAccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/QACashAccount6_0'
+          description: The creditor account for the transaction, when the transaction is a debit.
+        debtorAgent:
+          $ref: '#/components/schemas/QABranchAndFinancialInstitutionIdentification6_1'
+        debtorAccount:
+          $ref: '#/components/schemas/QACashAccount6_0'
+        cardInstrument:
+          $ref: '#/components/schemas/QATransactionCardInstrument'
+        supplementaryData:
+          type: object
+          description: Any additional data stored with the transaction that is displayed to the user or available in the statement.
+        geoLocation:
+          $ref: '#/components/schemas/QAGeoLocation'
+        paymentPurposeCode:
+          $ref: '#/components/schemas/QAPaymentPurposeCode'
+        isPrimaryInstrument:
+          type: boolean
+          description: Indicates if the transaction is made with primary instrument.
+        allocations:
+          $ref: '#/components/schemas/QAAmountWithCategorization'
+      description: Provides further details on an entry in the report.
+    QcbFlags:
+      title: Flags
+      description: The flag of a transaction
+      type: string
+      enum:
+        - Cashback
+        - Payroll
+        - DirectDebit
+        - StandingOrder
+        - Finance
+        - Dividend
+        - OpenFinance
+    QABankTransactionCodeStructure:
+      type: object
+      description: >
+        BankTransactionCode is mandatory (with code specifying the Domain, Family and SubFamily as per External Codes
+        ISO20022) when the ProprietaryBankTransactionCode is absent.
+      properties:
+        domain:
+          description: Specifies the Domain
+          type: string
+          minLength: 4
+          maxLength: 4
+        domainCode:
+          description: Specifies the Domain Code.
+          type: string
+          minLength: 4
+          maxLength: 4
+        family:
+          description: Specifies the Family
+          type: string
+          minLength: 4
+          maxLength: 4
+        familyCode:
+          description: Specifies the Family Code
+          type: string
+          minLength: 4
+          maxLength: 4
+        subFamily:
+          description: Specifies the Sub-Family
+          type: string
+          minLength: 4
+          maxLength: 4
+        subFamilyCode:
+          description: Specifies the Sub-family Code
+          type: string
+          minLength: 4
+          maxLength: 4
+      additionalProperties: false
+    QABranchAndFinancialInstitutionIdentification6_1:
+      type: object
+      required:
+        - schemeName
+        - identification
+      description: >
+        Financial institution servicing an account for the creditor in case the transaction is a Debit transaction or
+        Financial institution servicing an account for the Debtor in case the transaction is a Credit transaction.
+      properties:
+        schemeName:
+          $ref: '#/components/schemas/QAExternalFinancialInstitutionIdentificationCode'
+        identification:
+          $ref: '#/components/schemas/Identification_1'
+        name:
+          $ref: '#/components/schemas/Name_1'
+        postalAddress:
+          $ref: '#/components/schemas/QAPostalAddress'
+      additionalProperties: false
+    Name_1:
+      description: >
+        * Creditor agent
+
+        Name by which the financial institution (FI) which is the creditor is known and which is usually used to
+        identify that FI.
+
+
+        * DebtorAgent
+
+        Name by which a financial institution of the debtor is known and which is usually used to identify that
+        financial institution.
+      type: string
+      minLength: 1
+      maxLength: 140
+    QAPostalAddress:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/QAQatarAddress'
+        - $ref: '#/components/schemas/QAInternationalQualifiedAddress'
+        - $ref: '#/components/schemas/QAInternationalUnqualifiedAddress'
+      discriminator:
+        propertyName: addressFormatType
+        mapping:
+          Qatar: '#/components/schemas/QAQatarAddress'
+          InternationalQualifiedAddress: '#/components/schemas/QAInternationalQualifiedAddress'
+          InternationalUnqualifiedAddress: '#/components/schemas/QAInternationalUnqualifiedAddress'
+      description: >-
+        An address related to a given person or organization, based on ISO 20022.
+
+
+        Qatar address structures are mapped as follows:
+
+
+        * Zone: `countrySubDivision`.
+
+
+        * Street: `streetName`.
+
+
+        * Building Number: `buildingNumber`.
+
+
+        Other properties are retained in this object to support non-Qatar addresses.
+
+
+        Implementers can choose, where appropriate, to provide `addressLine` and `country` where disambiguation of
+        address properties is impossible.
+    QAAddressType:
+      type: string
+      enum:
+        - Billing
+        - Business
+        - Correspondence
+        - DeliveryTo
+        - MailTo
+        - POBox
+        - Postal
+        - Permanent
+        - Residential
+        - Statement
+        - Other
+      description: Qualifies the type of address.
+    QAQatarAddress:
+      type: object
+      required:
+        - addressFormatType
+        - addressType
+        - buildingNumber
+        - streetName
+        - countrySubDivision
+        - country
+      properties:
+        addressFormatType:
+          type: string
+          enum:
+            - Qatar
+          description: Address format, defaults to `Qatar`
+        addressType:
+          $ref: '#/components/schemas/QAAddressType'
+        buildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifies the position of a given building on a street.
+        streetName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a street or thoroughfare.
+        countrySubDivision:
+          type: string
+          pattern: ^Zone\x20[0-9]{1,2}$
+          description: Country sub-division, provided as a Zone for Qatar addresses.
+        country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: Address in the Qatar address format.
+      additionalProperties: false
+    QAInternationalQualifiedAddress:
+      type: object
+      required:
+        - addressFormatType
+        - addressType
+        - streetName
+        - country
+      properties:
+        addressFormatType:
+          type: string
+          enum:
+            - InternationalQualifiedAddress
+          description: Address format, defaults to `InternationalQualifiedAddress`
+        addressType:
+          $ref: '#/components/schemas/QAAddressType'
+        buildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifies the position of a given building on a street.
+        buildingName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of the house or building.
+        floor:
+          type: string
+          minLength: 1
+          maxLength: 70
+          description: Floor or storey within a building.
+        streetName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a street or thoroughfare.
+        districtName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Identifies a subdivision within a country sub-division.
+        postBox:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Numbered box in a post office assigned to a given Party where post is kept until collected.
+        postCode:
+          type: string
+          minLength: 1
+          maxLength: 16
+          description: Identifier that qualifies a postal address to assist with the sorting and delivery of mail.
+        townName:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of a built-up area.
+        countrySubDivision:
+          type: string
+          minLength: 1
+          maxLength: 35
+          description: Country sub-division based on standards for stated country.
+        country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: International address in the qualified address format, implemented using separate address properties.
+      additionalProperties: false
+    QAInternationalUnqualifiedAddress:
+      type: object
+      required:
+        - addressFormatType
+        - addressType
+        - country
+      properties:
+        addressFormatType:
+          type: string
+          enum:
+            - InternationalUnqualifiedAddress
+          description: Address format, defaults to `InternationalUnqualifiedAddress`
+        addressType:
+          $ref: '#/components/schemas/QAAddressType'
+        addressLine:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 70
+            description: A freeform address entry that is not specified using specific address properties.
+          minItems: 1
+          maxItems: 7
+          description: One-or-more address lines provided using freeform text.
+        country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Country code that conforms to ISO 3166-1 alpha-2 values.
+      description: International address in the unqualified address format, implemented using `addressLine` and `country`.
+      additionalProperties: false
+    QACashAccount6_0:
+      type: object
+      description: |
+        Creditor account details available in case the transaction is a Debit transaction.
+      required:
+        - schemeName
+        - identification
+      properties:
+        schemeName:
+          $ref: '#/components/schemas/QAExternalAccountIdentificationCode'
+        identification:
+          $ref: '#/components/schemas/Identification_0'
+        name:
+          $ref: '#/components/schemas/Name_0'
+      additionalProperties: false
+    QATransactionCardInstrument:
+      type: object
+      required:
+        - cardSchemeName
+        - instrumentType
+      description: Set of elements to describe the card instrument used in the transaction.
+      properties:
+        cardSchemeName:
+          description: Name of the card scheme.
+          type: string
+          enum:
+            - AmericanExpress
+            - Diners
+            - Discover
+            - GCC
+            - MasterCard
+            - UPI
+            - VISA
+        instrumentType:
+          description: The card instrument type.
+          type: string
+          enum:
+            - ApplePay
+            - Contactless
+            - MagStripe
+            - Chip
+            - Other
+        name:
+          description: Name of the cardholder using the card instrument.
+          type: string
+          minLength: 1
+          maxLength: 70
+        identification:
+          description: >-
+            Identification assigned by an institution to identify the card instrument used in the transaction. This
+            identification is known by the account owner, and MUST be masked.
+          type: string
+          minLength: 1
+          maxLength: 19
+          example: 1234********4321
+      additionalProperties: false
+    QAGeoLocation:
+      description: Estimated latitude and longitude coordinates, in degrees. Contains one latitude and one longitude subfield.
+      type: object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          description: Latitude in degrees
+          type: string
+          minLength: 1
+          maxLength: 20
+        longitude:
+          description: Longitude in degrees
+          type: string
+          minLength: 1
+          maxLength: 20
+      additionalProperties: false
+    MerchantDetails:
+      type: object
+      properties:
+        merchantId:
+          description: Merchant Id
+          type: string
+          minLength: 1
+          maxLength: 35
+        merchantName:
+          description: Name by which the merchant is known.
+          type: string
+          minLength: 1
+          maxLength: 350
+        merchantCategoryCode:
+          description: >-
+            Category code values are used to enable the classification of merchants into specific categories based on
+            the type of business, trade or services supplied.
+          type: string
+          minLength: 3
+          maxLength: 4
+      description: >
+        Details of the Merchant involved in the transaction.
+
+        Merchant Details are specified only for those merchant categories that are generally expected to originate
+        retail financial transactions
+    ProprietaryBankTransactionCode:
+      type: object
+      properties:
+        code:
+          description: Proprietary bank transaction code to identify the underlying transaction.
+          type: string
+          minLength: 1
+          maxLength: 35
+        issuer:
+          description: Identification of the issuer of the proprietary bank transaction code.
+          type: string
+          minLength: 1
+          maxLength: 35
+      required:
+        - code
+      description: >
+        ProprietaryBankTransactionCode is mandatory when the BankTransactionCode (with code specifying the Domain,
+        Family and SubFamily as per External Codes ISO20022) is absent.
+
+        Set of elements to fully identify a proprietary bank transaction code
+    CurrencyExchange:
+      type: object
+      properties:
+        sourceCurrency:
+          $ref: '#/components/schemas/TCurrency'
+        targetCurrency:
+          $ref: '#/components/schemas/TCurrency'
+        unitCurrency:
+          $ref: '#/components/schemas/TCurrency'
+        exchangeRate:
+          type: string
+          description: >-
+            Factor used to convert an amount from one currency into another. This reflects the price at which one
+            currency was bought with another currency.
+
+            Usage: ExchangeRate expresses the ratio between UnitCurrency and QuotedCurrency (ExchangeRate =
+            UnitCurrency/QuotedCurrency).
+        contractIdentification:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Unique identification to unambiguously identify the foreign exchange contract.
+        quotationDate:
+          type: string
+          format: date-time
+          description: >-
+            Date and time at which an exchange rate is quoted. All dates in the JSON payloads are represented in ISO
+            8601 date-time format.
+
+            All date-time fields in responses must include the timezone. An example is below:
+
+            2017-04-05T10:43:07+00:00
+        instructedAmount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount_8'
+      required:
+        - sourceCurrency
+        - targetCurrency
+        - unitCurrency
+        - exchangeRate
+        - instructedAmount
+      description: Set of elements used to provide details on the currency exchange.
+    OBActiveOrHistoricCurrencyAndAmount_6:
+      type: object
+      description: Transaction charges to be paid by the charge bearer.
+      required:
+        - amount
+        - currency
+        - chargeIncluded
+      properties:
+        amount:
+          $ref: '#/components/schemas/QAActiveCurrencyAndAmount_SimpleType'
+        currency:
+          $ref: '#/components/schemas/ActiveOrHistoricCurrencyCode_1'
+        chargeIncluded:
+          description: |
+            If true then the value in the Amount has the ChargeAmount deducted from it
+          type: boolean
+    OBActiveOrHistoricCurrencyAndAmount_8:
+      type: object
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          $ref: '#/components/schemas/QAActiveCurrencyAndAmount_SimpleType'
+        currency:
+          $ref: '#/components/schemas/ActiveOrHistoricCurrencyCode_1'
+      description: The amount and currency code for a given payment or transaction.
+    ActiveOrHistoricCurrencyCode_1:
+      description: >-
+        A 3 character alphabetic code allocated to a currency under an international currency identification scheme, as
+        described in the latest edition of the international standard ISO 4217 'Codes for the representation of
+        currencies and funds'.
+      type: string
+      pattern: ^[A-Z]{3,3}$
+      example: SAR
+    QAActiveCurrencyAndAmount_SimpleType:
+      description: >-
+        A number of monetary units specified in an active currency where the unit of currency is explicit and compliant
+        with ISO 4217.
+      type: string
+      pattern: ^\d{1,13}$|^\d{1,13}\.\d{1,5}$
+    TCurrency:
+      type: string
+      pattern: ^[A-Z]{3,3}$
+      description: Currency code for the account.
+    AccountHolderName:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: >
+        The Account Holder Name is the name or names of the account owner(s) represented at the account level, as
+        displayed by the LFI's online channels.
+
+        Note, the Account Holder Name is not the product name or the nickname of the account.
+    AccountHolderShortName:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: |
+        The account holder nick name
+    TransactionDateTime:
+      title: TransactionDateTime
+      description: |
+        The Date Time of when the transaction occurred.
+        All dates in the JSON payloads are represented in ISO 8601 date-time format.
+        All date-time fields in responses must include the timezone.
+        An example is below: 2017-04-05T10:43:07+00:00
+      type: string
+      format: date-time
+    LocalTimeZone:
+      description: The UTC offset of the local date and time of where the transaction occurred. e.g. UTC+03:00
+      type: string
+      example: UTC+03:00
+      pattern: ^UTC[+-]([01]\d|2[0-4])(:?[0-5]\d)?$
+    TerminalId:
+      description: ID of the Terminal if the transaction was initiated from a retail POS
+      type: string
+      minLength: 8
+      maxLength: 20
+    QAPaymentPurposeCode:
+      description: >-
+        Purpose code that relates to the type of services or goods that corresponds to the underlying purpose of the
+        payment. The code must conform to the published payment purpose code list
+      type: string
+      pattern: ^[A-Z]{4}$
+    Meta:
+      type: object
+      properties:
+        totalPages:
+          type: number
+          description: |
+            The number of expected pages for the query.
+        totalRecords:
+          type: number
+          description: |
+            The total number of records in the full set.
+      description: Metadata relevant to the resource.
+    PaginatedMeta:
+      type: object
+      properties:
+        paginated:
+          type: boolean
+          description: |
+            `true` if the response is paginated.
+
+            `false` if the response returns all matching data elements.
+
+            If not specified, a non-paginated response is assumed.
+        totalPages:
+          type: number
+          description: |
+            The number of expected pages for the query.
+        totalRecords:
+          type: number
+          description: |
+            The total number of records in the full set.
+      description: Pagination metadata relevant to the resource.
+    ErrorMessage:
+      description: Message describing the problem that has occurred.
+      type: string
+    Error400:
+      description: Default error response payload structure for Ozone Connect
+      type: object
+      required:
+        - errorCode
+        - errorMessage
+      properties:
+        errorCode:
+          description: >-
+            Error code identifying the problem that occurred. This may either be one of the prescribed Error Code(s) or
+            a namespaced Error Code where the namespace is the system or organisation that has responded with the error,
+            and the code is the code specific to the system or organisation. organisation or system.
+
+            LFIs should implement error codes based on the prescribed codes or guidance in the standards, with
+            non-specific codes maintained for backward compatibility with version 1.2.
+          anyOf:
+            - type: string
+              enum:
+                - Consent.Invalid
+                - Consent.BusinessRuleViolation
+                - Consent.FailsControlParameters
+                - Consent.InvalidUserIdentifier
+                - JWS.InvalidSignature
+                - JWS.Malformed
+                - JWS.InvalidClaim
+                - JWS.InvalidHeader
+                - JWE.DecryptionError
+                - JWE.InvalidHeader
+                - GenericRecoverableError
+                - GenericError
+                - Event.UnexpectedEvent
+                - Body.InvalidFormat
+                - Resource.InvalidFormat
+            - type: string
+              pattern: ^[A-Za-z]+\.[A-Za-z0-9]+$
+            - type: string
+        errorMessage:
+          $ref: '#/components/schemas/ErrorMessage'
+    transactionFilterDateTime:
+      description: Filter-based on date and time
+      type: string
+      format: date-time
+    Error403:
+      description: >-
+        Error code identifying the problem that occurred. The first part of the code is the namespace, which is the name
+        of the organisation or system that is rejecting the payment, and the second part is the specific rejection
+        reason code for the originating organisation or system.
+
+        LFIs should implement error codes based on the prescribed codes or guidance in the standards, with non-specific
+        codes maintained for backward compatibility with version 1.2.
+      type: object
+      required:
+        - errorCode
+        - errorMessage
+      properties:
+        errorCode:
+          description: >-
+            Error code identifying the problem that occurred. This may either be one of the prescribed Error Code(s) or
+            a namespaced Error Code where the namespace is the system or organisation that has responded with the error,
+            and the code is the code specific to the system or organisation.
+          anyOf:
+            - type: string
+              enum:
+                - AccessToken.InvalidScope
+                - Consent.TransientAccountAccessFailure
+                - Consent.AccountTemporarilyBlocked
+                - Consent.PermanentAccountAccessFailure
+                - GenericRecoverableError
+                - GenericError
+            - type: string
+              pattern: ^[A-Za-z]+\.[A-Za-z0-9]+$
+            - type: string
+        errorMessage:
+          $ref: '#/components/schemas/ErrorMessage'
+    Error500:
+      description: >-
+        Error code identifying the problem that occurred. The first part of the code is the namespace, which is the name
+        of the organisation or system that is rejecting the payment, and the second part is the specific rejection
+        reason code for the originating organisation or system.
+
+        LFIs should implement error codes based on the prescribed codes or guidance in the standards, with non-specific
+        codes maintained for backward compatibility with version 1.2.
+      type: object
+      required:
+        - errorCode
+        - errorMessage
+      properties:
+        errorCode:
+          description: >-
+            Error code identifying the problem that occurred. This may either be one of the prescribed Error Code(s) or
+            a namespaced Error Code where the namespace is the system or organisation that has responded with the error,
+            and the code is the code specific to the system or organisation.
+          anyOf:
+            - type: string
+              enum:
+                - GenericRecoverableError
+                - GenericError
+            - type: string
+              pattern: ^[A-Za-z]+\.[A-Za-z0-9]+$
+            - type: string
+        errorMessage:
+          $ref: '#/components/schemas/ErrorMessage'
+    QASubTransactionType:
+      type: string
+      enum:
+        - Purchase
+        - Reversal
+        - Refund
+        - Withdrawal
+        - WithdrawalReversal
+        - Deposit
+        - DepositReversal
+        - MoneyTransfer
+        - Repayments
+        - Interest
+        - Fee
+        - Charges
+        - Profit
+        - Disbursement
+        - Adjustment
+        - Tax
+        - Rewards
+        - NotApplicable
+        - LeaseRepayment
+    QABalanceCategory:
+      type: string
+      enum:
+        - Principal
+        - Interest
+        - FeesAndCharges
+        - PastDue
+        - Profit
+        - Rental
+    QAShariaFlag:
+      description: A flag to denote if the Product is Sharia Compliant
+      type: boolean
+      default: false
+    QAAmountWithCategorization:
+      type: object
+      required:
+        - BalanceCategory
+        - Amount
+      properties:
+        BalanceCategory:
+          $ref: '#/components/schemas/QABalanceCategory'
+        BalanceDescription:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: |-
+            Description of the categorized amount.
+
+            Allows the specific Sharia compliant charges, payments and rewards that affect the balance to be identified.
+        Amount:
+          description: The value of the categorized balance, incorporating `Amount` and `Currency`.
+          type: object
+          required:
+            - Amount
+            - Currency
+          properties:
+            Amount:
+              $ref: '#/components/schemas/QAActiveCurrencyAndAmount_SimpleType'
+            Currency:
+              $ref: '#/components/schemas/ActiveOrHistoricCurrencyCode_1'
+    QAExternalAccountSubTypeCode:
+      description: Specifies the sub type of account (product family group).
+      type: string
+      enum:
+        - CreditCard
+        - CurrencyAccount
+        - CurrentAccount
+        - Loan
+        - Mortgage
+        - Savings
+        - Wallet
+    QACreditDebitIndicator:
+      description: Indicates whether a given balance, transaction, or summarized amount is a credit or a debit.
+      type: string
+      enum:
+        - Credit
+        - Debit
+    QABalanceCheckDateTime:
+      description: Indicates the date (and time) that the account balance was checked
+      type: string
+      format: date-time
+  parameters:
+    providerId:
+      name: o3-provider-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: Identifier for the LFI that the request is targeted to
+    callerOrgId:
+      name: o3-caller-org-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: An identifier for the organization calling the API
+    callerClientId:
+      name: o3-caller-client-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: An identifier for the OIDC clientId calling the API
+    callerSoftwareStatementId:
+      name: o3-caller-software-statement-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: An identifier for the software statement calling the API
+    apiUri:
+      name: o3-api-uri
+      in: header
+      schema:
+        type: string
+      required: true
+      description: The parameterised URL of the API being called by the caller
+    apiOperation:
+      name: o3-api-operation
+      in: header
+      schema:
+        type: string
+      required: true
+      description: The API operation carried out by the caller (e.g. GET, POST, PUT, DELETE, PATCH)
+    consentId:
+      name: o3-consent-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: The consentId for which this call is being made
+    callerInteractionId:
+      name: o3-caller-interaction-id
+      in: header
+      schema:
+        type: string
+      required: false
+      description: The interaction ID passed in by the caller, if any
+    ozoneInteractionId:
+      name: o3-ozone-interaction-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: >-
+        An interaction ID generated by Ozone if the caller did not send in one. If the callerInteractionId is specified,
+        this takes the same value.
+    psuIdentifier:
+      name: o3-psu-identifier
+      in: header
+      schema:
+        type: string
+      required: true
+      description: A Base64 encoded representation of the psuIdentifier JSON object.
+    transaction-fromBookingDateTime:
+      name: fromBookingDateTime
+      in: query
+      description: >-
+        If specified, the API should only return transactions which have a `bookingDateTime` that occurs on or after the
+        specified date-time.
+      schema:
+        $ref: '#/components/schemas/transactionFilterDateTime'
+    transaction-toBookingDateTime:
+      name: toBookingDateTime
+      in: query
+      description: >-
+        If specified, the API should only return transactions which have a `bookingDateTime` that occurs on or before
+        the specified date-time.
+      schema:
+        $ref: '#/components/schemas/transactionFilterDateTime'
+    page:
+      name: page
+      in: query
+      description: Page of results to request (standard pagination)
+      required: true
+      schema:
+        default: 1
+        type: integer
+      style: form
+    page-size:
+      name: page-size
+      in: query
+      description: Page size to request. Default is 100 to comply with the Operating Guidelines for the Open Finance Framework.
+      required: true
+      schema:
+        default: 100
+        type: integer
+      style: form
+  securitySchemes:
+    OzoneConnectMutualTls:
+      description: >-
+        Communications between the API Hub and the LFI Ozone Connect implementation are secured using mutual TLS (mTLS),
+        where the Client authenticates by presenting an X.509 certificate during the TLS handshake.
+      type: mutualTLS
+    OzoneConnectApiKey:
+      description: >-
+        Communications between the API Hub and the LFI Ozone Connect implementation are secured using an API Key, which
+        is a secret shared between the API Hub and the LFI.
+      type: apiKey
+      in: header
+      name: Authorization
+    OzoneConnectClientCredentials:
+      type: oauth2
+      description: >
+        Communications between the API Hub and the LFI Ozone Connect implementation are secured using a Client
+        Credentials grant type.
+
+
+        LFIs must host an OAuth 2.0 Authorization Server to utilise this security pattern. Scope values are set during
+        the onboarding process, and represented by a placeholder in this API description.
+      flows:
+        clientCredentials:
+          tokenUrl: https://example.lfi.qa/token
+          scopes:
+            placeholder: Placeholder for scopes, which are set by the LFI during onboarding
+    OzoneConnectJwtAuth:
+      description: >
+        Communications between the API Hub and the LFI Ozone Connect implementation are secured using the "JWT Auth"
+        mechanism, where the Client presents a signed JSON Web Token as a credential.
+
+
+        The Server MUST verify the signature in order to authenticate the Client.
+
+
+        Please note that the value of the `scheme` parameter is not a registered HTTP Authentication Scheme, to indicate
+        it is specific to Ozone Connect. Please refer to API Hub documentation for further details.
+      type: http
+      scheme: Ozone-Connect-JWT-Auth

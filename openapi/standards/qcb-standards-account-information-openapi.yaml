@@ -1,16 +1,12 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: 'QCB Open Finance: Account Information API'
   description: |-
     # QCB Open Finance: Account Information
 
     This API description provides the API operations for Account Information, exposed by the API Hub.
-  version: v1.0-draft1
+  version: v1.0-rc1
   x-sf-docs-util-menu-item-name: Account Information
-  x-sf-typescript-util-family: Qcb
-  x-sf-typescript-util-api-type: standards
-  x-sf-typescript-util-class-prefix: QcbAcctInfo
-  x-sf-permission-codes-required: true
 tags:
   - name: Account Access Consents
     description: Account Access Consent Operations
@@ -40,7 +36,7 @@ paths:
             x-fapi-interaction-id:
               $ref: '#/components/headers/FapiInteractionId'
           content:
-            application/jwt:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ReadAccountAccessBaseConsents1Response'
         '400':
@@ -60,9 +56,10 @@ paths:
       tags:
         - Account Access Consents
       security:
-        - UserOAuth2Security1Properties:
+        - TPPOAuth2Security1Properties:
             - openid
             - accounts
+          ClientMutualTLSSecurity1Properties: []
   /account-access-consents/{ConsentId}:
     get:
       operationId: ReadAccountAccessConsent_read
@@ -102,9 +99,10 @@ paths:
       tags:
         - Account Access Consents
       security:
-        - UserOAuth2Security1Properties:
+        - TPPOAuth2Security1Properties:
             - openid
             - accounts
+          ClientMutualTLSSecurity1Properties: []
     patch:
       operationId: UpdateAccountInformationConsentStatus_update
       summary: Update the status of a Account Information Consent
@@ -155,9 +153,10 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateAccountInformationConsent1Request'
       security:
-        - UserOAuth2Security1Properties:
+        - TPPOAuth2Security1Properties:
             - openid
             - accounts
+          ClientMutualTLSSecurity1Properties: []
   /accounts:
     get:
       operationId: ReadAccountsOperationV1_0
@@ -212,10 +211,7 @@ paths:
         - UserOAuth2Security1Properties:
             - openid
             - accounts
-      x-sf-permission-codes:
-        - ReadAccounts
-        - ReadAccountsBasic
-        - ReadAccountsDetail
+          ClientMutualTLSSecurity1Properties: []
   /accounts/{AccountId}:
     get:
       operationId: ReadAccountOperationV1_0
@@ -263,10 +259,7 @@ paths:
         - UserOAuth2Security1Properties:
             - openid
             - accounts
-      x-sf-permission-codes:
-        - ReadAccounts
-        - ReadAccountsBasic
-        - ReadAccountsDetail
+          ClientMutualTLSSecurity1Properties: []
   /accounts/{AccountId}/balances:
     get:
       operationId: ReadAccountBalancesOperationV1_0
@@ -318,9 +311,7 @@ paths:
         - UserOAuth2Security1Properties:
             - openid
             - accounts
-      x-sf-permission-codes:
-        - ReadAccounts
-        - ReadBalances
+          ClientMutualTLSSecurity1Properties: []
   /accounts/{AccountId}/transactions:
     get:
       operationId: ReadAccountTransactionsOperationV1_0
@@ -374,9 +365,7 @@ paths:
         - UserOAuth2Security1Properties:
             - openid
             - accounts
-      x-sf-permission-codes:
-        - ReadAccounts
-        - ReadTransactions
+          ClientMutualTLSSecurity1Properties: []
 components:
   parameters:
     AccountIdPathParameter:
@@ -499,7 +488,6 @@ components:
             - Suspended
             - Closed
           description: Specifies the status of account resource.
-          x-ozone-discovery-requires-analysis: Verify the correct list of account status codes for QCB.
         StatusUpdateDateTime:
           type: string
           pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
@@ -515,8 +503,6 @@ components:
 
         For example, a TPP may only require balance information and not need all the properties of the account. The TPP
         will therefore only require minimal properties to do this.
-      x-sf-permission-codes:
-        - ReadAccounts
       additionalProperties: false
     AccountInformation.Account1Types:
       oneOf:
@@ -549,7 +535,6 @@ components:
             - Suspended
             - Closed
           description: Specifies the status of account resource.
-          x-ozone-discovery-requires-analysis: Verify the correct list of account status codes for QCB.
         StatusUpdateDateTime:
           type: string
           pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
@@ -557,6 +542,8 @@ components:
           description: 'Date and time at which the account resource status was updated. '
         AccountHolderName:
           $ref: '#/components/schemas/AccountInformation.AccountHolderName1Type'
+        AccountHolderShortName:
+          $ref: '#/components/schemas/AccountInformation.AccountHolderShortName1Type'
         Nickname:
           type: string
           minLength: 1
@@ -591,8 +578,6 @@ components:
       description: >-
         Properties of a given Account, as indicated by the `AccountId` value, that are provided by the
         `ReadAccountsBasic` permissions.
-      x-sf-permission-codes:
-        - ReadAccountsBasic
       additionalProperties: false
     AccountInformation.AccountBasicWithoutIdentifier1Properties:
       type: object
@@ -615,7 +600,6 @@ components:
             - Suspended
             - Closed
           description: Specifies the status of account resource.
-          x-ozone-discovery-requires-analysis: Verify the correct list of account status codes for QCB.
         StatusUpdateDateTime:
           type: string
           pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
@@ -623,6 +607,8 @@ components:
           description: 'Date and time at which the account resource status was updated. '
         AccountHolderName:
           $ref: '#/components/schemas/AccountInformation.AccountHolderName1Type'
+        AccountHolderShortName:
+          $ref: '#/components/schemas/AccountInformation.AccountHolderShortName1Type'
         Nickname:
           type: string
           minLength: 1
@@ -657,8 +643,6 @@ components:
       description: >-
         Properties provided by the `ReadAccountsBasic` permissions, excluding `AccountId`, which is provided by the
         containing object.
-      x-sf-permission-codes:
-        - ReadAccountsBasic
       additionalProperties: false
     AccountInformation.AccountCurrency1Type:
       type: string
@@ -690,7 +674,6 @@ components:
             - Suspended
             - Closed
           description: Specifies the status of account resource.
-          x-ozone-discovery-requires-analysis: Verify the correct list of account status codes for QCB.
         StatusUpdateDateTime:
           type: string
           pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
@@ -698,6 +681,8 @@ components:
           description: 'Date and time at which the account resource status was updated. '
         AccountHolderName:
           $ref: '#/components/schemas/AccountInformation.AccountHolderName1Type'
+        AccountHolderShortName:
+          $ref: '#/components/schemas/AccountInformation.AccountHolderShortName1Type'
         Nickname:
           type: string
           minLength: 1
@@ -741,8 +726,6 @@ components:
       description: >-
         Properties of a given Account, as indicated by the `AccountId` value, that are provided by the
         `ReadAccountsDetail` permissions.
-      x-sf-permission-codes:
-        - ReadAccountsDetail
       additionalProperties: false
     AccountInformation.AccountDetailWithoutIdentifier1Properties:
       type: object
@@ -767,7 +750,6 @@ components:
             - Suspended
             - Closed
           description: Specifies the status of account resource.
-          x-ozone-discovery-requires-analysis: Verify the correct list of account status codes for QCB.
         StatusUpdateDateTime:
           type: string
           pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
@@ -775,6 +757,8 @@ components:
           description: 'Date and time at which the account resource status was updated. '
         AccountHolderName:
           $ref: '#/components/schemas/AccountInformation.AccountHolderName1Type'
+        AccountHolderShortName:
+          $ref: '#/components/schemas/AccountInformation.AccountHolderShortName1Type'
         Nickname:
           type: string
           minLength: 1
@@ -818,8 +802,6 @@ components:
       description: >-
         Properties provided by the `ReadAccountsDetail` permissions, excluding `AccountId`, which is provided by the
         containing object.
-      x-sf-permission-codes:
-        - ReadAccountsDetail
       additionalProperties: false
     AccountInformation.AccountHolderName1Type:
       type: string
@@ -831,6 +813,20 @@ components:
         * Where the property is included in an Account resource, this is the holder of the account.
 
         * Where the property is related to a beneficiary or payment to a beneficiary, this is the name of the Creditor.
+    AccountInformation.AccountHolderShortName1Type:
+      type: string
+      minLength: 1
+      maxLength: 70
+      description: >-
+        The Account Holder Short Name is the short name or nickname of the Account owner(s) represented at the account
+        level:
+
+
+        * Where the property is included in an Account resource, this is the holder of the account.
+
+
+        * Where the property is related to a beneficiary or payment to a beneficiary, this is the short name of the
+        Creditor.
     AccountInformation.AccountId1Type:
       type: string
       minLength: 1
@@ -850,19 +846,23 @@ components:
         - MobileNumber
         - UtilityName
         - EWallet
+        - MortgageReference
+        - FinanceReference
       description: Name of the identification scheme for the account. Encoded with allowable values published in an external list.
     AccountInformation.AccountSubType1Codes:
       type: string
       enum:
-        - Current
-        - Savings
         - CreditCard
+        - CurrencyAccount
+        - CurrentAccount
+        - Loan
         - Mortgage
-        - Finance
+        - Savings
+        - Wallet
       description: |-
         Specifies the sub type of account (product family group).
 
-        Supported values: CurrentAccount, Savings, CreditCard, Mortgage, Finance.
+        Supported values: CreditCard, CurrencyAccount, CurrentAccount, Loan, Mortgage, Savings, Wallet.
     AccountInformation.AccountType1Codes:
       type: string
       enum:
@@ -1105,7 +1105,6 @@ components:
         - ReadTransactionsBasic
         - ReadTransactionsDetail
       description: The permission codes available to the TPP for Bank Data Sharing and agreed with the User.
-      x-ozone-discovery-requires-analysis: Verify that the list of permissions is correct for QCB.
     AccountInformation.CreditDebit1Codes:
       type: string
       enum:
@@ -1210,7 +1209,14 @@ components:
         Meta:
           $ref: '#/components/schemas/JsonApi.MetaResource1Properties'
         Subscription:
-          $ref: '#/components/schemas/Events.Subscription1Properties'
+          allOf:
+            - $ref: '#/components/schemas/Events.Subscription1Properties'
+          description: >-
+            Subscription to Event Notifications, to be sent to the TPP Webhook registered at the API Hub.
+
+
+            Omitted where the TPP does not implement Event Notifications of Webhooks, and will use polling to retrieve
+            updates to the status of a given Consent.
       additionalProperties: false
     AccountInformation.ReadConsent1Properties:
       type: object
@@ -1221,7 +1227,6 @@ components:
         - CreationDateTime
         - Status
         - StatusUpdateDateTime
-        - OpenFinanceBilling
       properties:
         ConsentId:
           $ref: '#/components/schemas/Consent.ConsentId1Type'
@@ -1263,38 +1268,6 @@ components:
             Indicates who the Consent was revoked by.
 
             Omitted where the Consent has not been revoked.
-        OpenFinanceBilling:
-          type: object
-          properties:
-            IsLargeCorporate:
-              type: boolean
-              description: Account holder is classified as a large corporate customer by the LFI.
-            UserType:
-              $ref: '#/components/schemas/Billing.TppBillingUserTypes1Codes'
-            Purpose:
-              type: string
-              enum:
-                - AccountAggregation
-                - RiskAssessment
-                - TaxFiling
-                - Onboarding
-                - Verification
-                - QuoteComparison
-                - BudgetingAnalysis
-                - FinancialAdvice
-                - AuditReconciliation
-              description: Purpose of data sharing request, based on supported use cases.
-              x-ozone-discovery-requires-analysis: Verify that the use cases listed are appropriate for QCB.
-          required:
-            - UserType
-            - Purpose
-          description: >-
-            Consolidated billing information properties added by the TPP and LFI.
-
-
-            `isLargeCorporate` is optional as the value is updated out-of-band, and may be updated after the completion
-            of Consent Authorization.
-          additionalProperties: false
       additionalProperties: false
     AccountInformation.Servicer1Properties:
       type: object
@@ -1742,18 +1715,6 @@ components:
                 - Chip
                 - Other
               description: The card instrument type.
-            IsPrimaryInstrument:
-              type: boolean
-              description: >-
-                Flag to indicate whether the transaction was made using the payment card belonging to the main account
-                holder(s), as opposed to a card issued to a family member or other person who is not the main account
-                holder(s) but needs to make payments against the account.
-
-
-                Set to `true` where the card belongs to the main account holder(s).
-
-
-                Omitted if not tracked.
             Name:
               type: string
               minLength: 1
@@ -1772,6 +1733,18 @@ components:
             - InstrumentType
           description: Set of elements to describe the card instrument used in the transaction.
           additionalProperties: false
+        IsPrimaryInstrument:
+          type: boolean
+          description: >-
+            Flag to indicate whether the transaction was made using the payment card belonging to the main account
+            holder(s), as opposed to a card issued to a family member or other person who is not the main account
+            holder(s) but needs to make payments against the account.
+
+
+            Set to `true` where the card belongs to the main account holder(s).
+
+
+            Omitted if not tracked.
         GeoLocation:
           type: object
           properties:
@@ -1924,9 +1897,7 @@ components:
       required:
         - AddressFormatType
         - AddressType
-        - BuildingNumber
         - StreetName
-        - CountrySubDivision
         - Country
       properties:
         AddressFormatType:
@@ -2050,18 +2021,7 @@ components:
           pattern: ^[A-Z]{2}$
           description: Country code that conforms to ISO 3166-1 alpha-2 values.
       description: Address in the Qatar address format.
-      x-ozone-discovery-requires-analysis: Confirm that address format introduced for Qatar is appropriate for all use cases.
       additionalProperties: false
-    Billing.TppBillingUserTypes1Codes:
-      type: string
-      enum:
-        - Retail
-        - SME
-        - Corporate
-      description: >-
-        Defines the entity type the TPP is acting on behalf of, as an indicator for the pricing tier of the service
-        being provided.
-      x-ozone-discovery-requires-analysis: Confirm that the billing user types are correct for Qatar.
     Consent.ConsentCreationDateTime1Type:
       type: string
       pattern: ^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\+03:00$
@@ -2203,7 +2163,6 @@ components:
 
         Omitted where the TPP is not representing another organization in providing open finance services and agreeing
         Consent with the User.
-      x-ozone-discovery-requires-analysis: Confirm that the on-behalf of approach is correct for Qatar and whether this or Sponsored TPP is correct.
     Consent.UnidentifiedTppActingOnBehalfOf1Properties:
       type: object
       required:
@@ -2774,7 +2733,8 @@ components:
       description: >-
         A number of monetary units specified in an active currency where the unit of currency is explicit and compliant
         with ISO 4217.
-      example: '100.00'
+      examples:
+        - '100.00'
     Values.ActiveOrHistoricCurrencyCode1Type:
       type: string
       pattern: ^[A-Z]{3,3}$
@@ -2807,6 +2767,21 @@ components:
             openid: Provides OpenID Connect scope for accessing user information, where supported
             accounts: Read permission for Bank Data Sharing Account Information resources
       description: Authorization Code Flow constrained by FAPI 2.0 Security Profile (guidelines provided in Developer Portal).
+    TPPOAuth2Security1Properties:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://authserver.example/token
+          scopes:
+            openid: Provides OpenID Connect scope for accessing user information, where supported
+            accounts: Read permission for Bank Data Sharing Account Information resources
+      description: Client Credentials Grant constrained by FAPI 2.0 Security Profile (guidelines provided in Developer Portal).
+    ClientMutualTLSSecurity1Properties:
+      type: mutualTLS
+      description: >-
+        Mutual TLS using a client certificate issued by the Trust Framework, as required by the FAPI 2.0 Security
+        Profile. Access tokens are sender-constrained by binding them to the client certificate, as defined in [RFC
+        8705](https://www.rfc-editor.org/rfc/rfc8705).
   headers:
     FapiInteractionId:
       required: false
