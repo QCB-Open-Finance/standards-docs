@@ -249,7 +249,7 @@
 <script type="module">var e=class extends HTMLElement{btn=this.querySelector(`button`);constructor(){super(),this.btn.addEventListener(`click`,()=>this.toggleExpanded());let e=this.closest(`nav`);e&&e.addEventListener(`keyup`,e=>this.closeOnEscape(e))}setExpanded(e){this.setAttribute(`aria-expanded`,String(e)),document.body.toggleAttribute(`data-mobile-menu-expanded`,e)}toggleExpanded(){this.setExpanded(this.getAttribute(`aria-expanded`)!==`true`)}closeOnEscape(e){e.code===`Escape`&&(this.setExpanded(!1),this.btn.focus())}};customElements.define(`starlight-menu-button`,e);</script>
 				<div id="starlight__sidebar" class="sidebar-pane astro-57oe7ezc">
 					<div class="sidebar-content sl-flex astro-57oe7ezc">
-						<script type="module">for(let e of document.querySelectorAll(`summary a.group-link`))e.addEventListener(`click`,e=>e.stopPropagation());</script><sl-sidebar-state-persist data-hash="148jl85" class="astro-o5cix2xa">
+						<script type="module">for(let e of document.querySelectorAll(`summary a.group-link`))e.addEventListener(`click`,e=>e.stopPropagation());</script><sl-sidebar-state-persist data-hash="0bt1pc8" class="astro-o5cix2xa">
 	<script aria-hidden="true">
 		(() => {
 			try {
@@ -982,6 +982,11 @@
 						<span class="astro-tnn3avp6">Other Rules for User Journeys</span>
 						
 					</a>
+			</li><li class="astro-tnn3avp6">
+				<a href="/standards-docs/en/standards/rules/business/common-components/user-experience-principles/12-qcb-brand-guidelines/" class="astro-tnn3avp6">
+						<span class="astro-tnn3avp6">QCB Brand Guidelines</span>
+						
+					</a>
 			</li>
 </ul>
 
@@ -1655,6 +1660,11 @@
 					<span style="--depth: 0;" class="astro-w7eaxkoy">8. Share the requested data</span>
 				</a>
 				
+			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
+				<a href="#9-support-consent-lifecycle-management" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">9. Support consent lifecycle management</span>
+				</a>
+				
 			</li>
 </ul>
 					</div>
@@ -1713,6 +1723,11 @@
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
 				<a href="#8-share-the-requested-data" style="--depth: 0;" class="astro-w7eaxkoy">
 					<span style="--depth: 0;" class="astro-w7eaxkoy">8. Share the requested data</span>
+				</a>
+				
+			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
+				<a href="#9-support-consent-lifecycle-management" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">9. Support consent lifecycle management</span>
 				</a>
 				
 			</li>
@@ -1862,6 +1877,31 @@ authorization.</li>
 or fails any other BAU check.</li>
 <li>Share the data the OFP requested, for the authorized Consent.</li>
 <li>Ensure the data you provide lets the TPP reconcile the account transactions it receives.</li>
+</ol>
+<div class="sl-heading-wrapper level-h2"><h2 id="9-support-consent-lifecycle-management">9. Support consent lifecycle management</h2><a class="sl-anchor-link" href="#9-support-consent-lifecycle-management"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “9. Support consent lifecycle management”</span></a></div>
+<p>Long-Lived data sharing consents need ongoing LFI-side support, per
+<a href="../../../rules/business/common-components/consent-setup/general/05-rules-and-guidelines/#lfis-must">Consent Setup | Rules and Guidelines | LFIs MUST</a>
+and the
+<a href="../../../rules/business/common-components/consents-mgmt-interface/lfi-consent-mgmt-interface/01-overview/">LFI Consent Management Interfaces</a>
+section:</p>
+<ol>
+<li>Never allow a User to change a Consent’s parameters through your own Consent Management Interface
+(CMI), in any Consent state.</li>
+<li>Notify the OFP the moment a User revokes a Consent through your CMI.</li>
+<li>Notify the OFP whenever a Consent moves into, or out of, <code dir="auto">Suspended</code>. For example, a User’s Qatar
+ID (QID) might expire, blocking access until it’s renewed. Move it back to <code dir="auto">Authorized</code> once
+fully cleared. See
+<a href="../../../rules/business/common-components/consent-setup/general/04-consent-states/">Consent States</a>
+for the complete state machine.</li>
+<li>Support Consent updates initiated from the TPP’s CMI, per
+<a href="../../../rules/business/common-components/consents-mgmt-interface/tpp-consent-mgmt-interface/06-consent-update-journey/">Consent Update Journey</a>:
+let the User amend the accounts related to the Consent before they authorize the update.</li>
+<li>Where you also operate your own CMI, label it “Open Finance Connected Services,” or “Open Finance
+Connections” if acting solely as an LFI, and follow the same easy-to-find, intuitive, transparent
+design principles as a TPP CMI. See
+<a href="../../../rules/business/common-components/consents-mgmt-interface/general/04-naming-of-consent-management-interfaces-cmis/">Naming of Consent Management Interfaces</a>.</li>
+<li><code dir="auto">Consumed</code> is not a valid terminal state for a Data Sharing Consent, Single-Use or Long-Lived. It
+applies only to Service Initiation.</li>
 </ol>
 									
 	<span id="docsearch-lvl0" hidden>Learn</span>

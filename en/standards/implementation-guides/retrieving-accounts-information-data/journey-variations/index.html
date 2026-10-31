@@ -249,7 +249,7 @@
 <script type="module">var e=class extends HTMLElement{btn=this.querySelector(`button`);constructor(){super(),this.btn.addEventListener(`click`,()=>this.toggleExpanded());let e=this.closest(`nav`);e&&e.addEventListener(`keyup`,e=>this.closeOnEscape(e))}setExpanded(e){this.setAttribute(`aria-expanded`,String(e)),document.body.toggleAttribute(`data-mobile-menu-expanded`,e)}toggleExpanded(){this.setExpanded(this.getAttribute(`aria-expanded`)!==`true`)}closeOnEscape(e){e.code===`Escape`&&(this.setExpanded(!1),this.btn.focus())}};customElements.define(`starlight-menu-button`,e);</script>
 				<div id="starlight__sidebar" class="sidebar-pane astro-57oe7ezc">
 					<div class="sidebar-content sl-flex astro-57oe7ezc">
-						<script type="module">for(let e of document.querySelectorAll(`summary a.group-link`))e.addEventListener(`click`,e=>e.stopPropagation());</script><sl-sidebar-state-persist data-hash="148jl85" class="astro-o5cix2xa">
+						<script type="module">for(let e of document.querySelectorAll(`summary a.group-link`))e.addEventListener(`click`,e=>e.stopPropagation());</script><sl-sidebar-state-persist data-hash="0bt1pc8" class="astro-o5cix2xa">
 	<script aria-hidden="true">
 		(() => {
 			try {
@@ -982,6 +982,11 @@
 						<span class="astro-tnn3avp6">Other Rules for User Journeys</span>
 						
 					</a>
+			</li><li class="astro-tnn3avp6">
+				<a href="/standards-docs/en/standards/rules/business/common-components/user-experience-principles/12-qcb-brand-guidelines/" class="astro-tnn3avp6">
+						<span class="astro-tnn3avp6">QCB Brand Guidelines</span>
+						
+					</a>
 			</li>
 </ul>
 
@@ -1616,6 +1621,11 @@
 				</a>
 				
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
+				<a href="#user-consents-to-non-account-specific-data-only" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">User consents to non-account-specific data only</span>
+				</a>
+				
+			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
 				<a href="#lfi-acting-as-a-tpp" style="--depth: 0;" class="astro-w7eaxkoy">
 					<span style="--depth: 0;" class="astro-w7eaxkoy">LFI acting as a TPP</span>
 				</a>
@@ -1638,6 +1648,11 @@
 	<li style="--depth: 0;" class="astro-w7eaxkoy">
 				<a href="#_top" style="--depth: 0;" class="astro-w7eaxkoy">
 					<span style="--depth: 0;" class="astro-w7eaxkoy">Overview</span>
+				</a>
+				
+			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
+				<a href="#user-consents-to-non-account-specific-data-only" style="--depth: 0;" class="astro-w7eaxkoy">
+					<span style="--depth: 0;" class="astro-w7eaxkoy">User consents to non-account-specific data only</span>
 				</a>
 				
 			</li><li style="--depth: 0;" class="astro-w7eaxkoy">
@@ -1692,6 +1707,19 @@
 										<p>The <a href="../tpp-guide/">TPP</a>, <a href="../lfi-guide/">LFI</a>, and <a href="../ofp-guide/">OFP</a> guides describe the
 standard journey, where the User selects one or more accounts to share data from. This page covers
 the documented variations on that journey.</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="user-consents-to-non-account-specific-data-only">User consents to non-account-specific data only</h2><a class="sl-anchor-link" href="#user-consents-to-non-account-specific-data-only"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “User consents to non-account-specific data only”</span></a></div>
+<p>Where a Data Request Consent includes only User-level data permissions and no account-specific
+permissions, there’s no account to select.</p>
+<ul>
+<li><strong>LFI:</strong> don’t display any list of eligible accounts during
+<a href="../lfi-guide/#5-select-accounts">Step 5 (Select accounts)</a>. Let the User proceed straight to
+authorization, showing them the data that will be shared for the Consent’s period.</li>
+<li><strong>TPP:</strong> no change to
+<a href="../tpp-guide/#2-collect-and-review-the-data-sharing-consent-parameters">Step 2 (Collect and review the consent parameters)</a>
+beyond scoping the request to the non-account-specific permissions actually needed.</li>
+<li><strong>OFP:</strong> validates and routes the request exactly as any other. See
+<a href="../ofp-guide/#7-account-for-journey-variations">OFP guide | Step 7</a>.</li>
+</ul>
 <div class="sl-heading-wrapper level-h2"><h2 id="lfi-acting-as-a-tpp">LFI acting as a TPP</h2><a class="sl-anchor-link" href="#lfi-acting-as-a-tpp"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “LFI acting as a TPP”</span></a></div>
 <p>
 <img src="/standards-docs/_astro/7.1-user-consents-to-data-sharing-with-lfi-qcb.4lFMKGEV_ZOVc98.webp" alt="User provides consent to share data from one LFI to another" loading="lazy" decoding="async" width="8750" height="2024"></p>
